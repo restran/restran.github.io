@@ -1,3 +1,3 @@
-# restran 个人站点
+# restran 涓汉绔欑偣
 
-使用 Hexo 搭建 
+浣跨敤 Hexo 鎼缓 
