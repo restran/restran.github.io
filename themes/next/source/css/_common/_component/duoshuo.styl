@@ -1,7 +1,9 @@
 
 .theme-next {
-  $duoshuoBaseBorderColor = #c7d4e1;
-  $duoshuoBaseBgColor = #f6f8fa;
+ /* $duoshuoBaseBorderColor = #c7d4e1;
+  $duoshuoBaseBgColor = #f6f8fa;*/
+  $duoshuoBaseBorderColor = $grey-light;
+  $duoshuoBaseBgColor = #fff;
 
   #ds-thread #ds-reset {
     color: #555;
@@ -56,10 +58,11 @@
     right: 5px;
     width: 90px;
     height: 30px;
-    border: 1px solid #c5ced7;
+    border: 1px solid $grey-light;
     border-radius: 3px;
-    background-image: linear-gradient(#fbfbfc, #f5f7f9);
-    color: #60676d;
+    /*background-image: linear-gradient(#fbfbfc, #f5f7f9);*/
+    color: $grey-dark;
+    background: #fff;
   }
 
   #ds-thread #ds-reset .ds-post-button:hover {
@@ -77,12 +80,12 @@
 
   #ds-thread #ds-reset li.ds-tab a.ds-current {
     border: none;
-    background: $duoshuoBaseBgColor;
-    color: #60676d;
+    background: #f5f5f5;
+    color: $grey-dim;
 
     &:hover {
-      background-color: #e9f0f7;
-      color: #60676d;
+      background-color: $gray-lighter;
+      /*color: #60676d;*/
     }
   }
 

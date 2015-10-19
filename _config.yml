@@ -86,7 +86,7 @@ theme: next
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:restran/restran.github.io.git
+  repo: https://github.com/restran/restran.github.io.git
   branch: gh-pages
 
 # 统计
