@@ -8,15 +8,27 @@
   #ds-thread #ds-reset {
     color: #555;
     font-family: $font-family-base !important;
+    border-top: none;
+
     /*修改字体*/
     .ds-textarea-wrapper textarea, 
     .ds-textarea-wrapper .ds-hidden-text,
     .ds-post-button {
       font-family: $font-family-base !important;
     }
+
+  }
+  
+  /*调整喜欢按钮的位置*/
+  #ds-thread #ds-reset .ds-meta {
+      top: 35px;
+      z-index: 999;
+      float: left;
   }
 
-
+  #ds-thread #ds-reset .ds-toolbar {
+       border-top: none; 
+  }
 
   #ds-thread #ds-reset .ds-replybox {
     margin-bottom: 30px;
@@ -31,6 +43,18 @@
     background: none;
     /*border-top-right-radius: 3px;*/
     /*border-top-left-radius: 3px;*/
+  }
+
+  #ds-thread #ds-reset a.ds-like-thread-button {
+    background-image: none;
+    border: 1px solid #ddd;
+    background: #fff;
+    box-shadow: none;
+    text-shadow: none;
+
+    &:hover  {
+      background: #eee;
+    }
   }
 
   /*输入框*/
@@ -71,7 +95,7 @@
     width: 90px;
     height: 30px;
     border: 1px solid $grey-light;
-    /*border-radius: 3px;*/
+    border-radius: 0;
     /*background-image: linear-gradient(#fbfbfc, #f5f7f9);*/
     color: $grey-dark;
     background: #fff;
