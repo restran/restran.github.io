@@ -22,7 +22,7 @@
       {% else %}
         {% set cheers = 'um' %}
       {% endif %}
-      {{ __('cheers.' + cheers) }}! {{ _p("counter.archive_posts", site.posts.length) }}{{ __("symbol.comma") + totalcount(site) + __("word") + __("symbol.period") }} {{ __('keep_on') }}
+      {{ __('cheers.' + cheers) }}! {{ _p("counter.archive_posts", site.posts.length) }}{{ __("symbol.comma") + '写了' + totalcount(site) + __("word") + __("symbol.comma") }} {{ __('keep_on') }}
     </span>
 
     {% for post in page.posts %}

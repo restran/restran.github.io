@@ -33,39 +33,50 @@ ul li { list-style: circle; }
 
 // Header
 // --------------------------------------------------
-.header { background: $whitesmoke; }
+.header { 
+  background: #fff;
+  border-bottom: 1px solid #e7e7e7;
+}
+
 .header-inner {
-  margin-bottom: 80px;
-  padding: 10px 0;
+  padding: 8px 0;
   clearfix();
 
   +mobile() {
-    margin-bottom: 50px;
+    /*margin-bottom: 50px;*/
     padding: 10px;
   }
 }
 
 .site-meta {
   float: left;
-  margin-left: -20px;
+  margin-left: -15px;
 
   +mobile() {
-    margin-left: 10px;
+    margin-left: 5px;
   }
 
   .brand {
     padding: 2px 1px;
-    color: $black-deep;
+    color: $black-light;
     background: none;
 
     +mobile() { display: block; }
   }
 
-  .logo { display: none; }
+  .logo { 
+    /*display: none;*/
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    border-radius: 50%;
+    position: relative;;
+    top: 2px;
+   }
 
   .site-title {
-    font-size: 22px;
-    font-weight: bolder;
+    font-size: 20px;
+    /*font-weight: bolder;*/
 
     +mobile() { line-height: 34px; }
   }
@@ -107,8 +118,8 @@ ul li { list-style: circle; }
 
 .menu {
   float: right;
-  margin: 8px 0 0 20px;
-  padding: 0 20px;
+  margin: 8px -20px 0 20px;
+  padding: 0 0 0 20px;
 
   +mobile() {
     margin: 0;
@@ -229,10 +240,10 @@ ul li { list-style: circle; }
     color: $grey-dim;
     background: none;
     border: none;
-    border-bottom: 2px solid $grey-dim;
+    border-bottom: 2px solid $grey-light;
     transition-property: border;
 
-    &:hover { border-bottom-color: $black-deep; }
+    &:hover { border-bottom-color: $grey-dim; }
   }
 }
 

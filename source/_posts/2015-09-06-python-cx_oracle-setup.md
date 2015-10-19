@@ -61,18 +61,18 @@ rpm -ivh oracle-instantclient-basic-10.2.0.3-1.x86_64.rpm
 rpm -ivh cx_Oracle-5.1.2-10g-py27-1.x86_64.rpm 
 # 有这个文件表示安装成功，根据 python 的位置，也可能在其他地方
 ls /usr/lib/python2.7/site-packages/cx_Oracle.so 
-``` 
+```
 
 ### 问题 1
 
-```python
+```py
 import cx_Oracle
    Traceback (most recent call last):
      File "<stdin>", line 1, in <module>
    ImportError: libclntsh.so.10.1: cannot open shared object file: No such file or directory
 ```
 
-The problem is that the just installed libraries of the Oracle Instant Client aren’t part of the default library path of your CentOS installation. Either you have to extend the LD_LIBRARY_PATH Bash variable of your current user or you have to add the lib directory of the Instant Client installation to the system-wide library path if all users should be allowed to use the Oracle Instant Client. To do so you have to create a new file, e.g. oracle.conf, in the /etc/ld.so.conf.d directory with the following content:
+> The problem is that the just installed libraries of the Oracle Instant Client aren’t part of the default library path of your CentOS installation. Either you have to extend the LD_LIBRARY_PATH Bash variable of your current user or you have to add the lib directory of the Instant Client installation to the system-wide library path if all users should be allowed to use the Oracle Instant Client. To do so you have to create a new file, e.g. oracle.conf, in the /etc/ld.so.conf.d directory with the following content:
 
     vim /etc/ld.so.conf.d/oracle.conf
     
@@ -129,7 +129,7 @@ cp cx_Oracle-5.1.2-py2.7.egg-info /usr/lib64/python2.7/site-packages/cx_Oracle-5
 
 **如果是 Ubuntu 系统则需要注意**
 
-For Debian and derivatives, this sys.path is augmented with directories for packages distributed within the distribution. Local addons go into /usr/local/lib/python/dist-packages, Debian addons install into /usr/{lib,share}/python/dist-packages. /usr/lib/python/site-packages is not used.
+> For Debian and derivatives, this sys.path is augmented with directories for packages distributed within the distribution. Local addons go into /usr/local/lib/python/dist-packages, Debian addons install into /usr/{lib,share}/python/dist-packages. /usr/lib/python/site-packages is not used.
 
 ```sh
 cd /usr/lib/python2.7
@@ -147,7 +147,7 @@ sudo ldconfig
 
 你可以在 Python 代码中这么设置环境变量
 
-```python
+```py
 # 设置编码，否则：
 # 1. Oracle 查询出来的中文是乱码
 # 2. 插入数据时有中文，会导致

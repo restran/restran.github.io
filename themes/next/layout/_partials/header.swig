@@ -1,12 +1,11 @@
 <h1 class="site-meta">
-  <span class="logo-line-before"><i></i></span>
+  <!-- <span class="logo-line-before"><i></i></span> -->
   <a href="{{ config.root }}" class="brand" rel="start">
-      <span class="logo">
-        <i class="icon-next-logo"></i>
+      <span class="logo" style="background-image:url({{ config.avatar }})">
       </span>
       <span class="site-title">{{ config.title }}</span>
   </a>
-  <span class="logo-line-after"><i></i></span>
+  <!-- <span class="logo-line-after"><i></i></span> -->
 </h1>
 
 <div class="site-nav-toggle">

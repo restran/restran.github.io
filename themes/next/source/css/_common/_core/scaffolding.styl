@@ -30,8 +30,12 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   line-height: 1;
   font-family: $font-family-headings;
+  color: $black-deep;
 }
 
+h1, h2, h3 {
+  font-weight: normal;
+}
 
 for headline in (1..6) {
   h{headline} {
@@ -40,7 +44,8 @@ for headline in (1..6) {
 
   +mobile() {
     h{headline} {
-      font-size: $font-size-headings-base - $font-size-headings-step * headline - 4px;
+      font-size: $font-size-headings-base - $font-size-headings-step * headline - 2px;
+      font-weight: bold;
     }
   }
 }

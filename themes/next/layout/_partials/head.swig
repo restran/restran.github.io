@@ -58,12 +58,16 @@
   fb_admins: theme.fb_admins,
   fb_app_id: theme.fb_app_id}) }}
 
+<script src="{{ url_for(theme.vendors) }}/pace/pace.min.js"></script>
+<link href="{{ url_for(theme.vendors) }}/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
 {# HEXO CONFIGURATIONS #}
 <script type="text/javascript" id="hexo.configuration">
   var CONFIG = {
     scheme: '{{ theme.scheme }}',
     sidebar: '{{ theme.sidebar }}'
   };
+  Pace.start();
 </script>
 
 {% if theme.facebook_sdk.enable and theme.facebook_sdk.webmaster %}

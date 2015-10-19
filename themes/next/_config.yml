@@ -59,7 +59,7 @@ toc_list_number: true
 # Automatically Excerpt
 auto_excerpt:
   enable: true
-  length: 150
+  length: 300
 
 # Use Lato font
 # Note: this option is avialable only when the language is not `zh-Hans`
@@ -73,6 +73,9 @@ duoshuo_info:
   admin_enable: false
   user_id: 0
   #admin_nickname: ROOT
+
+# duoshuo:
+#   short_name : restran
 
 ## DO NOT EDIT THE FOLLOWING SETTINGS
 ## UNLESS YOU KNOW WHAT YOU ARE DOING
