@@ -87,7 +87,7 @@ theme: next
 deploy:
   type: git
   repo: git@github.com:restran/restran.github.io.git
-  branch: gh-pages
+  branch: master
 
 # 统计
 google_analytics: 'UA-38277310-2'
