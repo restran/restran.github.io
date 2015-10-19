@@ -7,7 +7,16 @@
 
   #ds-thread #ds-reset {
     color: #555;
+    font-family: $font-family-base !important;
+    /*修改字体*/
+    .ds-textarea-wrapper textarea, 
+    .ds-textarea-wrapper .ds-hidden-text,
+    .ds-post-button {
+      font-family: $font-family-base !important;
+    }
   }
+
+
 
   #ds-thread #ds-reset .ds-replybox {
     margin-bottom: 30px;
@@ -20,13 +29,13 @@
   #ds-thread #ds-reset .ds-textarea-wrapper {
     border-color: $duoshuoBaseBorderColor;
     background: none;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
+    /*border-top-right-radius: 3px;*/
+    /*border-top-left-radius: 3px;*/
   }
 
-
+  /*输入框*/
   #ds-thread #ds-reset .ds-textarea-wrapper textarea {
-    height: 60px;
+    height: 80px !important;
   }
 
   #ds-reset .ds-rounded-top {
@@ -35,7 +44,7 @@
 
   #ds-thread #ds-reset .ds-post-toolbar {
     box-sizing: border-box;
-    border: 1px solid $duoshuoBaseBorderColor;
+    border-top: 1px solid $duoshuoBaseBorderColor;
     background: $duoshuoBaseBgColor;
   }
 
@@ -45,24 +54,28 @@
     background: none;
   }
 
+  /*不显示发表情的按钮*/
   #ds-thread #ds-reset .ds-toolbar-buttons {
     top: 11px;
+    display: none;
   }
 
   #ds-thread #ds-reset .ds-sync {
     top: 5px;
   }
 
+  /*发布按钮*/
   #ds-thread #ds-reset .ds-post-button {
-    top: 4px;
-    right: 5px;
+    top: 10px;
+    right: 0;
     width: 90px;
     height: 30px;
     border: 1px solid $grey-light;
-    border-radius: 3px;
+    /*border-radius: 3px;*/
     /*background-image: linear-gradient(#fbfbfc, #f5f7f9);*/
     color: $grey-dark;
     background: #fff;
+    font-weight: normal;
   }
 
   #ds-thread #ds-reset .ds-post-button:hover {
