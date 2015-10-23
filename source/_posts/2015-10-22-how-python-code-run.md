@@ -332,8 +332,7 @@ False
 True
 ```
 
-关于 intern 函数 可以参考[官方文档](https://docs.python.org/2/library/functions.html#intern)，
-更多扩展阅读：
+关于 intern 函数 可以参考[官方文档](https://docs.python.org/2/library/functions.html#intern)，更多扩展阅读：
 
 http://stackoverflow.com/questions/15541404/python-string-interning
 
@@ -387,4 +386,4 @@ http://hbprotoss.github.io/posts/pythonla-ji-hui-shou-ji-zhi.html
 ## 4. 参考文献
 
 - [Python 源码剖析](http://book.douban.com/subject/3117898/)
-- [Python 官方文档] (https://docs.python.org/2/library/index.html)
+- [Python 官方文档](https://docs.python.org/2/library/index.html)
