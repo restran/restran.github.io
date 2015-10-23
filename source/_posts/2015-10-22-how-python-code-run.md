@@ -1,9 +1,10 @@
 ---
 title: 谈谈 Python 程序的运行原理
 layout: post
-category : [Python]
+category: [Python]
 tagline: 
-tags : [Python]
+tags: [Python]
+toc_number: false
 ---
 
 这篇文章准确说是『Python 源码剖析』的读书笔记，整理完之后才发现很长，那就将就看吧。

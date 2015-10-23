@@ -54,7 +54,8 @@ scroll_to_more: true
 
 
 # Automatically add list number to toc.
-toc_list_number: true
+toc:
+  number: true
 
 # Automatically Excerpt
 auto_excerpt:

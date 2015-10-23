@@ -96,7 +96,11 @@
         <section class="post-toc-wrap sidebar-panel-active">
           <div class="post-toc-indicator-top post-toc-indicator"></div>
           <div class="post-toc">
-            {% set toc = toc(page.content, {"class": "nav", list_number: theme.toc_list_number}) %}
+            {% if page.toc_number === undefine %}
+              {% set toc = toc(page.content, {"class": "nav", list_number: theme.toc.number}) %}
+            {% else %}
+              {% set toc = toc(page.content, {"class": "nav", list_number: page.toc_number}) %}
+            {% endif %}
             {% if toc.length <= 1 %}
               <p class="post-toc-empty">{{ __('post.toc_empty') }}</p>
             {% else %}
