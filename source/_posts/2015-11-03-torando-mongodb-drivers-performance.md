@@ -14,7 +14,7 @@ tags: [Python, MongoDB, Tornado]
 - [Motor](https://motor.readthedocs.org/en/stable/) （适用于 Tornado 的异步 driver）
 - [MongoEngine](http://mongoengine.org/) （ORM-like Layers）
 
-Motor 和 MongoEngine 都是基于 PyMongo，Motor 的最新版是基于 Pymongo 2.8，Motor 的优势就在于异步，而 PyMongo 在 2.2 以后的版本，就开始支持 gevent。
+Motor 和 MongoEngine 都是基于 PyMongo，Motor 的最新版是基于 PyMongo 2.8，Motor 的优势就在于异步，而 PyMongo 在 2.2 以后的版本，就开始支持 gevent。
 
 MongoEngine 借鉴了 Django 的 ORM，提供了一个 [ORM-like layer](http://api.mongodb.org/python/current/tools.html?&_ga=1.36608928.1014949497.1445330034#orm-like-layers)，官方称作 Document-Object Mapper，可以像使用 Django 的 ORM 一样，简单的操作和处理数据。 
 
@@ -154,7 +154,7 @@ https://api.mongodb.org/python/current/examples/gevent.html
 
 Tornado 的单线程的，同步的数据库 Driver 会将 Tornado 阻塞住，导致无法处理其他的请求。
 
-最后给出一组数据，百分比请求的最大响应时间。下面两张图，左边坐标的单位是毫秒。例如 Motor 有 50% 的请求是在 376 毫秒内完成的。
+最后给出一组数据，百分比请求的最大响应时间。下面这张图，左边坐标的单位是毫秒。例如 Motor 有 50% 的请求是在 376 毫秒内完成的。
 
 ![mongodb_tornaod_3](/uploads/post_img/2015/11/mongodb_tornaod_3.png "")
 
