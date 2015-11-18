@@ -373,3 +373,20 @@ or
     
     # 查看网卡配置
     vi /etc/sysconfig/network-scripts/ifcfg-eth0
+    
+## MySQL
+
+mysql命令用户连接数据库。
+
+    mysql -h 主机地址 -u 用户名 －p 用户密码 -P port -D database
+    
+修改数据库的表编码
+
+    ALTER TABLE test_table CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+    # For each database:
+    ALTER DATABASE database_name CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+    # For each table:
+    ALTER TABLE table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+    # For each column:
+    ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_general_ci;

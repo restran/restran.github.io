@@ -292,7 +292,7 @@ service supervisord start
 
 ```sh
 # 如果是 Ubuntu 添加以下内容
-/usr/locl/bin/supervisord -c /etc/supervisord.conf
+/usr/local/bin/supervisord -c /etc/supervisord.conf
 ```
 
 ```sh
