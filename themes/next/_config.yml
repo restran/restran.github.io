@@ -5,6 +5,7 @@ menu:
   archives: /archives
   tags: /tags
   about: /about
+  # rss: /atom.xml
   # commonweal: /404.html
 
 # Place your favicon.ico to /source directory.
@@ -16,7 +17,7 @@ keywords: "restran,restran.net,淡水,淡水网志,blog,博客"
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
 # Set rss to specific value if you have burned your feed already.
-rss:
+rss: /atom.xml
 
 # Icon fonts
 # Place your font into next/source/fonts, specify directory-name and font-name here

@@ -5,7 +5,7 @@
 # Site
 title: 淡水网志
 subtitle: 
-description: 在位流的海洋里徜徉
+description: 在位流的海洋里徜徉～
 author: restran
 language: zh-Hans
 timezone:
@@ -91,11 +91,21 @@ deploy:
 
 # 统计
 google_analytics: 'UA-38277310-2'
-baidu_analytics: 'a060ea3ffa16e451223f396f226de9c7'
-tencent_analytics: '51258575'
+# baidu_analytics: 'a060ea3ffa16e451223f396f226de9c7'
+# tencent_analytics: '51258575'
 
 # 设置多说评论
 duoshuo_shortname: restran
 
 # 设置站点的 Creative commons协议
 creative_commons: by-nc-sa
+
+plugins:
+- hexo-generator-feed
+- hexo-generator-sitemap
+
+feed:
+  type: atom
+  path: atom.xml
+  limit: 10
+  hub:
