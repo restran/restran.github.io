@@ -90,7 +90,7 @@ du -sh [目录名]
 du -sm [文件夹] 
 ```
 
-# 端口相关
+## 端口相关
 
 查看端口占用情况
 
@@ -333,7 +333,7 @@ or
     
 
 
-### nginx permission denied 问题
+### Nginx permission denied 问题
 
 因为忘记了 selinux 的问题，导致 trouble shooting 耽误了不少时间。
 由于[SELinux的问题][2]，会导致nginx nginx permission denied 的问题，需要将 selinux 关闭。
@@ -360,9 +360,9 @@ or
 
     shutdown -r now
 
-## nginx 权限问题
+## Nginx 权限问题
 
-静态文件没有权限，Nginx报错403 forbidden (13: Permission denied)
+静态文件没有权限，Nginx 报错 403 forbidden (13: Permission denied)
 
 需要修改相应文件夹的权限，或者把nginx的启动用户由默认的nginx，改成网站拥有者的用户
 
@@ -395,3 +395,17 @@ mysql命令用户连接数据库。
     ALTER TABLE table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
     # For each column:
     ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+## yum update 之后出现的问题
+
+### django-celery
+
+使用 Supervisord 来管理 django-celery 的 beat 和 worker 进程，使用了 MySQL 数据库。但是在执行 yum update 之后，在 beat 的日志中出现异常，导致所有的 task 都无法正确执行
+
+```
+OperationalError: (2006, 'MySQL server has gone away')
+```
+
+重新启动进程后解决
+
+    supervisorctl restart all
