@@ -855,7 +855,7 @@ Here is a one line command with step 1 to 5 for the next time you upgrade:
 Visit YOUR_SERVER in your web browser for your first GitLab login.
 The setup has created an admin account for you. You can use it to log in:
 
-    root
+    admin
     5iveL!fe
 
 **Important Note:**
@@ -950,6 +950,44 @@ The CRON=1 environment setting tells the backup script to suppress all progress 
     sudo service gitlab start;
     sudo service nginx restart;
     sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production;
+
+
+## 忘记管理员密码
+
+
+可以参考[这篇文章](https://www.nitrohsu.com/gitlab-reset-administrator-password.html "")
+
+Gitlab 服务器上使用
+
+```
+# Gitlab 安装路径
+cd /home/git/gitlab
+# 进入Rails控制台
+sudo -u git -H bundle exec rails console production
+```
+
+ominbus上使用
+
+```
+sudo gitlab-rails console
+# 或者
+sudo gitlab-rake rails console
+```
+
+进入控制台，如果知道需要修改用户的邮箱，使用如下，直接修改
+
+```
+user = User.find_by(email: 'admin@example.com')
+user.password = 'secret_password'
+user.password_confirmation = 'secret_password'
+user.save
+```
+
+如果不知道具体邮箱，可以通过find来查找邮箱
+
+```
+user = User.find(1)
+```
 
 
 [https]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#using-https
