@@ -69,10 +69,10 @@ MBP 睡眠的时候耗电很低，我现在都是直接合上电脑，几乎不�
 - Command(⌘)-C 复制
 - Command(⌘)-V 粘贴
 - Command(⌘)-A 全选
-- Ctrl-C 在终端中结束程序
 - Command(⌘)-Shift-F Chrome 中进入和退出全屏
 - Command(⌘)-空格键 显示或隐藏 Spotlight
 - Command(⌘)-上箭头 前往上层文件夹
+- Ctrl-C 在终端中结束程序
 
 屏幕截图，文件会自动保存在桌面
 
