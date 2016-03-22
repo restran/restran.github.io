@@ -71,13 +71,18 @@ MBP 睡眠的时候耗电很低，我现在都是直接合上电脑，几乎不�
 - Command(⌘)-Shift-F Chrome 中进入和退出全屏
 - Command(⌘)-空格键 显示或隐藏 Spotlight
 - Command(⌘)-上箭头 前往上层文件夹
+- Command(⌘)-Option-H 除了当前窗口外，其他窗口全部最小化
 - Ctrl-C 在终端中结束程序
 
-屏幕截图，文件会自动保存在桌面
+屏幕截图，文件保存在桌面
 
 - Command(⌘)-Shift-3 对整个屏幕拍摄屏幕快照
 - Command(⌘)-Shift-4 对屏幕的某个部分拍摄屏幕快照，可以选择截图区域
 - Command(⌘)-Shift-4-空格键 对某个窗口拍摄屏幕快照
+
+屏幕截图，文件保存在剪贴板
+
+- Command(⌘)-Ctrl-Shift-4 对选定区域进行截屏
 
 ### 右键打开终端
 
@@ -144,7 +149,6 @@ git config --global core.autocrlf true
 	socks5 = 127.0.0.1:1080
 	proxy = 127.0.0.1:1080
 
-
 ## 吐槽篇
 
 我之前一直都是使用 Windows，虽然也有一些 Linux 使用的经验，但是面对基于 Unix 系统的 Mac OS 还是有很多不习惯的地方。
@@ -161,7 +165,7 @@ git config --global core.autocrlf true
 
 ### 外接显示器
 
-我买了一个雷电转 VGA 的转接器，然后接到我的 23 寸 DEll 显示器上，才发现[文字会发虚](https://www.v2ex.com/t/109983)。查了才发现原来 [Mac 的字体渲染](http://blog.jobbole.com/50061/) 跟 Windows 不一样，这下我的大屏显示器完全没法用了。使用 Mac 时，在选购大屏显示器时，还得注意是否适配 Mac，苹果自己有出[显示器](http://www.apple.com/cn/displays/)，但是很贵。
+我买了一个雷电转 VGA 的转接器，然后接到我的 23 寸 DEll 显示器上，才发现[文字会发虚](https://www.v2ex.com/t/109983)。查了才发现原来 [Mac 的字体渲染](http://blog.jobbole.com/50061/) 跟 Windows 不一样，这下我的大屏显示器完全没法用了。苹果自己有出[显示器](http://www.apple.com/cn/displays/)，但是很贵。VGA 是模拟的，显示效果比较差，我后来又买了一个雷电转 DP 的转接器，显示效果就好很多了，终于又可以欢快的使用 DELL 显示器了。
 
 ## 总结
 
