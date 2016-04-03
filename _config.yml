@@ -102,8 +102,8 @@ duoshuo_shortname: restran
 creative_commons: by-nc-sa
 
 plugins:
-- hexo-generator-feed
-- hexo-generator-sitemap
+  hexo-generator-feed
+  hexo-generator-sitemap
 
 feed:
   type: atom

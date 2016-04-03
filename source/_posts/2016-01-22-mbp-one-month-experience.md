@@ -67,6 +67,7 @@ MBP 睡眠的时候耗电很低，我现在都是直接合上电脑，几乎不�
 - Command(⌘)-F3 回到桌面
 - Command(⌘)-C 复制
 - Command(⌘)-V 粘贴
+- Command(⌘)-Option-V 移动文件（Move to here，也就是剪切粘贴）
 - Command(⌘)-A 全选
 - Command(⌘)-Shift-F Chrome 中进入和退出全屏
 - Command(⌘)-空格键 显示或隐藏 Spotlight
@@ -83,6 +84,18 @@ MBP 睡眠的时候耗电很低，我现在都是直接合上电脑，几乎不�
 屏幕截图，文件保存在剪贴板
 
 - Command(⌘)-Ctrl-Shift-4 对选定区域进行截屏
+
+### 显示隐藏文件和文件夹
+
+默认情况下 Finder 会隐藏文件和文件夹，可以参考[这里](http://sspai.com/26273)的方法来显示。
+
+在终端中输入
+
+	defaults write com.apple.finder AppleShowAllFiles -boolean true ; killall Finder
+	
+现在就可以在 Finder 窗口中看到那些隐藏的文件和文件夹了。如果要恢复隐藏，在终端中输入
+
+	defaults write com.apple.finder AppleShowAllFiles -boolean false ; killall Finder
 
 ### 右键打开终端
 
