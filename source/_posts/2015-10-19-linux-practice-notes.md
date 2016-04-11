@@ -6,7 +6,6 @@ tagline:
 tags : [Linux, 错误解决]
 ---
 
-
 这篇文章是用来记录我使用 Linux 操作系统时常用的一些命令、一些笔记、以及遇到的一些问题的解决方法。Linux 在这里指代 CentOS 和 Ubuntu，因为我目前只使用这两个发行版。 
 
 不保证以下操作方法是最佳实践，也不保证内容完整，我将会不定期更新。
@@ -36,15 +35,11 @@ find / -name "*.log"
 
     cp file_a file_b
 
-
 ### 输出文件内容
 
     cat /path/to/file/name
 
-
-    
 ### zip unzip
-
 
 把 mydata.zi p解压到 mydatabak 目录里面
 
@@ -181,29 +176,6 @@ fd目录下是进程打开或使用的文件的符号连接
     
     # 将文件设置为可执行，/etc/rc.local 实际上链接到 /etc/rc.d/rc.local
     chmod +x /etc/rc.d/rc.local
-
-```
-以下命令均在/home目录下操作
-cd /home #进入/home目录
-1、把/home目录下面的mydata目录压缩为mydata.zip
-zip -r mydata.zip mydata #压缩mydata目录
-2、把/home目录下面的mydata.zip解压到mydatabak目录里面
-unzip mydata.zip -d mydatabak
-3、把/home目录下面的abc文件夹和123.txt压缩成为abc123.zip
-zip -r abc123.zip abc 123.txt
-4、把/home目录下面的wwwroot.zip直接解压到/home目录里面
-unzip wwwroot.zip
-5、把/home目录下面的abc12.zip、abc23.zip、abc34.zip同时解压到/home目录里面
-unzip abc\*.zip
-6、查看把/home目录下面的wwwroot.zip里面的内容
-unzip -v wwwroot.zip
-7、验证/home目录下面的wwwroot.zip是否完整
-unzip -t wwwroot.zip
-8、把/home目录下面wwwroot.zip里面的所有文件解压到第一级目录
-unzip -j wwwroot.zip
-系统运维 温馨提醒：qihang01原创内容版权所有,转载请注明出处及原文链接
-```
-
 
 ## 用户创建和删除
 
