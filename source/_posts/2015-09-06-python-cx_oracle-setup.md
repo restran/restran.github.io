@@ -6,7 +6,7 @@ tagline:
 tags : [Python, Oracle, SQLAlchemy]
 ---
 
-[SQLAlchemy](http://www.sqlalchemy.org/ "") 是 Python 中用来操作数据库的一个利器，支持 MySQL、Oracle、PostgreSQL、SQLite、Oracle。使用 SQLAlchemy 来管理 Oracle 的数据需要安装依赖 [cx_Oracle](http://cx-oracle.sourceforge.net/ "")。在这过程中遇到不少问题，记录如下。
+[SQLAlchemy](http://www.sqlalchemy.org/ "") 是 Python 中用来操作数据库的一个利器，支持 MySQL、Oracle、PostgreSQL、SQLite。使用 SQLAlchemy 来管理 Oracle 的数据需要安装依赖 [cx_Oracle](http://cx-oracle.sourceforge.net/ "")。在这过程中遇到不少问题，记录如下。
 
 cx_Oracle 可以到这里下载：http://cx-oracle.sourceforge.net/
 旧版本的下载地址：http://sourceforge.net/projects/cx-oracle/files/
@@ -15,7 +15,7 @@ cx_Oracle 可以到这里下载：http://cx-oracle.sourceforge.net/
 
 ## Windows 
 
-安装 cx_Oracle 正确版本，需要区分 10g, 11g，安装 instantclient_11_2（请到 Oracle 官网下载）
+安装 cx_Oracle 正确版本，需要区分 10g，11g，安装 instantclient_11_2（请到 Oracle 官网下载）
 
 ### 问题 
 
@@ -34,7 +34,7 @@ Unable to acquire Oracle environment handle
 
 复制 oci.dll 依赖的 dll，oraociei11.dll，ocijdbc11.dll 到 \Python27\Lib\site-packages 目录下。如果不清楚就将 instantclient_11_2 目录下的 dll 都复制到 \Python27\Lib\site-packages 目录下
 
-可以参考：http://docs.oracle.com/cd/B12037_01/appdev.101/b10779/oci01int.htm#423364
+详细信息还可以参考[这里](http://docs.oracle.com/cd/B12037_01/appdev.101/b10779/oci01int.htm#423364)。
 
 ```
 # UNIX
