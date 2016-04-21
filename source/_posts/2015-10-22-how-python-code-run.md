@@ -84,7 +84,7 @@ magic number 是 Python 定义的一个整数值。一般来说，不同版本�
      python generate_pyc.py demo
 
 ```py
-[generate_pyc.pyc]
+[generate_pyc.py]
 import imp
 import sys
 

@@ -97,6 +97,10 @@ du -sm [文件夹]
 
     sudo netstat -ap | grep 8108
 
+或者 
+
+    sudo ps -aux | grep 8108
+
 杀死指定进程
 
     sudo kill xxx
