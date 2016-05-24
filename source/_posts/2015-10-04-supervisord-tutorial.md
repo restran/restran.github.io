@@ -94,7 +94,7 @@ serverurl=unix:///var/run/supervisor.sock ; use a unix:// URL  for a unix socket
 
     sudo chmod 777 /run
 
-一般情况下，我们可以用 root 用户启动 supervisord 进程，然后在其所管理的进程中，再具体指定需要以那个用户启动这些进程。    
+这样有点简单粗暴，也可以考虑把上述配置文件中 `.sock`，`.pid` 等文件修改到其他文件夹中，并确保有相应的权限即可。一般情况下，我们可以用 root 用户启动 supervisord 进程，然后在其所管理的进程中，再具体指定需要以那个用户启动这些进程。    
 
 ### 使用浏览器来管理
 
