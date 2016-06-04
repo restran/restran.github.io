@@ -105,8 +105,13 @@ du -sm [文件夹]
 
     sudo kill xxx
 
+### 强制杀死所有 uwsgi 进程
 
-进程 pid 对应的程序文件路径
+[参考这里](http://serverfault.com/questions/565903/how-to-stop-uwsgi-when-no-pidfile-in-config)
+
+    sudo pkill -f uwsgi -9
+    
+### 查看进程 pid 对应的程序文件路径
 
 http://os.51cto.com/art/201003/186841.htm
 
