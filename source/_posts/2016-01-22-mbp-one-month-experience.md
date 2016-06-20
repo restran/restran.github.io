@@ -58,6 +58,8 @@ MBP 睡眠的时候耗电很低，我现在都是直接合上电脑，几乎不�
 
 - [Homebrew](http://brew.sh/) 包管理
 - [SourceTree](https://www.sourcetreeapp.com/) Git GUI 工具
+- [Alfred](https://www.alfredapp.com/) 类似 Everytingh 的搜索神器 
+- [Mounty](http://enjoygineering.com/mounty/) 将文件写入到 NTFS 格式硬盘中的工具
 
 ### 快捷键
 
@@ -170,11 +172,10 @@ git config --global core.autocrlf true
 
 最不适应的就是 Finder，Windows 下叫资源管理器。
 
-- 找文件不容易了，没有了 Windows 中查找文件的利器 Everything ，因为是基于 NTFS，所以 Mac 没有。
+- 找文件不容易了，没有了 Windows 中查找文件的利器 Everything ，因为是基于 NTFS，所以 Mac 没有。有时候我不得不在终端中，用 open 命令来打开一个文件夹。Mac 下也有类似的搜索神器 [Alfred](https://www.alfredapp.com/) (经`@kid_ynxts`指点)。
 - 右键菜单中的`复制`是直接复制一份文件，而这里的`拷贝`才是对应 Windows 下面复制。
-- 只能从 NTFS 的硬盘中读文件，不能写文件，FAT32 是读写都可以，需要转换硬盘的格式，做到 Windows 和 Mac 兼容，或者通过第三方软件来读写。
-- 文件夹的路径没有像 Windows 一样全部显示出来，返回上一个文件夹也不容易，虽然有快捷键 Command(⌘)-上箭头，来前往上层文件夹。
-- 找文件不容易，有时候我不得不在终端中，用 open 命令来打开一个文件夹。
+- 只能从 NTFS 的硬盘中读文件，不能写文件，FAT32 是读写都可以，需要转换硬盘的格式，做到 Windows 和 Mac 兼容，或者通过第三方软件来读写，例如 [Mounty ](http://enjoygineering.com/mounty/) 。
+- 文件夹的路径没有像 Windows 一样全部显示出来，返回上一个文件夹也不容易，虽然有快捷键 Command(⌘)-上箭头，来前往上层文件夹。一种解决方法是可以调整文件夹显示方式为分栏展示（经`@kid_ynxts`指点）。
 
 ### 外接显示器
 
