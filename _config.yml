@@ -18,6 +18,9 @@ social:
   Douban: http://douban.com/people/restran
   Zhihu: http://www.zhihu.com/people/restran
 
+# leancloud_appid: 
+# leancloud_appkey: 
+
 avatar: /uploads/avatar.jpg
 
 # title, chinese available

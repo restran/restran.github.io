@@ -1,136 +1,67 @@
 ---
-title: CentOS 6.5 Minimal 安装 Gitlab 7.5
+title: CentOS 7 Minimal 安装 Gitlab 8.9
 layout: post
 category : [Git]
 tagline: 
 tags : [Gitlab, Git]
 ---
 
-在 CentOS 6.5 Minimal 系统环境下，用源代码的方式安装 Gitlab 7.5 的过程中，遇到了不少问题，现把笔记整理出来。
+之前整理过一份 CentOS 6.5 Minimal 系统环境下，用源代码的方式安装 Gitlab 7.5 的[文档](https://www.restran.net/2015/04/09/gilab-centos-installation-note/)，后面因为要将 Gitlab 升级到 8.9 的版本，操作系统也升级到了 CentOS 7，因此重新整理了一份。
 
-    Distribution      : CentOS 6.5 Minimal
-    GitLab version    : 7.0 - 7.4
-    Web Server        : Apache, Nginx
-    Init system       : sysvinit
-    Database          : MySQL, PostgreSQL
-    Contributors      : @nielsbasjes, @axilleas, @mairin, @ponsjuh, @yorn, @psftw, @etcet, @mdirkse, @nszceta, @herkalurk
-    Additional Notes  : In order to get a proper Ruby setup we build it from source
+## Software stack
 
+GitLab is a Ruby on Rails application that runs on the following software:
+Ubuntu/Debian/CentOS/RHEL
+Ruby (MRI) 2.1
+Git 2.7.4+
+Redis 2.8+
+MySQL or PostgreSQL
 
-## Overview
-
-Please read [requirements.md](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/requirements.md) for hardware and platform requirements.
-
-### Important Notes
-
-The following steps have been known to work and should be followed from up to bottom.
-If you deviate from this guide, do it with caution and make sure you don't violate
-any assumptions GitLab makes about its environment. We have also tried this on
-RHEL 6.3 and found that there are subtle differences which are documented in part.
-Look for the **RHEL Notes** note.
 
 **全部命令都是在 root 用户下执行**
 
-#### If you find a bug
-
-If you find a bug/error in this guide please submit an issue or a Merge Request
-following the contribution guide (see [CONTRIBUTING.md](https://gitlab.com/gitlab-org/gitlab-recipes/blob/master/CONTRIBUTING.md)).
-
-#### Security
-
-Many setup guides of Linux software simply state: "disable selinux and firewall".
-This guide does not disable any of them, we simply configure them as they were intended.
-[Stop disabling SELinux](http://stopdisablingselinux.com/).
-
-- - -
-
-The GitLab installation consists of setting up the following components:
-
-1. Install the base operating system (CentOS 6.5 Minimal) and Packages / Dependencies
-2. Ruby
-3. System Users
-4. Database
-5. Redis
-6. GitLab
-7. Web server
-8. Firewall
-
 ----------
 
-## 1. Installing the operating system (CentOS 6.5 Minimal)
+## 1. Installing the operating system (CentOS 7 Minimal)
 
-We start with a completely clean CentOS 6.5 "minimal" installation which can be
-accomplished by downloading the appropriate installation iso file. Just boot the
-system of the iso file and install the system.
-
-**配置网络**
-
-Note that during the installation you use the *"Configure Network"* option (it's a
-button in the same screen where you specify the hostname) to enable the *"Connect automatically"*
-option for the network interface and hand (usually eth0).
-
-**If you forget this option the network will NOT start at boot.**
-
-The end result is a bare minimum CentOS installation that effectively only has
-network connectivity and (almost) no services at all.
+先配置好网卡和DNS，保证网络没问题。
 
 ## Updating and adding basic software and services
 
-### Add EPEL repository
+先安装 wget
 
-**安装 wget**
+	yum install wget
+	
+### 安装EPEL源
 
-    yum -y install wget
+[可以参考](http://www.cyberciti.biz/faq/installing-rhel-epel-repo-on-centos-redhat-7-x/)
+
+输入命令
+    
+    yum install epel-release
+
+	# wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6 https://www.fedoraproject.org/static/0608B895.txt
+	# rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
 
 
-[EPEL][] is a volunteer-based community effort from the Fedora project to create
-a repository of high-quality add-on packages that complement the Fedora-based
-Red Hat Enterprise Linux (RHEL) and its compatible spinoffs, such as CentOS and Scientific Linux.
+### Add Remi's RPM repository
+	
+Remi's RPM Repository is unofficial repository for Centos/RHEL that provides latest versions of some software. We take advantage of Remi's RPM repository to obtain up-to-date version of Redis.
+Download the GPG key for Remi's repository and install it on your system:
 
-As part of the Fedora packaging community, EPEL packages are 100% free/libre open source software (FLOSS).
-
-Download the GPG key for EPEL repository from [fedoraproject][keys] and install it on your system:
-
-    wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6 https://www.fedoraproject.org/static/0608B895.txt --no-check-certificate
-    rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
-
+	wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-remi http://rpms.famillecollet.com/RPM-GPG-KEY-remi
+	rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-remi
+	
 Verify that the key got installed successfully:
+	
+	rpm -qa gpg*
+	# 查看输出是否包含
+	# gpg-pubkey-00f97f56-467e318a
+	
+Now install the remi-release-7 package, which will enable remi-safe repository on your system:
 
-    rpm -qa gpg*
-    结果应显示
-    gpg-pubkey-0608b895-4bd22942
+	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
-Now install the `epel-release-6-8.noarch` package, which will enable EPEL repository on your system:
-
-    rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-
-**Note:** Don't mind the `x86_64`, if you install on a i686 system you can use the same commands.
-
-### Add PUIAS Computational repository
-
-The [PUIAS Computational][PUIAS] repository is a part of [PUIAS/Springdale Linux][SDL],
-a custom Red Hat&reg; distribution maintained by [Princeton University][PU] and the
-[Institute for Advanced Study][IAS].  We take advantage of the PUIAS
-Computational repository to obtain a git v1.8.x package since the base CentOS
-repositories only provide v1.7.1 which is not compatible with GitLab.
-Although the PUIAS offers an RPM to install the repo, it requires the
-other PUIAS repos as a dependency, so you'll have to add it manually.
-Otherwise you can install git from source (instructions below).
-
-Download PUIAS repo:
-
-    wget -O /etc/yum.repos.d/PUIAS_6_computational.repo https://gitlab.com/gitlab-org/gitlab-recipes/raw/master/install/centos/PUIAS_6_computational.repo --no-check-certificate
-
-Next download and install the gpg key:
-
-    wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-puias http://springdale.math.ias.edu/data/puias/6/x86_64/os/RPM-GPG-KEY-puias
-    rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-puias
-
-Verify that the key got installed successfully:
-
-    rpm -qa gpg*
-    结果应显示
-    gpg-pubkey-41a40948-4ce19266
 
 Verify that the EPEL and PUIAS Computational repositories are enabled as shown below:
 
@@ -146,7 +77,7 @@ Verify that the EPEL and PUIAS Computational repositories are enabled as shown b
 改成
 
     baseurl
-    #mirrorlist
+    # mirrorlist
 
     repo id                 repo name                                                status
     PUIAS_6_computational   PUIAS computational Base 6 - x86_64                      2,018
@@ -159,38 +90,52 @@ Verify that the EPEL and PUIAS Computational repositories are enabled as shown b
 If you can't see them listed, use the folowing command (from `yum-utils` package) to enable them:
 
     先安装yum-utils，才能使用yum-config-manager，否则会出现commond not found
-    yum -y install yum-utils
     
+    yum -y install yum-utils
     yum-config-manager --enable epel --enable PUIAS_6_computational
+
+
+最后，更新源缓存
+
+    yum clean all && yum makecache
 
 ### Install the required tools for GitLab
 
     yum -y update
     yum -y groupinstall 'Development Tools'
-    yum -y install readline readline-devel ncurses-devel gdbm-devel glibc-devel tcl-devel openssl-devel curl-devel expat-devel db4-devel byacc sqlite-devel libyaml libyaml-devel libffi libffi-devel libxml2 libxml2-devel libxslt libxslt-devel libicu libicu-devel system-config-firewall-tui redis sudo wget crontabs logwatch logrotate perl-Time-HiRes git cmake libcom_err-devel.i686 libcom_err-devel.x86_64
+    yum -y install readline readline-devel ncurses-devel gdbm-devel glibc-devel tcl-devel openssl-devel curl-devel expat-devel db4-devel byacc sqlite-devel libyaml libyaml-devel libffi libffi-devel libxml2 libxml2-devel libxslt libxslt-devel libicu libicu-devel system-config-firewall-tui redis sudo wget crontabs logwatch logrotate perl-Time-HiRes git cmake libcom_err-devel.i686 libcom_err-devel.x86_64 ntp nodejs python-docutils
 
-**RHEL Notes**
+gitlab 8.0 之后的版本需要依赖 nodejs，不然安装 gitlab-shell 的时候会出现没有javascript runtime
 
-If some packages (eg. gdbm-devel, libffi-devel and libicu-devel) are NOT installed,
-add the rhel6 optional packages repo to your server to get those packages:
+### 安装vim
 
-    yum-config-manager --enable rhel-6-server-optional-rpms
-    
-
-
-Tip taken from [here](https://github.com/gitlabhq/gitlab-recipes/issues/62).
-
-**Note:**
-During this installation some files will need to be edited manually.
-If you are familiar with vim set it as default editor with the commands below.
-If you are not familiar with vim please skip this and keep using the default editor.
-
-    # Install vim and set as default editor
     yum -y install vim-enhanced
     update-alternatives --set editor /usr/bin/vim.basic
 
-    # For reStructuredText markup language support, install required package:
-    yum -y install python-docutils
+### 设置NTP时间同步
+
+修正时区
+
+	 # 删除当前默认时区
+    rm -rf /etc/localtime    
+    # 复制替换默认时区为上海
+    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
+   
+SSH执行以上命令，将时区修改为中国上海的时区，当然，也可以设置中国香港或北京的时间。
+    
+手动修正时间
+
+    date -s '09:16:00 2013-01-21' 
+    
+使用“date”命令，修改时间和日期为2013年1月21日，时间是上午9点16分0秒。
+    
+时间自动同步和校正
+
+    yum install -y ntp        # 安装时间同步服务（组件）
+    ntpdate us.pool.ntp.org   # 设置同步服务器
+    date                      # 查看当前时间
+    
+部分系统已经安装了NTP服务，系统会根据当前记录的时区（第一步操作）自动连接ntp服务器校正时间。
 
 ### Install mail server
 
@@ -201,7 +146,7 @@ mail server. The recommended one is postfix and you can install it with:
 
 To use and configure sendmail instead of postfix see [Advanced Email Configurations](e-mail/configure_email.md).
 
-### Configure the default editor
+### 配置默认编辑器
 
 You can choose between editors such as nano, vi, vim, etc.
 In this case we will use vim as the default editor for consistency.
@@ -213,16 +158,11 @@ To remove this alias in the future:
     
     rm -i /usr/bin/editor
 
+### 从源代码安装 Git
 
-### Install Git from Source (optional)
+因为 Git 版本要求 2.7.4+，通过 yum install 的版本是 1.8.3，需要从源代码安装。
 
-Make sure Git is version 1.7.10 or higher, for example 1.7.12 or 1.8.4
-
-    git --version
-    
-如果有安装git，这一步就可以跳过，直接跳到Ruby
-
-If not, install it from source. First remove the system Git:
+先删除旧版本的 git
 
     yum -y remove git
 
@@ -233,8 +173,8 @@ Install the pre-requisite files for Git compilation:
 Download and extract it:
 
     mkdir /tmp/git && cd /tmp/git
-    curl --progress https://www.kernel.org/pub/software/scm/git/git-2.1.3.tar.gz | tar xz
-    cd git-2.1.3/
+    curl --progress https://www.kernel.org/pub/software/scm/git/git-2.8.4.tar.gz | tar xz
+    cd git-2.8.4/
     ./configure
     make
     make prefix=/usr/local install
@@ -250,9 +190,7 @@ You might have to logout and login again for the `$PATH` to take effect.
 
 ## 2. Ruby
 
-The use of ruby version managers such as [RVM](http://rvm.io/), [rbenv](https://github.com/sstephenson/rbenv) or [chruby](https://github.com/postmodern/chruby) with GitLab in production frequently leads to hard to diagnose problems. Version managers are not supported and we strongly advise everyone to follow the instructions below to use a system ruby.
-
-Remove the old Ruby 1.8 package if present. GitLab only supports the Ruby 2.0+ release series:
+GitLab 需要 2.1 以上版本的 Ruby，但是当前不兼容 2.2 和 2.3，先删除旧的
 
     yum remove ruby
 
@@ -266,43 +204,34 @@ Remove any other Ruby build if it is still present:
 Download Ruby and compile it:
 
     mkdir /tmp/ruby && cd /tmp/ruby
-    curl --progress ftp://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz | tar xz
     
-    cd ruby-2.1.2
+从网上下载
+
+    curl --progress ftp://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.8.tar.gz | tar xz
+
+如果已经下载好，手动上传到服务器，可以先解压缩
+    
+    tar -xzf ruby-2.1.8.tar.gz
+    
+进入目录
+
+    cd ruby-2.1.8
     ./configure --disable-install-rdoc
     
 如果出现错误
+
     make: Warning: File 'common.mk' has modification time 1386501635 s in the future
-    是由于系统的时间错误导致
     
-一、修正时区
+是由于系统的时间错误导致，可以重新配置一下系统时间，以及NTP自动同步时间
+    
+编译安装
 
-    rm -rf /etc/localtime    # 删除当前默认时区www.kwx.gd
-    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
-    # 复制替换默认时区为上海
-    SSH执行以上命令，将时区修改为中国上海的时区，当然，也可以设置中国香港或北京的时间。
-    
- 二、手动修正时间
- 
-    date -s '09:16:00 2013-01-21' 
-    
-使用“date”命令，修改时间和日期为2013年1月21日，时间是上午9点16分0秒。
-    
-三、时间自动同步和校正
-
-    yum install -y ntp        #安装时间同步服务（组件）
-    ntpdate us.pool.ntp.org   #设置同步服务器
-    date                      #查看当前时间www.kwx.gd
-    
-部分系统已经安装了NTP服务，系统会根据当前记录的时区（第一步操作）自动连接ntp服务器校正时间。
-    
-    
     make
     make prefix=/usr/local install
 
-Install the Bundler Gem:
+### Install the Bundler Gem:
 
-由于AWS被墙无法使用，修改ruby的源
+由于 AWS 被墙无法使用，修改 ruby 的源
 
     gem sources --remove https://rubygems.org/
     gem sources -a https://ruby.taobao.org/
@@ -316,9 +245,22 @@ installed with:
     which ruby
     # /usr/local/bin/ruby
     ruby -v
-    # ruby 2.1.2p95 (2014-05-08 revision 45877) [x86_64-linux]
 
-----------
+
+## 安装 go （gitlab 8.0 以后的版本需要go语言的支持）
+
+    mkdir /tmp/go && cd /tmp/go
+
+下载
+
+    URL='https://storage.googleapis.com/golang/' && wget -c `curl -s $URL|xmllint --format - |awk -PF'[><]' '{if ($3~/linux/ && $3!~/(beta|rc)[0-9]+|armv6l|386/)a=$3}END{print "'$URL'"a}'`
+    
+解压缩
+
+    tar xf go*.linux-amd64.tar.gz -C /usr/local/ 
+    echo "PATH=/usr/local/go/bin:\$PATH" >/etc/profile.d/go.sh
+    . /etc/profile.d/go.sh
+    go version
 
 ## 3. System Users
 
@@ -346,32 +288,36 @@ Save and exit.
 
 ### 4.2 MySQL
 
-Install `mysql` and enable the `mysqld` service to start on boot:
-    
-    使用这条命令默认安装的是5.1.37版本
-    yum install -y mysql-server mysql-devel
-    
-    使用这些命令安装5.5.41版本
-    rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
-    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-    yum --enablerepo=remi,remi-test install mysql mysql-server mysql-devel
-    
+CentOS 7 版本将 MySQL 数据库软件从默认的程序列表中移除，用 Mariadb 代替了
 
-    chkconfig mysqld on
-    service mysqld start
+    yum install -y mariadb mariadb-server mariadb-devel
+
+    systemctl enable mariadb  #设置开机启动
+    systemctl start mariadb #启动MariaDB
+    
+    
+mariadb数据库的相关命令是：
+
+```
+systemctl start mariadb  #启动MariaDB
+systemctl stop mariadb  #停止MariaDB
+systemctl restart mariadb  #重启MariaDB
+systemctl enable mariadb  #设置开机启动
+```
 
 Ensure you have MySQL version 5.5.14 or later:
 
     mysql --version
 
-Secure your installation:
+设置数据库 root 用户密码，并设置相关的安全配置
 
     mysql_secure_installation
+    
+因为是刚安装完数据库，因此没有 root 账户的密码，按回车后，会开始让设置密码。设置完密码后，会问是否删除匿名用户（不需要密码就能登录），选择 y。
 
-Login to MySQL (type the database root password):
+登录 MySQL (输入数据库 root 用户的密码):
 
     mysql -u root -p
-
 
 Create a user for GitLab (change $password in the command below to a real password you pick):
 
@@ -401,24 +347,24 @@ Try connecting to the new database with the new user:
     sudo -u git -H mysql -u git -p -D gitlabhq_production
 
 使用上面在MySQL中创建的git用户的密码
-
+    
+Type the password you replaced $password with earlier.
 Quit the database session:
 
     \q
     
-    
-配置MySQL max_allowed_packet的大小，避免POST太大的内容导致出现500错误，例如GitLab 发出MergeRequest的时候返回500错误。
+配置 MySQL max_allowed_packet 的大小，避免POST太大的内容导致出现 500 错误，例如 GitLab 发出 MergeRequest 的时候返回 500 错误。
 
     vim /etc/my.cnf
 
-在mysqld中添加max_allowed_packet，调整值，加大为一个合适的数字即可。
+在 mysqld 中添加 max_allowed_packet，调整值，加大为一个合适的数字即可。
 
     [mysqld]
     max_allowed_packet=512M
 
-然后reload下mysql的服务即可。
+然后 reload 下 mysql 的服务即可。
 
-    service mysqld restart
+    systemctl restart mariadb
 
 ----------
 
@@ -458,45 +404,32 @@ Add git to the redis group:
 
 ### Clone the Source
 
-   // vi /home/git/.bash_profile
-   // 添加如下，不验证SSL
-   // export GIT_SSL_NO_VERIFY=1
-    
-    否则 git clone 时会出现错误 Peer certificate cannot be authenticated with known CA certificates
-    
-    # Clone GitLab repository
-    sudo -u git -H git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 7-4-stable gitlab
+	# 先切换到git账户
+	su - git
+	# 再clone代码
+	git clone https://github.com/gitlabhq/gitlabhq.git -b 8-8-stable gitlab
 
-**Gitlab 中文翻译版**
+或者中文翻译版
 
-不知道为什么，使用sudo -u git -H git clone..还会出现证书错误，但是使用下面的就可以
-    su - git
-    先进入git用户，然后git config，才可以，不然还是会出现证书问题
-    git config --global http.sslverify "false"
-    
-    git clone https://gitlab.com/larryli/gitlab.git -b 7-5-zh gitlab
-    
-    # 自己的修改版，修改部分翻译
-    git clone https://github.com/restran/gitlabhq.git -b 7-5-zh gitlab
-    
-    退出git用户操作命令，使用root用户操作
+	git clone https://gitlab.com/larryli/gitlab.git -b 8-8-zh gitlab
+	
+    # 退出git用户操作命令，使用root用户操作
     logout
-    
-**Note:** You can change `7-4-stable` to `master` if you want the *bleeding edge* version, but do so with caution!
 
 ### Configure it
 
     # Go to GitLab installation folder
     cd /home/git/gitlab
     
-为了方便添加git用户拥有root权限 [sudoers文件默认没有写权限需要强制保存:wq!]
-使用root用户执行下述命令
-    
+为了方便添加 git 用户拥有 root 权限，sudoers文件默认没有写权限需要强制保存:wq!
+
     vi /etc/sudoers
     
 最后添加
-    
-    git     ALL=(ALL)       ALL
+
+```
+git     ALL=(ALL)       ALL
+```
 
 Copy the example GitLab config
 
@@ -504,19 +437,18 @@ Copy the example GitLab config
 
 Update GitLab config file, follow the directions at top of file
 
-    sudo -u git -H editor config/gitlab.yml
+    sudo -u git -H vim config/gitlab.yml
     
-配置 
+配置如下信息
 
 ```
 host: 192.168.137.142
 port: 8008
 email_from: gitlab@example.com
-email_enabled: false
 default_theme: 1
 ```
 
-Make sure GitLab can write to the log/ and tmp/ directories
+确保 GitLab 可以写 log/ and tmp/ 目录
 
     chown -R git log/
     chown -R git tmp/
@@ -534,62 +466,65 @@ Make sure GitLab can write to the tmp/pids/ and tmp/sockets/ directories
     chmod -R u+rwX tmp/sockets/
 
 Make sure GitLab can write to the public/uploads/ directory
-
+    
+    sudo -u git mkdir /home/git/gitlab/public/uploads
     chmod -R u+rwX  /home/git/gitlab/public/uploads
 
 Copy the example Unicorn config
-
+    
     sudo -u git -H cp config/unicorn.rb.example config/unicorn.rb
 
-查看CPU的核心数量
-
+Find number of cores
+    
     nproc
 
     # Enable cluster mode if you expect to have a high load instance
     # Ex. change amount of workers to 3 for 2GB RAM server
     # Set the number of workers to at least the number of cores
-    sudo -u git -H editor config/unicorn.rb
+    sudo -u git -H vim config/unicorn.rb
     
-**特别注意：比较差配置的机器，注意将unicorn.rb中的timeout设置大一点，因为第一次启动的时候Gitlab需要初始化，如果timeout太小，由于需要执行较长时间，导致无法正常启动，出现502错误**
+> 特别注意：比较差配置的机器，注意将unicorn.rb中的timeout设置大一点，因为第一次启动的时候Gitlab需要初始化，如果timeout太小，由于需要执行较长时间，导致无法正常启动，出现502错误**
 
-    # Copy the example Rack attack config
+Copy the example Rack attack config
+
     sudo -u git -H cp config/initializers/rack_attack.rb.example config/initializers/rack_attack.rb
 
-Configure Git global settings for git user, useful when editing via web. Edit user.email according to what is set in gitlab.yml
+Configure Git global settings for git user, useful when editing via web.
+
+Edit user.email according to what is set in gitlab.yml
 
     sudo -u git -H git config --global user.name "GitLab"
     sudo -u git -H git config --global user.email "gitlab@example.com"
     sudo -u git -H git config --global core.autocrlf input
 
-Configure Redis connection settings
-
+    # Configure Redis connection settings
     sudo -u git -H cp config/resque.yml.example config/resque.yml
 
-如果不使用默认的端口，则需要配置，Change the Redis socket path if you are not using the default CentOS configuration
+如果不使用Redis的默认端口，则需要配置，Change the Redis socket path if you are not using the default CentOS configuration
 
-    sudo -u git -H editor config/resque.yml
-    
+    sudo -u git -H vim config/resque.yml
+
 **Important Note:** Make sure to edit both `gitlab.yml` and `unicorn.rb` to match your setup.
 
 **Note:** If you want to use HTTPS, see [Using HTTPS][https] for the additional steps.
 
+配置一下权限
+
+	sudo chmod 700 /home/git/gitlab/public/uploads
+	sudo chmod -R ug+rwX,o-rwx /home/git/repositories/
+	sudo chmod -R ug-s /home/git/repositories/
+	sudo find /home/git/repositories/ -type d -print0 | sudo xargs -0 chmod g+s
+
 ### Configure GitLab DB settings
 
-    # MySQL only:
     sudo -u git cp config/database.yml.mysql config/database.yml
 
-    # MySQL and remote PostgreSQL only:
-    # Update username/password in config/database.yml.
-    # You only need to adapt the production settings (first part).
-    # If you followed the database guide then please do as follows:
-    # Change 'secure password' with the value you have given to $password
-    # You can keep the double quotes around the password
-    sudo -u git -H editor config/database.yml
-    修改为正确的用户名和密码
-    分别修改git用户和root用户
+配置数据库的密码，修改为正确的用户名和密码，分别修改git用户和root用户
 
-    # PostgreSQL and MySQL:
-    # Make config/database.yml readable to git only
+    sudo -u git -H vim config/database.yml
+    
+Make config/database.yml readable to git only
+    
     sudo -u git -H chmod o-rwx config/database.yml
 
 ### Install Gems
@@ -621,31 +556,68 @@ source "https://ruby.taobao.org/"
 
 GitLab Shell is an SSH access and repository management software developed specially for GitLab.
 
-    # Run the installation task for gitlab-shell (replace `REDIS_URL` if needed):
-    sudo -u git -H bundle exec rake gitlab:shell:install[v2.2.0] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
-    
-执行上述命令如果有SSL证书问题，改用下述命令
+Run the installation task for gitlab-shell (replace `REDIS_URL` if needed):
 
     su - git
     cd /home/git/gitlab
-    bundle exec rake gitlab:shell:install[v2.2.0] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
+    bundle exec rake gitlab:shell:install[v$(cat GITLAB_SHELL_VERSION)] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
     
     logout
+
+如果出现错误
+
+```
+Errno::ENOENT: No such file or directory - /usr/bin/git
+```
+
+找一下 git 所在的位置
+
+    which git
+    
+例如我是在/usr/local/bin/git，因此建立软连接
+
+    ln -s /usr/local/bin/git /usr/bin/git
 
 By default, the gitlab-shell config is generated from your main GitLab config. You can review (and modify) the gitlab-shell config as follows:
 
     sudo -u git -H editor /home/git/gitlab-shell/config.yml
 
-Ensure the correct SELinux contexts are set. Read http://wiki.centos.org/HowTos/Network/SecuringSSH
-
+    # Ensure the correct SELinux contexts are set
+    # Read http://wiki.centos.org/HowTos/Network/SecuringSSH
     restorecon -Rv /home/git/.ssh
     
+### 安装 gitlab-workhorse
+
+    su - git
+    cd /home/git/
+    git clone https://gitlab.com/gitlab-org/gitlab-workhorse.git  
+    logout
+    
+    cd /home/git/gitlab-workhorse  
+
+编译安装
+
+    sudo -u git -H make
+
+如果出现错误
+
+```
+/bin/sh: go: 未找到命令
+```
+
+找一下 go 所在的位置
+
+    which go
+    
+例如我是在 /usr/local/go/bin/go，因此建立软连接
+
+    ln -s /usr/local/go/bin/go /usr/bin/go
+    
+然后重新编译安装一下
 
 **Note:** If you want to use HTTPS, see [Using HTTPS](#using-https) for the additional steps.
 
-### Initialize Database and Activate Advanced Features
-
-初始化数据库
+### 初始化数据并且激活高级特性
 
     cd /home/git/gitlab/
     sudo -u git -H bundle exec rake gitlab:setup RAILS_ENV=production
@@ -655,17 +627,11 @@ When done you see **Administrator account created:**.
 
 **Note:** You can set the Administrator password by supplying it in environmental variable `GITLAB_ROOT_PASSWORD`, eg.:
 
-如果要修改gitlab管理员的密码，则执行这一句，否则执行上一句
-
-    sudo -u git -H bundle exec rake gitlab:setup RAILS_ENV=production GITLAB_ROOT_PASSWORD=newpassword
-
 ### Install Init Script
 
 Download the init script (will be /etc/init.d/gitlab):
 
     sudo cp /home/git/gitlab/lib/support/init.d/gitlab /etc/init.d/gitlab
-
-    # wget -O /etc/init.d/gitlab https://gitlab.com/gitlab-org/gitlab-recipes/raw/master/init/sysvinit/centos/gitlab-unicorn --no-check-certificate
     chmod +x /etc/init.d/gitlab
     chkconfig --add gitlab
 
@@ -703,35 +669,30 @@ To do so, follow the instructions provided by the [nginx wiki][nginx-centos] and
     yum update
     yum -y install nginx
     chkconfig nginx on
-    
+
 使用SSl
     
     cp lib/support/nginx/gitlab-ssl /etc/nginx/conf.d/gitlab.conf
-    # wget -O /etc/nginx/conf.d/gitlab.conf https://gitlab.com/gitlab-org/gitlab-ce/raw/master/lib/support/nginx/gitlab-ssl --no-check-certificate
     
 不使用SSL
 
     cp lib/support/nginx/gitlab /etc/nginx/conf.d/gitlab.conf
-    
-    # wget -O /etc/nginx/conf.d/gitlab.conf https://gitlab.com/gitlab-org/gitlab-ce/raw/master/lib/support/nginx/gitlab --no-check-certificate
-最后加上--no-check-certificate不检查证书
 
 Edit `/etc/nginx/conf.d/gitlab.conf` and replace `git.example.com` with your FQDN. Make sure to read the comments in order to properly set up SSL.
 
     vi /etc/nginx/conf.d/gitlab.conf
-    去掉listen后面的default_server，修改为正确的端口号
-    去掉 listen [::]:
-    修改server_name 为本机的IP地址
     
-    修改client_max_body_size 256m;
-    否则当推送较多数据到 gitlab 上时，会由于数据过大，而出现错误
+去掉listen后面的default_server，修改为正确的端口号
+去掉 listen [::]:
+修改server_name 为本机的IP地址
+    
+修改`client_max_body_size 256m;` 否则当推送较多数据到 gitlab 上时，会由于数据过大，而出现错误
     fatal: The remote end hung up unexpectedly fatal: The remote end hung up unexpectedly error: RPC failed; result=22, HTTP code = 413
     
 Add `nginx` user to `git` group:
 
     usermod -a -G git nginx
     chmod g+rx /home/git/
-    
     
     //chmod -R g+rx /home/git/gitlab/
     
@@ -792,17 +753,12 @@ You should receive `syntax is okay` and `test is successful` messages. If you re
     
 ## 8. Configure the firewall
 
-Poke an iptables hole so users can access the web server (http and https ports) and ssh.
+    systemctl stop firewalld
+    systemctl mask firewalld
 
-    lokkit -s http -s https -s ssh
-    
-添加防火墙允许的端口
+设置开放端口到服务器外访问，这里以8081为例子，需要替换为真实的端口
 
-    vi /etc/sysconfig/iptables
-    
-添加，端口为nginx中为gitlab设置的端口
-
-    -A INPUT -m state --state NEW -m tcp -p tcp --dport 8083 -j ACCEPT
+    /sbin/iptables -I INPUT -p tcp --dport 8081 -j ACCEPT 
 
 Restart the service for the changes to take effect:
 
@@ -817,79 +773,14 @@ To make sure you didn't miss anything run a more thorough check with:
     cd /home/git/gitlab
     sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
 
-Now, the output will complain that your init script is not up-to-date as follows:
+如果都是绿色的，表示安装成功。
 
-    Init script up-to-date? ... no
-      Try fixing it:
-      Redownload the init script
-      For more information see:
-      doc/install/installation.md in section "Install Init Script"
-      Please fix the error above and rerun the checks.
-
-Do not mind about that error if you are sure that you have downloaded the up-to-date file from https://gitlab.com/gitlab-org/gitlab-recipes/raw/master/init/sysvinit/centos/gitlab-unicorn and saved it to `/etc/init.d/gitlab`.
-
-    wget https://gitlab.com/gitlab-org/gitlab-recipes/raw/master/init/sysvinit/centos/gitlab-unicorn
-    mv gitlab-unicorn gitlab
-    cp -f gitlab /etc/init.d/gitlab
-    rm gitlab
-
-复制完后，要删除/etc/init.d/gitlab.swap文件
-
-If all other items are green, then congratulations on successfully installing GitLab!
-
-**NOTE:** Supply `SANITIZE=true` environment variable to `gitlab:check` to omit project names from the output of the check command.
-
-
-升级Gitlab Shell，安装的时候版本是2.1.0，需要升级到2.2.0才可以使用，否则会出现502错误
-
-Upgrade GitLab Shell
-GitLab Shell might be outdated, running the commands below ensures you're using a compatible version:
-
-    su - git
-    cd /home/git/gitlab-shell
-    git fetch
-    git checkout v`cat /home/git/gitlab/GITLAB_SHELL_VERSION`
-
-One line upgrade command
-You've read through the entire guide and probably already did all the steps one by one.
-
-Here is a one line command with step 1 to 5 for the next time you upgrade:
-
-    cd /home/git/gitlab; \
-    sudo -u git -H bundle exec rake gitlab:backup:create RAILS_ENV=production; \
-    sudo service gitlab stop; \
-    if [ -f bin/upgrade.rb ]; then sudo -u git -H ruby bin/upgrade.rb -y; else sudo -u git -H ruby script/upgrade.rb -y; fi; \
-    cd /home/git/gitlab-shell; \
-    sudo -u git -H git fetch; \
-    sudo -u git -H git checkout v`cat /home/git/gitlab/GITLAB_SHELL_VERSION`; \
-    cd /home/git/gitlab; \
-    exit; \
-    sudo service gitlab start; \
-    sudo service nginx restart; sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
-  
-  
-  
 ## Initial Login
 
-Visit YOUR_SERVER in your web browser for your first GitLab login.
-The setup has created an admin account for you. You can use it to log in:
+默认的用户名是 root，一开始会要求重新设置密码
 
     root
     5iveL!fe
-
-**Important Note:**
-Please go over to your profile page and immediately change the password, so
-nobody can access your GitLab by using this login information later on.
-
-**Enjoy!**
-
-You can also check some [Advanced Setup Tips][tips].
-
-## Links used in this guide
-
-- [EPEL information](http://www.thegeekstuff.com/2012/06/enable-epel-repository/)
-- [SELinux booleans](http://wiki.centos.org/TipsAndTricks/SelinuxBooleans)
-
 
 ## 代码更新
 
@@ -900,7 +791,7 @@ You can also check some [Advanced Setup Tips][tips].
     git fetch origin
     git merge origin/7-5-zh
 
-    重启 gitlab
+    # 重启 gitlab
     service gitlab restart
 
 ## Gitlab 备份
@@ -921,6 +812,7 @@ https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore
     sudo service gitlab stop # 先停止Gitlab，可以不暂停
     cd /home/git/gitlab/
     sudo -u git -H bundle exec rake gitlab:backup:create RAILS_ENV=production
+    
 执行完成后，会在/home/git/gitlab/tmp/backups/目录下创建一个备份俄文件，以时间戳_gitlab_backup命名如 1417040627_gitlab_backup.tar
 
 ### 重新启动
@@ -942,15 +834,24 @@ https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore
     sudo service gitlab stop
     cd /home/git/gitlab/ 
     sudo -u git -H bundle exec rake gitlab:backup:restore BACKUP=timestamp_of_backup RAILS_ENV=production
+
+如果是从全新部署的 gitlab 还原，需要执行这一步
+
+    sudo -u git -H bundle exec rake gitlab:satellites:create RAILS_ENV=production
+
+重启 gitlab
+
     sudo service gitlab start
     sudo service nginx restart
+    
     sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
 
 ### 设置自动备份
 
     sudo service gitlab stop;
     cd /home/git/gitlab;
-    sudo -u git -H editor config/gitlab.yml; # Enable keep_time in the backup section to automatically delete old backups
+    sudo -u git -H editor config/gitlab.yml; 
+    # Enable keep_time in the backup section to automatically delete old backups
 
 keep_time参数默认是604800（单位是秒），因此会保留最近7天内的备份
 
@@ -1009,6 +910,11 @@ user.save
 user = User.find(1)
 ```
 
+
+## 参考文档
+
+- https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/install/centos
+- https://www.dwhd.org/20160406_094416.html
 
 [https]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#using-https
 [EPEL]: https://fedoraproject.org/wiki/EPEL

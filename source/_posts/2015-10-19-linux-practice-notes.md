@@ -190,17 +190,15 @@ fd目录下是进程打开或使用的文件的符号连接
 
 创建用户（useradd/adduser）：
 
-（1）用useradd命令创建用户创建用户：
+    useradd [所要创建的用户名] -p [密码]
 
-语法： useradd [所要创建的用户名] -p [密码]
+删除用户
 
-删除用户（userdel命令）
+    userdel [-r] [要删除的用户的名称]
 
-语法：userdel  [-r]  [要删除的用户的名称]
+修改用户密码
 
-修改用户密码：passwd [用户名]
-
-
+    passwd [用户名]
 
 ## 在服务器上用 SSH 登录另外一台服务
     
@@ -238,7 +236,20 @@ fd目录下是进程打开或使用的文件的符号连接
 
     vi /etc/sysconfig/network-scripts/ifcfg-eno16777736
 
-最后一行，设置 `onboot=yes`，然后重启网络服务
+最后一行，设置 `onboot=yes`，
+
+配置 DNS
+
+    vi /etc/resolve.conf
+    
+添加
+
+```
+nameserver 114.114.114.114
+nameserver 8.8.8.8
+```
+
+然后重启网络服务
  
     sudo service network restart
 
@@ -312,7 +323,17 @@ or
 
     /usr/libexec/iptables/iptables.init save
     
+## Nginx
 
+## 安装最新版的 Nginx
+
+可以参考[这里](http://www.lnmp.cn/installing-php7-mysql57-nginx18-under-centos7.html)
+
+    rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+
+通过 yum 安装
+
+    yum install nginx
 
 ### Nginx permission denied 问题
 
@@ -362,10 +383,25 @@ or
     
 ## MySQL
 
+## 安装 MySQL 5.7
+
+    rpm -Uvh http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+    # 安装
+    yum install mysql-community-server mysql-community-devel
+    #启动
+    systemctl start mysqld
+
+    # MySQL 5.7 会给 root 分配临时密码，可以通过该方法查看
+    grep 'temporary password' /var/log/mysqld.log
+
+## MySQL 操作
+
 mysql命令用户连接数据库。
 
     mysql -h 主机地址 -u 用户名 －p 用户密码 -P port -D database
-    
+    # 连接本机的数据库
+    mysql -u root -p
+ 
 修改数据库的表编码
 
     ALTER TABLE test_table CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -376,6 +412,11 @@ mysql命令用户连接数据库。
     ALTER TABLE table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
     # For each column:
     ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+修改密码
+
+    # MySQL 5.7 版本对密码的安全性要求很严格，必须至少包含1个大写字母、1个小写字母、1个数字和1个特殊字符，长度不得小于8个字符。
+    ALTER USER 'root'@'localhost' IDENTIFIED BY 'p@ssw0rd';
 
 ## yum update 之后出现的问题
 
