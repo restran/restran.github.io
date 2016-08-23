@@ -28,6 +28,28 @@ tags : [Vue]
 
 如果想按需加载组件资源，而不是在入口页就一次性加载全部的组件，可以参考 vue-router 文档中[动态组件载入](http://router.vuejs.org/zh-cn/lazy.html)章节。
 
+Webpack 已经集成了代码分割功能。可以使用 AMD 风格的 require 来对你的代码标识代码分割点:
+
+```js
+require(['./MyComponent.vue'], function (MyComponent) {
+  // code here runs after MyComponent.vue is asynchronously loaded.
+})
+```
+
+和路由配合使用，如下：
+
+```js
+router.map({
+  '/async': {
+    component: function (resolve) {
+      require(['./MyComponent.vue'], resolve)
+    }
+  }
+})
+```
+
+现在，只有当 /async 需要被渲染时，MyComponent.vue组件，会自动加载它的依赖组件，并且异步的加载进来。
+
 ## Vue.util.extend
 
 有时想要使用 Vue 内置的方法来进行拷贝对象，就像`Angular.copy`，Vue 也提供了这样一个方法，但是存在问题，[相关 Issue](https://github.com/vuejs/vue/issues/1849)。
@@ -38,10 +60,10 @@ tags : [Vue]
 
 ```json
 item = {
-	data: {
-		name: '',
-		phone: ''
-	}
+  data: {
+    name: '',
+    phone: ''
+  }
 }
 
 // item.data.name 也会被修改

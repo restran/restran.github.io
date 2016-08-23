@@ -25,6 +25,21 @@ find . -name your_file_name
 find / -name "*.log"
 ```
 
+### 查看隐藏文件
+
+以`.`开头的文件或文件夹是隐藏文件，默认不显示
+
+```
+# 显示所有文件（包含隐藏文件）
+ls -a
+# 只显示隐藏文件
+l.
+# 或者
+ls -d .*
+```
+
+如果是 Ubuntu，按 Ctrl+H就可以显示隐藏文件，再按一次则隐藏
+
 ### 移动文件
 
     mv file_path new_file_path
