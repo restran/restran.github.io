@@ -74,28 +74,21 @@ ls -d .*
 
 ## 查看硬盘及内存空间
 
-```sh
+```bash
 # 查看内存及swap大小
 free -m
-    
 # 查看当前文件夹下所有文件大小（包括子文件夹）
 du -sh
-
 # 查看指定文件夹下所有文件大小（包括子文件夹）
 du -h ftp
-
 # 查看指定文件夹大小
 du -hs ftp
-
 # 查看磁盘剩余空间
 df -hl
-
 # 查看每个根路径的分区大小
 df -h
-
 # 返回该目录的大小
 du -sh [目录名]
-
 # 返回该文件夹总M数
 du -sm [文件夹] 
 ```
@@ -398,7 +391,7 @@ or
     
 ## MySQL
 
-## 安装 MySQL 5.7
+### 安装 MySQL 5.7
 
     rpm -Uvh http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
     # 安装
@@ -409,7 +402,7 @@ or
     # MySQL 5.7 会给 root 分配临时密码，可以通过该方法查看
     grep 'temporary password' /var/log/mysqld.log
 
-## MySQL 操作
+### MySQL 操作
 
 mysql命令用户连接数据库。
 
@@ -433,9 +426,81 @@ mysql命令用户连接数据库。
     # MySQL 5.7 版本对密码的安全性要求很严格，必须至少包含1个大写字母、1个小写字母、1个数字和1个特殊字符，长度不得小于8个字符。
     ALTER USER 'root'@'localhost' IDENTIFIED BY 'p@ssw0rd';
 
-## yum update 之后出现的问题
+## 配置 SNMP 服务
 
-### django-celery
+Solarwinds 可以使用 SNMP 协议监控服务器的状态。
+
+```
+# 安装
+yum install net-snmp
+# 可选安装 net-snmp 的工具，可以使用 snmpwalk 命令
+yum install net-snmp-utils
+ 
+# 设置开机启动
+chkconfig snmpd on
+
+# 启动
+service snmpd start
+ 
+# 查看当前版本
+snmpd -v
+```
+
+[snmap 配置](http://blog.csdn.net/jacky0922/article/details/6952152)
+
+为了让 Solarwinds 监控服务器的状态，需要配置这几个东西
+
+```
+# 打开配置文件
+vim /etc/snmp/snmpd.conf
+```
+
+修改 community
+
+```
+####
+# First, map the community name "public" into a "security name"
+
+#       sec.name  source          community
+# com2sec notConfigUser  default       public
+# 修改最后的 public 为指定的名称
+com2sec notConfigUser  default       public
+```
+
+配置可以查看主机CPU和内存等设备的数据，添加一行数据
+
+```
+# Third, create a view for us to let the group have rights to:
+
+# Make at least  snmpwalk -v 1 localhost -c public system fast again.
+#       name           incl/excl     subtree         mask(optional)
+# 添加这条数据，表示可以查看.1节点下的所有设备信息
+view    systemview    included   .1
+
+view    systemview    included   .1.3.6.1.2.1.1
+view    systemview    included   .1.3.6.1.2.1.25.1.1
+```
+
+修改disk checks配置
+
+```
+# disk PATH [MIN=100000]
+# Check the / partition and make sure it contains at least 10 megs.
+
+# "#" 号去掉，取消注释。
+disk / 10000
+```
+
+
+## 其他
+
+### 修改 hostname
+
+    hostname your_hostname
+
+### yum update 之后出现的问题
+
+django-celery
 
 使用 Supervisord 来管理 django-celery 的 beat 和 worker 进程，使用了 MySQL 数据库。但是在执行 yum update 之后，在 beat 的日志中出现异常，导致所有的 task 都无法正确执行。应该是由于 yum update 更新了 MySQL，才会出现该问题，而且 beat 进程仍然在运行，只是不停的出现该异常。
 
@@ -446,3 +511,5 @@ OperationalError: (2006, 'MySQL server has gone away')
 重新启动进程后解决
 
     supervisorctl restart all
+
+
