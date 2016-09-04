@@ -73,3 +73,26 @@ newItem.data.name = 'newName';
 [官方推荐的方法](https://github.com/vuejs/vue/issues/158)是
 
 	newItem ＝ JSON.parse(JSON.stringify(object))
+	
+## vue-resource 
+
+当使用 JSON 与服务端进行交互时，在一些 Android 手机的微信中, 会出现没有将返回的数据转换成 JSON, 而是仍然为字符串，这时需要手动转换
+
+```js
+Vue.http.post(
+  postUrl, postData
+).then(function (response) {
+  var data = response.data;
+  // 需要手动转换为 JSON
+  if (typeof data == 'string') {
+    try {
+      data = JSON.parse(data);
+    } catch (e) {
+    }
+  }
+   // do something
+}, function (response) {
+  // 请求失败
+});
+```	
+	
