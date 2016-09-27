@@ -76,7 +76,7 @@ newItem.data.name = 'newName';
 	
 ## vue-resource 
 
-当使用 JSON 与服务端进行交互时，在一些 Android 手机的微信中, 会出现没有将返回的数据转换成 JSON, 而是仍然为字符串，这时需要手动转换
+当使用 JSON 与服务端进行交互时，在一些 Android 手机的微信中, 会出现没有将返回的数据转换成 JSON，而是仍然为字符串，这时需要手动转换
 
 ```js
 Vue.http.post(

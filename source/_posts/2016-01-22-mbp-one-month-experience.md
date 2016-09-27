@@ -155,7 +155,7 @@ git config --global core.autocrlf true
 
 处理完之后，在不同的操作系统中需要使用 Git Clone 出来的文件，不能直接将 Windows 中的文件拷贝到 Mac 中，不然文件的行结束符还是不一样的。
 
-## 配置终端使用代理
+### 配置终端使用代理
 
 	vi ~/.curlrc
 
@@ -163,6 +163,30 @@ git config --global core.autocrlf true
 
 	socks5 = 127.0.0.1:1080
 	proxy = 127.0.0.1:1080
+
+### .DS_Store 文件
+
+https://www.zhihu.com/question/20345704
+
+.DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件，如文件的图标位置或背景色，相当于 Windows 的 desktop.ini。通过 .DS_Store 可以知道这个目录里面所有文件的清单，很多时候这是一个不希望出现的问题。
+
+禁止 .DS_store 生成，打开“终端”，复制黏贴下面的命令，回车执行，重启 Mac 即可生效。
+
+```
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+```
+
+恢复 .DS_store 生成
+
+```
+defaults delete com.apple.desktopservices DSDontWriteNetworkStores
+```
+
+刪除已存在的.DS_Store
+
+```
+sudo find . -name ".DS_Store" -depth -exec rm {} \;
+```
 
 ## 吐槽篇
 

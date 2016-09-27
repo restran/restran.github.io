@@ -167,7 +167,25 @@ fd目录下是进程打开或使用的文件的符号连接
 通过cwd直接进入进程运行目录，通过查看相关信息就可以定位此目录对应那个端口号，以及定位是那个应用才使用此服务程序。这样就获得了Linux进程文件路径了。
 
 
-### supervisord 使用问题
+## 查看CPU和内存占用
+
+```
+# CPU占用最多的前10个进程： 
+ps auxw|head -1;ps auxw|sort -rn -k3|head -10 
+# 内存消耗最多的前10个进程 
+ps auxw|head -1;ps auxw|sort -rn -k4|head -10 
+# 虚拟内存使用最多的前10个进程 
+ps auxw|head -1;ps auxw|sort -rn -k5|head -10
+```
+
+```
+# 按内存占用对进程排序
+ps auxw --sort=rss
+# 按CPU占用对进程排序
+ps auxw --sort=%cpu
+```
+
+## supervisord 使用问题
 
 运行 supervisord 命令出现 unix:///tmp/supervisor.sock no such file
 

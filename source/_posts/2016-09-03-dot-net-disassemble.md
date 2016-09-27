@@ -8,6 +8,17 @@ tags : [.NET]
 
 常用的 .NET 反编译工具有两个 [ILSpy](http://ilspy.net/) 和 [Reflector](http://www.red-gate.com/products/dotnet-development/reflector/)，ILSpy 开源而 Reflector 收费。不同的反编译工具得到的代码可能会不一样，甚至会出现无法反编译的情况，有时需要同时使用两个工具对照着看。这里介绍 Reflector 的使用方法。
 
+## 反混淆
+
+有时会遇到 Reflector 打开要反编译的文件，出现 Index was outside the bounds of the array 的问题，这是因为文件可能进行了混淆，可以先用反混淆工具 [de4dot] (https://github.com/0xd4d/de4dot) 处理一下，使用方法
+
+```
+de4dot.exe -r c:\my\files -ro c:\my\output
+de4dot.exe file1 file2 file3
+de4dot.exe file1 -f file2 -o file2.out -f file3 -o file3.out
+de4dot.exe file1 --strtyp delegate --strtok 06000123
+```
+
 ## Reflector 的使用
 
 这里以一个 `TestWinFrom` 项目为例，使用 Reflector 打开 .NET 的可执行文件后，反编译后的窗口如下，可以看到里面的具体代码。
