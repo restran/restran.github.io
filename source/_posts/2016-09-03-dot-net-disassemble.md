@@ -10,7 +10,7 @@ tags : [.NET]
 
 ## 反混淆
 
-有时会遇到 Reflector 打开要反编译的文件，出现 Index was outside the bounds of the array 的问题，这是因为文件可能进行了混淆，可以先用反混淆工具 [de4dot] (https://github.com/0xd4d/de4dot) 处理一下，使用方法
+有时会遇到 Reflector 打开要反编译的文件，出现 Index was outside the bounds of the array 的问题，这是因为文件可能进行了混淆，可以先用反混淆工具 [de4dot](https://github.com/0xd4d/de4dot) 处理一下，使用方法
 
 ```
 de4dot.exe -r c:\my\files -ro c:\my\output
