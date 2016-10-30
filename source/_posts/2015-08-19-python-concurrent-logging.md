@@ -46,7 +46,7 @@ logging.config.dictConfig({
         },
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.RotatingFileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             # 当达到10MB时分割日志
             'maxBytes': 1024 * 1024 * 10,
             # 最多保留50份文件

@@ -151,9 +151,7 @@ lrwxrwxrwx 1 zhouys zhouys 0 Dec 11 11:10 root -> /
 -r--r--r-- 1 zhouys zhouys 0 Dec 11 11:10 status 
 ```
 
-/proc文件系统下的 进程号目录 下面的文件镜像了进程的当前运行信息，
-
-从中可以看到：
+/proc文件系统下的进程号目录下面的文件镜像了进程的当前运行信息，从中可以看到：
 
 ```
 cwd符号链接的就是进程22401的运行目录；
@@ -226,8 +224,14 @@ ps auxw --sort=%cpu
 
     passwd [用户名]
 
-## 在服务器上用 SSH 登录另外一台服务
+## SSH 相关
     
+生成 SSH 密钥
+
+    ssh-keygen -t rsa -C "your_email@example.com"
+
+在服务器上用 SSH 登录另外一台服务
+
     # -p 后面跟的是端口
     ssh 192.168.1.102 -l root -p 22
 
@@ -508,7 +512,6 @@ view    systemview    included   .1.3.6.1.2.1.25.1.1
 # "#" 号去掉，取消注释。
 disk / 10000
 ```
-
 
 ## 其他
 

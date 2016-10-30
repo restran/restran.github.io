@@ -1,7 +1,7 @@
 ---
 title: Vue.js 学习笔记
 layout: post
-category : [技术, 前端]
+category : [前端]
 tagline: 
 tags : [Vue]
 ---
