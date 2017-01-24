@@ -1,9 +1,7 @@
 ---
 title: Python 使用 Postfix 发送邮件
 layout: post
-category : [Python]
-tagline: 
-tags : [Python, Email, Postfix]
+type: snippets
 ---
 
 最近在做一个监控程序，需要用邮件发送告警。以前是使用注册的免费邮来发送，但是这样不免有很多限制，而且有时还会当作恶意登录，帐号异常等，还不让登录邮箱了。利用[Postfix][1]提供邮件SMTP服务，可以很自由的发送邮件，任意定义发送者的邮箱地址。感觉都可以用来恶作剧，用别人的邮箱来发邮件呢。
@@ -31,7 +29,7 @@ tags : [Python, Email, Postfix]
 
 使用[这里][4]给出的完美例子
 
-```py
+```python
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -77,9 +75,10 @@ if __name__ == '__main__':
     send_mail(['your_name <your_name@gmail.com>'], 'MonitorBase <notify@monitor.base>', 'Hello Python!', 'Say hello to Python! :)', [])
 ```
 
-最后把使用SMTP登录邮箱发送邮件的方法也附上
 
-```py
+**最后把使用SMTP登录邮箱发送邮件的方法也附上**
+
+```python
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -103,74 +102,6 @@ def send_mail(mail_from, password, mail_to, subject, content):
 if __name__ == '__main__':
     send_mail('your_name@163.com', 'your_password', 'Hello Python!', 'Say hello to Python! :)')
 ```
-
-如果要发送附件
-
-```py
-# -*- coding: utf-8 -*-
-# created by restran on 2016/07/02
-from __future__ import unicode_literals, absolute_import, print_function
-
-import os
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.utils import COMMASPACE, formatdate
-
-
-class EmailHandler(object):
-    def __init__(self, mail_from, password, smtp_server, smtp_port=25):
-        """
-        :param mail_from: 发件人
-        :param password: 发件人密码
-        :param smtp_server: SMTP服务器地址
-        :param smtp_port: SMTP服务器端口
-        :return:
-        """
-        
-        self.mail_from = mail_from
-        self.password = password
-        self.smtp_server = smtp_server
-        self.smtp_port = smtp_port
-
-    def send_mail(self, mail_to_list, subject, content, file_name_list):
-        """
-        发送邮件
-        :param mail_to_list: 收件人列表
-        :param subject: 邮件主题
-        :param content: 邮件正文
-        :param file_name_list: 附近的文件路径列表
-        :return:
-        """
-        
-        smtp = smtplib.SMTP(self.smtp_server, self.smtp_port)
-        smtp.ehlo(name='foxmail')
-        # 调用login时，如果没有调用过 echlo 会自动调用该方法，但是默认使用的name为计算机名
-        # 如果计算机名有中文，就会返回503方法未实现的异常
-        smtp.login(self.mail_from, self.password)
-
-        msg = MIMEMultipart()
-        msg['From'] = self.mail_from
-        msg['To'] = COMMASPACE.join(mail_to_list)
-        msg['Date'] = formatdate(localtime=True)
-        msg['Subject'] = subject
-
-        # 如果 content 是 html，则需要设置 _subtype='html'
-        # 默认情况下 _subtype='plain'，即纯文本
-        msg.attach(MIMEText(content, _charset='utf-8'))
-
-        for fn in file_name_list:
-            part = MIMEText(open(fn, 'rb').read(), 'base64', 'gb2312')
-            part["Content-Type"] = 'application/octet-stream'
-            basename = os.path.basename(fn)
-            # 文件名使用 gb2312 编码，否则会没有附件
-            part['Content-Disposition'] = ('attachment; filename=%s' % basename).encode('gb2312')
-            msg.attach(part)
-
-        smtp.sendmail(self.mail_from, mail_to_list, msg.as_string())
-        smtp.close()
-```
-
 
   [1]: http://www.postfix.org/
   [2]: http://oxygen.qiniudn.com/img2014103024.png

@@ -32,13 +32,16 @@ find / -name "*.log"
 ```
 # 显示所有文件（包含隐藏文件）
 ls -a
+# 列表方式查看，可以查看文件权限
+ls -l
+ls -al
 # 只显示隐藏文件
 l.
 # 或者
 ls -d .*
 ```
 
-如果是 Ubuntu，按 Ctrl+H就可以显示隐藏文件，再按一次则隐藏
+必须有文件的`执行`权限，用 ls 命令的时候才能看见文件。如果是 Ubuntu，按 Ctrl+H 就可以显示隐藏文件，再按一次则隐藏。
 
 ### 移动文件
 
@@ -67,10 +70,14 @@ ls -d .*
     
     chown [用户名] [文件名] 
 
+如果是修改所属的用户组使用 `chgrp`
+
 修改文件夹的拥有者
 
     chown -R [用户名] [文件夹] 
     chown -R user /tmp/folder
+
+
 
 ## 查看硬盘及内存空间
 
@@ -103,6 +110,8 @@ du -sm [文件夹]
 
 查询指定端口的进程id，如8108
 
+grep 是搜索，`|` 是管道，下面命令的意思是将 netstat -ap 的结果作为下一个命令的输入
+
     sudo netstat -ap | grep 8108
 
 或者 
@@ -113,6 +122,20 @@ du -sm [文件夹]
 
     sudo kill xxx
 
+查看指定用户名启动的进程
+
+    ps -u username
+
+指定用户来运行某个程序，当前必须要是 root
+
+    sudo -u username ./run.sh
+
+
+使用 ax 和 aux 可以查看详细信息
+
+    ps ax | grep uwsgi
+    ps aux | grep uwsgi
+    
 ### 强制杀死所有 uwsgi 进程
 
 [参考这里](http://serverfault.com/questions/565903/how-to-stop-uwsgi-when-no-pidfile-in-config)
@@ -214,8 +237,10 @@ ps auxw --sort=%cpu
 
 创建用户（useradd/adduser）：
 
-    useradd [所要创建的用户名] -p [密码]
-
+    useradd [所要创建的用户名] -p [加密后的密码]
+    # 会自动创建目录，会提示设置密码
+    adduser [所要创建的用户名] 
+    
 删除用户
 
     userdel [-r] [要删除的用户的名称]
@@ -519,9 +544,9 @@ disk / 10000
 
     hostname your_hostname
 
-### yum update 之后出现的问题
+## yum update 之后出现的问题
 
-django-celery
+### django-celery
 
 使用 Supervisord 来管理 django-celery 的 beat 和 worker 进程，使用了 MySQL 数据库。但是在执行 yum update 之后，在 beat 的日志中出现异常，导致所有的 task 都无法正确执行。应该是由于 yum update 更新了 MySQL，才会出现该问题，而且 beat 进程仍然在运行，只是不停的出现该异常。
 
@@ -534,3 +559,19 @@ OperationalError: (2006, 'MySQL server has gone away')
     supervisorctl restart all
 
 
+### gitlab-ci-runner
+
+如果 gitlab-ci-runner 有更新或者 docker 有更新，会出现无法连接到 gitlab，clone 代码
+ 
+```
+fatal: unable to access 'http://gitlab-ci-token:xxxxxx@your_gitlab/webport/fomalhaut.git/': Failed to connect to your_gitlab port 80: Operation timed out
+```
+
+需要重启 docker
+
+    service docker restart
+   
+或者重启 gitlab-ci-runnner
+
+    gitlab-ci-runner restart
+    

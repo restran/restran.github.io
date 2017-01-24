@@ -1,5 +1,12 @@
 {% extends '_layout.swig' %}
 {% import '_macro/sidebar.swig' as sidebar_template %}
+{% import '_macro/snippets-sidebar.swig' as snippets_sidebar_template %}
+
+{% block snippets-sidebar %}
+  {% if page.type === "snippets" %}
+    {{ snippets_sidebar_template.render(true) }}
+  {% endif %}
+{% endblock %}
 
 {% block title %}
   {% set page_title_suffix = ' | ' + config.title %}
