@@ -1,5 +1,5 @@
 ---
-title: Nginx 使用 Let’s Encrypt 配置 HTTPS 和 HTTP2.0
+title: Nginx 使用 Let's Encrypt 配置 HTTPS 和 HTTP2
 layout: post
 category : [技术]
 tagline: 

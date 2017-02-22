@@ -75,6 +75,8 @@ MBP 睡眠的时候耗电很低，我现在都是直接合上电脑，几乎不�
 - Command(⌘)-空格键 显示或隐藏 Spotlight
 - Command(⌘)-上箭头 前往上层文件夹
 - Command(⌘)-Option-H 除了当前窗口外，其他窗口全部最小化
+- Command(⌘)-Shift-Y 用当前选中的文字生成便签
+- Ctrl-Shift-电源键 关闭显示器
 - Ctrl-C 在终端中结束程序
 
 屏幕截图，文件保存在桌面
