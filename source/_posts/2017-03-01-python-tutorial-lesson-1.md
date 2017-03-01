@@ -1,5 +1,5 @@
 ---
-title: Python 入门课程 Lesson 1 - 初识 Python
+title: Python 入门教程 Lesson 1 - 初识 Python
 layout: post
 category : [技术]
 tagline: 
