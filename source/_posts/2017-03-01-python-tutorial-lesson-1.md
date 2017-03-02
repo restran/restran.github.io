@@ -24,7 +24,7 @@ Python是一种面相对象、函数式、动态类型、解释型的计算机�
 
 - API监控
 - Web应用网关
-- 数据可视化
+- 数据可视化 [matplotlib](http://matplotlib.org/gallery.html)
 - [发送邮件](http://www.restran.net/2015/02/12/python-postfix-email/)
 - 爬虫
 
@@ -132,6 +132,7 @@ import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d
 - BracketHighlighter 高亮显示匹配的括号、引号和标签
 - IME Support 支持中文输入法
 - Jedi Python 代码自动提示
+- ConvertToUTF8 文件编码转换
 
 ### iPython
 
@@ -149,7 +150,7 @@ import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d
 
 有免费的社区版和收费的专业版，社区版可以满足基本需求
 
-专业版有专门对 Django 做了一些支持，可以使用(该地址)[http://idea.lanyus.com/]提供的序列号注册。
+专业版有专门对 Django 做了一些支持，可以使用[该地址](http://idea.lanyus.com/)提供的序列号注册。
 
 
 ### 字体
@@ -157,7 +158,6 @@ import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d
 等宽字体
 
 - Miscroft Yahei Mono
-
 
 ## Python 的基础语法
 
@@ -213,7 +213,7 @@ bar = {
 ### 循环和条件表达式
 
 ```py
-x == 'apple'
+x = 'apple'
 
 if x == 'milk':
     print('color: white')
@@ -363,7 +363,7 @@ print(foo)
 
 ## 命名空间
 
-模命名空间的意义，就是用来确定一个变量符号到底对应什么对象。命名空间可以一个套一个地形成一条命名空间链。
+命名空间的意义，就是用来确定一个变量符号到底对应什么对象。命名空间可以一个套一个地形成一条命名空间链。
 
 ### 变量和对象的概念
 
@@ -472,7 +472,21 @@ requests
     
     # 进入源码目录，如果存在 setup.py 则可以进行源码安装，使用该命令
     python setup.py install
-    
+
+### 常见问题
+
+源码安装，但是没有 C++ 的编译环境
+
+```
+error: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual
+C++ Build Tools": http://landinghub.visualstudio.com/visual-cpp-build-tools
+```
+
+- 如果是 Python 27 可以安装 [Microsoft Visual C++ Compiler for Python 2.7
+](https://www.microsoft.com/en-us/download/details.aspx?id=44266)
+- 如果是 Python 3 可以安装 [Visual C++ 2015 Build Tools](http://landinghub.visualstudio.com/visual-cpp-build-tools)
+- 或者使用下载编译好的 exe 文件
+- 或者使用 whl 格式的包
 
 ## 代码模板
 
@@ -570,5 +584,8 @@ if __name__ == '__main__':
 
 ### 其他
 
+- [为什么Python的字符串是不可变对象](http://hgoldfish.com/blogs/article/61/)
+- [用Python生成词云](https://github.com/amueller/word_cloud)
+- [6 种 Python 数据可视化工具](http://python.jobbole.com/85601/)
 - [Sublime Text](http://9iphp.com/web/html/1260.html)
 - [为什么文件名要小写](http://www.ruanyifeng.com/blog/2017/02/filename-should-be-lowercase.html)
