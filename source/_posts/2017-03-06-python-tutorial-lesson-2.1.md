@@ -31,7 +31,12 @@ from __future__ import unicode_literals, absolute_import
 # 这里的 def func() 是创建一个函数
 # 只有执行了这段代码，函数才会创建
 def func():
+    # Python 是以缩进来确定作用域的
+    # 缩进相同，是属于同一个作用域的
+    # 函数 func 的代码是从冒号开始
     print('hello func')
+
+# 到了相同缩进的外面，函数 func 的代码结束
 
 
 # 这段代码是开始创建MyClass这个类的对象
@@ -180,7 +185,7 @@ with open('test.txt', 'r') as f:
 with open('test.txt', 'rb') as f:
     # 将文件的所有内容读取出来
     data = f.read()
-        
+
 # 写模式，文件旧内容将会删除，并存储为新的内容
 with open('test.txt', 'w') as f:
     f.write('test content')
