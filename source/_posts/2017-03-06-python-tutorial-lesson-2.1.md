@@ -98,6 +98,8 @@ import test1
 print('test2 模块被执行')
 ```
 
+关于 Python 运行的一些原理，上面只做了简要介绍，详细可以查看[这篇文章](http://www.restran.net/2015/10/22/how-python-code-run/#more)
+
 ## 列表/字典解析
 
 ```py
