@@ -164,6 +164,7 @@ data = data[1:-1]
 | ab     |  等同 a 但是以二进制模式处理数据 | 
 | ab+    |  等同 ab 但是可读，需要注意文件指针的位置 | 
 
+<br>
 也可以参考[这里](http://www.cnblogs.com/feeland/p/4477535.html)
 
 ```py
