@@ -64,6 +64,14 @@ HTTP 协议主要包括这几项内容
 - 500 服务端错误
 - 502 服务端使用了代理但是代理请求的服务无法访问 
 
+## HTTP Header
+
+- Content-Type， Body 内容的类型，常见的有 text/html, application/json
+- Cookie， 客户端发给服务端的 Cookie 值
+- Set-Cookie， 服务端设置的 Cookie 值
+- Content-Encoding Body 的内容使用了什么编码，常见的有 gzip
+
+
 ## Web API 是什么？
 
 - API 是应用程序接口的意思
@@ -92,12 +100,14 @@ JSON （JavaScript Simple Object Notation），JSON 的数据类型只有四种�
 
 这是一个 JSON 的例子，可以发现跟 Python 的数据类型和表示方式是一样的，因此 Python 原生就很适合处理 JSON 数据
 
+注意 JSON 的字符串是用双引号，不是用单引号
+
 ```json
 data = [
     {
-        'name': 'jack',
-        'age': 28,
-        'tax': 120.12
+        "name": "jack",
+        "age": 28,
+        "tax": 120.12
     }
 ]
 ```
