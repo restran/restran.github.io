@@ -107,7 +107,9 @@ data = [
     {
         "name": "jack",
         "age": 28,
-        "tax": 120.12
+        "tax": 120.12,
+        "human": true,
+        "money": null
     }
 ]
 ```
