@@ -50,10 +50,9 @@ os.environ['PATH'] = 'D:\Program Files\Oracle\instantclient_11_2;' + os.environ[
 
 如果是使用 Django Web 框架的话，其自带的 Django ORM 就十分强大，这里不介绍 ORM 的相关知识，可以自己查阅文档。
 
-### Records
+## Records
 
-如果是使用 RAW SQL 的方式，可以使用 [records](https://github.com/kennethreitz/records)。
-records 基于 SQLAlchemy，并做了一些封装，可以更简单地用写 SQL 的方式来处理数据库的数据。
+如果是使用 RAW SQL 的方式，可以使用 [records](https://github.com/kennethreitz/records)。records 基于 SQLAlchemy，并做了一些封装，可以更简单地用写 SQL 的方式来处理数据库的数据。
 
 records 使用举例
 
@@ -66,7 +65,7 @@ for r in rows:
     print(r.name)
 ```
 
-### SQL 和存储过程的使用方法
+## SQL 和存储过程的使用方法
 
 以下是使用 Tornado 框架做的 API，使用了 records。APIHandler 为封装好的 API 处理基类，详细内容不展开介绍，主要介绍 SQL 和存储过程的使用方法。 
 
