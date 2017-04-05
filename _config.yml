@@ -101,7 +101,9 @@ google_analytics: 'UA-38277310-2'
 # tencent_analytics: '51258575'
 
 # 设置多说评论
-duoshuo_shortname: restran
+# duoshuo_shortname: restran
+# 设置 dusqus 评论
+disqus_shortname: restran
 
 # 设置站点的 Creative commons协议
 creative_commons: by-nc-sa

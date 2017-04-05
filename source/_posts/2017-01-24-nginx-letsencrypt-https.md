@@ -21,7 +21,7 @@ yum install letsencrypt
 
 ```
 server {
-    listen 80; // 改为指定的端口
+    listen 80;
     server_name www.example.com;
     root /var/www/html;
     location ~ /.well-known {
@@ -150,6 +150,22 @@ server {
 
 如果当前服务器的80端口被占用，或者防火墙那边不开放80端口，只能是采用这种手动的方式，先将域名指定到一台有80端口的服务器上，验证通过后，再将域名指定回来真正的服务器上面。
 
+## 手动模式获取的证书，如何刷新证书
+
+但是通过手动模式获取的 letsencrypt 证书是无法通过执行 /usr/bin/letsencrypt renew 来刷新，会出现如下问题
+
+```
+Could not choose appropriate plugin: The manual plugin is not working; there may be problems with your existing configuration.
+The error was: PluginError('Running manual mode non-interactively is not supported',)
+Attempting to renew cert from /etc/letsencrypt/renewal/example.com.conf produced an unexpected error: The manual plugin is not working; there may be problems with your existing configuration.
+The error was: PluginError('Running manual mode non-interactively is not supported',). Skipping.
+```
+
+因为 letsencrypt 的 manual 插件不支持非交互形式，因此通过 manual 插件获取的证书，需要再次执行此前获取该证书时输入的命令，也就是
+
+    letsencrypt certonly --manual -d www.example.com
+
+这样的话，就没办法将这条命令放到 crontab 中去自动运行了。如果是在其他服务器上执行的，那么又得重新配置一次域名的IP。
 
 ## 安装最新的 openssl
 

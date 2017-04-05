@@ -282,3 +282,42 @@ class ProcedureReturnCursorHandler(APIHandler):
         return self.success(data, msg='存储过程执行成功')
 ```
 
+## PyCharm 类型注释
+因为 Python 是动态类型的，因此在 PyCharm 经常遇到对应的变量没有自动完成的提示，原因在于 PyCharm 不知道该变量是什么类型。
+
+```py
+# 可以在参数上设置类型提示，但是只支持 Python 3.5 以上
+# 这里注释 param1 为 int 类型，该函数返回 list 类型
+def func(param1: int, param2) -> list: 
+    # 这里有个变量 db，在注释中设置类型
+    p = param2.db # type: list
+    return p
+    
+# 因为前面有注释返回类型为 list，PyCharm 就会知道 a 是 list 类型
+a = func(p1, p2)
+```
+
+PyCharm 也支持在文档字符串中设置类型注释
+
+```py
+def func(param1, param2):
+    """
+    :type app: int
+    :rtype: list
+    """
+    p = param1.db # type: list
+```
+
+也可以参考[这里](https://www.jetbrains.com/help/pycharm/2016.3/type-hinting-in-pycharm.html)
+
+类型注释并不会做类型检查，但是可以让 PyCharm 知道该变量是什么类型，并做智能的代码完成提示。
+
+## 开发协作和 Git 的使用
+
+版本管理工具提供了这几项功能
+
+- 对当前的状态进行快照，并且可以还原到历史快照中
+- 可以比较快照间的差异
+- 可以对不同的快照进行合并
+
+目前最流行的版本管理工具是 Git，关于 Git 的使用可以查看这篇文章 [Git & Gitlab 使用指南](http://www.restran.net/2016/02/23/git-and-gitlab-guide/#more)。如果还在使用 SVN，建议可以尝试一下 Git。

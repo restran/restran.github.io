@@ -40,6 +40,8 @@ Supervisor 有两个主要的组成部分：
 
 默认的配置文件是下面这样的，但是这里有个坑需要注意，supervisord.pid 以及 supervisor.sock 是放在 /tmp 目录下，但是 /tmp 目录是存放临时文件，里面的文件是会被 Linux 系统删除的，一旦这些文件丢失，就无法再通过 supervisorctl 来执行 restart 和 stop 命令了，将只会得到 `unix:///tmp/supervisor.sock` 不存在的错误 。
 
+因此可以单独建一个文件夹，来存放这些文件，比如放在 `/home/supervisor/`
+
 ```ini
 [unix_http_server]
 ;file=/tmp/supervisor.sock   ; (the path to the socket file)
@@ -64,8 +66,8 @@ logfile_maxbytes=50MB        ; (max main logfile bytes b4 rotation;default 50MB)
 logfile_backups=10           ; (num of main logfile rotation backups;default 10)
 loglevel=info                ; (log level;default info; others: debug,warn,trace)
 ;pidfile=/tmp/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
-;修改为 /var/run 目录，避免被系统删除
-pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
+;修改为 /home/supervisor 目录，避免被系统删除
+pidfile=/home/supervisor/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
 ...
 ;设置启动supervisord的用户，一般情况下不要轻易用root用户来启动，除非你真的确定要这么做
 ;user=chrism                 ; (default is current user, required if root)
@@ -74,8 +76,8 @@ pidfile=/var/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
 [supervisorctl]
 ; 必须和'unix_http_server'里面的设定匹配
 ;serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL  for a unix socket
-;修改为 /var/run 目录，避免被系统删除
-serverurl=unix:///var/run/supervisor.sock ; use a unix:// URL  for a unix socket
+;修改为 /home/supervisor 目录，避免被系统删除
+serverurl=unix:///home/supervisor/supervisor.sock ; use a unix:// URL  for a unix socket
 ;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket
 ;username=chris              ; should be same as http_username if set
 ;password=123                ; should be same as http_password if set
@@ -90,11 +92,11 @@ serverurl=unix:///var/run/supervisor.sock ; use a unix:// URL  for a unix socket
 
     Error: Cannot open an HTTP server: socket.error reported errno.EACCES (13)
 
-就是由于上面的配置文件中 /var/run 文件夹，没有授予启动 supervisord 的用户 oxygen 的写权限。/var/run 文件夹实际上是链接到 /run，因此我们修改 /run 的权限。
+就是由于上面的配置文件中 /home/supervisor 文件夹，没有授予启动 supervisord 的用户 oxygen 的写权限，可以将这个文件夹的拥有者设置该该账号
 
-    sudo chmod 777 /run
+    sudo chown oxygen /home/supervisor
 
-这样有点简单粗暴，也可以考虑把上述配置文件中 `.sock`，`.pid` 等文件修改到其他文件夹中，并确保有相应的权限即可。一般情况下，我们可以用 root 用户启动 supervisord 进程，然后在其所管理的进程中，再具体指定需要以那个用户启动这些进程。    
+一般情况下，我们可以用 root 用户启动 supervisord 进程，然后在其所管理的进程中，再具体指定需要以那个用户启动这些进程。    
 
 ### 使用浏览器来管理
 

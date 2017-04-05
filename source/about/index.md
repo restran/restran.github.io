@@ -2,8 +2,7 @@ title: about
 date: 2015-10-19 20:42:40
 ---
 
-嗨，我是 restran，也使用淡水这个网名，我是一名 Web 开发者，使用 Python 这门手艺。你可以通过 [Email](mailto:grestran@gmail.com) 与我取得联系。
-
+嗨，我是 restran，也使用淡水这个网名，我是一名 Web 开发者，喜欢 Python 和 Vue，是一名走在文艺路上的工程师。你可以通过 [Email](mailto:grestran@gmail.com) 与我取得联系。
 
 **关于这里**
 
@@ -15,4 +14,6 @@ date: 2015-10-19 20:42:40
 
 2015 年，我做了一次更新，将这个网站改成由 [Hexo](https://hexo.io/zh-cn/) 生成。你现在看到的页面使用了 [NexT](https://github.com/iissnan/hexo-theme-next) 主题，我对一些样式进行了修改，尽可能让你看起来简洁优雅。
 
-<div style="color:#999; font-size:14px"># 更新于 2015-10-19</div>  
+2017 年，因为多说关闭，我将评论迁移到了 [Disqus](https://disqus.com)，意味着以后国内的用户可能无法评论，同时也丢失了过去的评论数据。
+
+<div style="color:#999; font-size:14px"># 更新于 2017-03-30</div>  
