@@ -1,5 +1,5 @@
 {% macro render(post, is_index, post_extra_class) %}
-
+  {% autoescape true %}
   <article class="post post-type-{{ post.type | default('normal') }} {{ post_extra_class | default('') }}" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
 
@@ -125,10 +125,10 @@
             </a>
           </div>
         {% else %}
-          <span itemprop="articleBody">{{ post.content }}</span>
+          <span itemprop="articleBody">{{ post.content|safe }}</span>
         {% endif %}
       {% else %}
-        <span itemprop="articleBody">{{ post.content }}</span>
+        <span itemprop="articleBody">{{ post.content|safe }}</span>
       {% endif  %}
     </div>
 
@@ -163,5 +163,5 @@
       {% endif %}
     </footer>
   </article>
-
+  {% endautoescape %}
 {% endmacro %}

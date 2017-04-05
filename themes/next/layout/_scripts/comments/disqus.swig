@@ -1,7 +1,6 @@
 {% if not (theme.duoshuo and theme.duoshuo.shortname) and not theme.duoshuo_shortname %}
-
+  {% autoescape true %}
   {% if theme.disqus_shortname %}
-
     <script type="text/javascript">
       var disqus_shortname = '{{theme.disqus_shortname}}';
       var disqus_identifier = '{{ page.path }}';
@@ -22,5 +21,5 @@
       {% endif %}
     </script>
   {% endif %}
-
+{% endautoescape %}
 {% endif %}

@@ -1,8 +1,8 @@
 {% macro render(post, is_index, post_extra_class) %}
 
+  {% autoescape true %}
   <article class="post post-type-{{ post.type | default('normal') }} {{ post_extra_class | default('') }}" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-
       {# Not to show title for quote posts that do not have a title #}
       {% if not (is_index and post.type === 'quote' and not post.title) %}
         <h1 class="post-title" itemprop="name headline">
@@ -125,10 +125,10 @@
             </a>
           </div>
         {% else %}
-          <span itemprop="articleBody">{{ post.content }}</span>
+          <span itemprop="articleBody">{{ post.content|safe }}</span>
         {% endif %}
       {% else %}
-        <span itemprop="articleBody">{{ post.content }}</span>
+        <span itemprop="articleBody">{{ post.content|safe }}</span>
       {% endif  %}
     </div>
 
@@ -163,5 +163,6 @@
       {% endif %}
     </footer>
   </article>
+  {% endautoescape %}
 
 {% endmacro %}
