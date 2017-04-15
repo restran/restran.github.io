@@ -100,6 +100,14 @@ google_analytics: 'UA-38277310-2'
 # baidu_analytics: 'a060ea3ffa16e451223f396f226de9c7'
 # tencent_analytics: '51258575'
 
+google_adsense: 'ca-pub-2652261158773851'
+google_adsense_slot: '9245521523'
+
+leancloud_visitors:
+  enable: true
+  app_id: 'QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz'
+  app_key: 'FVfLCd14uEKbS1GXLxKWJS7O'
+
 # 设置多说评论
 # duoshuo_shortname: restran
 # 设置 dusqus 评论

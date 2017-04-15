@@ -6,35 +6,39 @@ tagline:
 tags : [Web]
 ---
 
-HTTPS 目前已经逐渐成为标配，利用 [Let's Encrypt](https://letsencrypt.org/) 可以免费实现网站的 HTTPS，保证传输安全，以下环境使用 CentOS 7。
+HTTPS 目前已经逐渐成为标配，利用 [Lets Encrypt](https://letsencrypt.org/) 可以免费实现网站的 HTTPS，保证传输安全，以下环境使用 CentOS 7。
 
 ## letsencrypt 安装和配置
 
-安装 letsencrypt
+### 安装 letsencrypt
 
 ```
 yum update
 yum install letsencrypt
 ```
 
-创建 Nginx 配置文件
+### 创建 Nginx 配置文件
 
 ```
 server {
     listen 80;
     server_name www.example.com;
     root /var/www/html;
-    location ~ /.well-known {
+    location ~ /.well-known/acme-challenge {
         allow all;
     }
 }
 ```
 
+如果不存在 /var/www/html 文件夹则创建
+
+	mkdir -p /var/www/html
+
 重启 Nginx
 
-    service restart nginx
+    service nginx restart
 
-验证域名所有权并申请证书
+### 验证域名所有权并申请证书
 
 ```
 sudo letsencrypt certonly -a webroot --webroot-path=/var/www/html -d www.example.com
@@ -54,14 +58,15 @@ sudo letsencrypt certonly -a webroot --webroot-path=/var/www/html -d www.example
 
 目前不支持通配符域名，*.sub.domain.com
 
-Generate Strong Diffie-Hellman Group
+### 生成强 Diffie-Hellman 组
+
 To further increase security, you should also generate a strong Diffie-Hellman group. To generate a 2048-bit group, use this command:
 
 ```
 sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 ```
 
-This may take a few minutes but when it's done you will have a strong DH group at /etc/ssl/certs/dhparam.pem.
+这一步需要花一些时间，完成后有一个强 DH 组在 /etc/ssl/certs/dhparam.pem
 
 
 配置 nginx 代码段，来指向 SSL Key and Certificate
@@ -96,7 +101,7 @@ resolver 8.8.8.8 8.8.4.4 valid=300s;
 resolver_timeout 5s;
 # Disable preloading HSTS for now.  You can use the commented out header line that includes
 # the "preload" directive if you understand the implications.
-#add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
+# add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
 add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
 add_header X-Frame-Options DENY;
 add_header X-Content-Type-Options nosniff;
@@ -119,7 +124,7 @@ server {
 
 重启 Nginx
 
-    sudo systemctl restart nginx
+    service nginx restart
 
 证书有效期是3个月，三个月后需要刷新证书。由于执行更新操作的时候，只有当过期时间小于30天时，才会真的更新。因此一个实际的方式是每星期或者每天执行一次更新操作。
 
@@ -173,13 +178,15 @@ The error was: PluginError('Running manual mode non-interactively is not support
 
     openssl version
 
+openssl 在[大于1.1.0版本](https://www.openssl.org/news/changelog.html#x2)已经支持了对移动端更友好的 Google 的 [ChaCha20](https://blog.wilddog.com/?p=749) 加密方式（针对ARM的手机端进行优化，使其更快更省电），因此尽可能选择最新的版本。
+
 编译安装
 
 ```
 cd /usr/src
-wget https://www.openssl.org/source/openssl-1.1.0c.tar.gz
-tar -zxf openssl-1.1.0c.tar.gz
-cd openssl-1.1.0c
+wget https://www.openssl.org/source/openssl-1.1.0e.tar.gz
+tar -zxf openssl-1.1.0e.tar.gz
+cd openssl-1.1.0e
 ./config
 make
 make test
@@ -220,17 +227,38 @@ ln -s /usr/local/bin/openssl /bin/openssl
 
 ## 平滑升级 Nginx 到最新的稳定版
 
-```
-#下载nginx最新版
-cd /root
-wget http://nginx.org/download/nginx-1.10.2.tar.gz
-#解压源码
-tar zxvf nginx-1.10.2.tar.gz
-#进入源码目录
-cd nginx-1.10.2
+下载 Nginx 最新稳定版
+
+    cd /root
+    wget http://nginx.org/download/nginx-1.10.3.tar.gz
+    
+解压源码
+
+    tar zxvf nginx-1.10.3.tar.gz
+    
+进入源码目录
+
+    cd nginx-1.10.3
+
+使用 cloudflare 的 TLS nginx__dynamic_tls_records 补丁来优化 [TLS Record Size](http://fangpeishi.com/optimizing-tls-record-size.html)
+    
+下载
+
+    wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
+
+打补丁
+
+    patch -p1 < nginx__dynamic_tls_records.patch
+
+如果提示 patch 命令找不到的话，则先安装 patch 
+
+    yum install patch
+
 加上所需参数开始编译
+
+```
 ./configure \
---with-openssl=/usr/src/openssl-1.1.0c \
+--with-openssl=/usr/src/openssl-1.1.0e \
 --prefix=/etc/nginx \
 --sbin-path=/usr/sbin/nginx \
 --modules-path=/usr/lib64/nginx/modules \
@@ -274,7 +302,7 @@ cd nginx-1.10.2
 编译安装
 
 ```
-# 执行make编译，但是不要执行 make install
+# 执行 make 编译，但是不要执行 make install
 make
 # 重命名nginx旧版本二进制文件，即sbin目录下的nginx（期间nginx并不会停止服务）
 mv /sbin/nginx /sbin/nginx.old

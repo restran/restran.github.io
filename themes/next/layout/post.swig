@@ -4,9 +4,7 @@
 {% import '_macro/snippets.swig' as snippets_template %}
 {% import '_macro/snippets-sidebar.swig' as snippets_sidebar_template %}
 
-{% autoescape true %}
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
-{% endautoescape %}
+{% block title %} {{ page.title|escape }} | {{ config.title|escape }} {% endblock %}
 
 {% block page_class %}page-post-detail{% endblock %}
 

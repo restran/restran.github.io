@@ -2,7 +2,6 @@
   {% autoescape true %}
   <article class="post post-type-{{ post.type | default('normal') }} {{ post_extra_class | default('') }}" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-
       {# Not to show title for quote posts that do not have a title #}
       {% if not (is_index and post.type === 'quote' and not post.title) %}
         <h1 class="post-title" itemprop="name headline">
@@ -53,15 +52,15 @@
           </span>
         {% endif %}
 
+        {% if theme.leancloud_visitors.enable %}
+          &nbsp; | &nbsp;
+          <span id="{{ url_for(post.path) }}"class="leancloud_visitors" data-flag-title="{{ post.title }}">
+                   &nbsp;{{__('post.visitors')}}
+                  </span>
+        {% endif %}
+        
         {% if post.comments %}
-          {% if (theme.duoshuo and theme.duoshuo.shortname) or theme.duoshuo_shortname %}
-            <span class="post-comments-count">
-              &nbsp; | &nbsp;
-              <a href="{{ url_for(post.path) }}#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="{{ post.path }}" itemprop="commentsCount"></span>
-              </a>
-            </span>
-          {% elseif theme.disqus_shortname %}
+          {% if theme.disqus_shortname %}
             <span class="post-comments-count">
             &nbsp; | &nbsp;
             <a href="{{ url_for(post.path) }}#comments" itemprop="discussionUrl">
