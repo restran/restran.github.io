@@ -1,13 +1,75 @@
 ---
-title: Vue.js 学习笔记
+title: Vue.js 1.0 学习笔记
 layout: post
 category : [前端]
 tagline: 
 tags : [Vue]
 ---
 
+## 知识框架
 
-## 组件状态缓存 keep-alive
+### 核心
+
+- [VueJS](http://cn.vuejs.org/)
+
+组件那一章需要仔细阅读，包括props给组件传参数，父子组件通信。
+
+- [awesome-vue](https://github.com/vuejs/awesome-vue) 周边的各种库和工具，很多需要的东西都在这里，需要重点看
+- [视频教程](https://laravist.com/series/vue-js-1-0-in-action-series)
+
+### 单页路由
+
+- [VueRouter](https://github.com/vuejs/vue-router)
+
+中文教程：http://router.vuejs.org/zh-cn/index.html
+
+需要关注一下，页面间怎么传参数，页面激活阶段的触发的事件方法
+
+### 与服务器通信（AJAX）
+
+- [VueResource](https://github.com/vuejs/vue-resource)
+
+### 界面
+
+#### [Vux](https://github.com/airyland/vux)
+
+演示地址：https://vux.li/#!/
+中文文档：https://vuxjs.gitbooks.io/vux/content/
+演示代码：https://github.com/airyland/vux/tree/master/src/demos
+
+因为中文文档不全，有些内容需要直接去看demo的代码会更清楚
+
+#### [MintUI](https://github.com/ElemeFE/mint-ui)
+
+演示地址：http://mint-ui.github.io/#!/en
+中文文档：http://mint-ui.github.io/docs/#!/zh-cn
+
+### 组件化开发教程
+
+- [Vue构建单页应用最佳实战](https://segmentfault.com/a/1190000005009052)
+- [Vue 组件化开发实践](https://gold.xitu.io/entry/55f77eb460b28e6a6f0f4f86)
+
+### 例子
+
+- [知乎日报Web版](https://github.com/yatessss/zhihudaily-vue)
+- [用vuejs写的播放器，API基于网易云](https://github.com/axhello/vPlayer)
+
+### 其他需掌握的知识点
+
+#### ES6
+
+[ECMAScript 6入门](http://es6.ruanyifeng.com/)
+
+关注一下如何定义和加载模块
+
+#### npm
+
+- [淘宝的npm镜像](https://npm.taobao.org/)，因为npm被墙，需要改成淘宝的镜像
+- [npm命令教程](http://www.jianshu.com/p/e958a74a0fd7)
+
+## 一些使用经验
+
+### 组件状态缓存 keep-alive
 
 如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染。为此可以添加一个 keep-alive 指令参数：
 
@@ -24,7 +86,7 @@ tags : [Vue]
 ```
 
 
-## 动态组件载入 lazy load
+### 动态组件载入 lazy load
 
 如果想按需加载组件资源，而不是在入口页就一次性加载全部的组件，可以参考 vue-router 文档中[动态组件载入](http://router.vuejs.org/zh-cn/lazy.html)章节。
 
@@ -50,7 +112,7 @@ router.map({
 
 现在，只有当 /async 需要被渲染时，MyComponent.vue组件，会自动加载它的依赖组件，并且异步的加载进来。
 
-## Vue.util.extend
+### Vue.util.extend
 
 有时想要使用 Vue 内置的方法来进行拷贝对象，就像`Angular.copy`，Vue 也提供了这样一个方法，但是存在问题，[相关 Issue](https://github.com/vuejs/vue/issues/1849)。
 
@@ -74,7 +136,7 @@ newItem.data.name = 'newName';
 
 	newItem ＝ JSON.parse(JSON.stringify(object))
 	
-## vue-resource 
+### vue-resource 
 
 当使用 JSON 与服务端进行交互时，在一些 Android 手机的微信中, 会出现没有将返回的数据转换成 JSON，而是仍然为字符串，这时需要手动转换
 

@@ -12,7 +12,7 @@ menu:
 favicon: /favicon.ico
 
 # Set default keywords (Use a comma to separate)
-keywords: "restran,restran.net,淡水,淡水网志,blog,博客"
+keywords: "restran,restran.net,淡水,淡水网志,blog,博客,python,vuejs"
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
@@ -51,7 +51,7 @@ scheme: Mist
 
 
 # Automatically scroll page to section which is under <!-- more --> mark.
-scroll_to_more: true
+scroll_to_more: false
 
 
 # Automatically add list number to toc.
@@ -65,15 +65,15 @@ auto_excerpt:
 
 # Use Lato font
 # Note: this option is avialable only when the language is not `zh-Hans`
-use_font_lato: true
+use_font_lato: false
 
 # Make duoshuo show UA
 # user_id must NOT be null when admin_enable is true!
 # you can visit http://dev.duoshuo.com get duoshuo user id.
-duoshuo_info:
-  ua_enable: true
-  admin_enable: false
-  user_id: 0
+# duoshuo_info:
+  # ua_enable: true
+  # admin_enable: false
+  # user_id: 0
   #admin_nickname: ROOT
 
 # duoshuo:
@@ -83,7 +83,7 @@ duoshuo_info:
 ## UNLESS YOU KNOW WHAT YOU ARE DOING
 
 # Use velocity to animate everything.
-use_motion: true
+use_motion: false
 
 # Fancybox
 fancybox: true
