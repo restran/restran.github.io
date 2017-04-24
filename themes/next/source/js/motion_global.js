@@ -28,7 +28,8 @@ $(document).ready(function () {
   // LogoAndMenuMotion();
 
   sidebarToggleMotion();
-  postsListMotion();
+  // post 不显示动画
+  // postsListMotion();
   backToTopMotion();
 
   //add motion effect to toc
