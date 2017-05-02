@@ -3,6 +3,7 @@ title: 使用 wrk 来测试 HTTP 性能
 layout: post
 category : [技术]
 tagline: 
+keywords: [wrk, linux, mac, ubunut, http, benchmark, 性能测试, 教程, lua]
 tags : [Web]
 ---
 

@@ -3,6 +3,7 @@ title: Python 中 logging 日志模块在多进程环境下的使用
 layout: post
 category : [Python]
 tagline: 
+keywords: [python, 日志, logging, 多进程, cloghandler]
 tags : [Python, 日志]
 ---
 

@@ -3,6 +3,7 @@ title: 使用 IIS 过程中遇到的一些问题
 layout: post
 category : [错误解决]
 tagline: 
+keywords: [iis, mime, 错误解决, 404, otf, woff, svg]
 tags : [IIS, 错误解决]
 ---
 

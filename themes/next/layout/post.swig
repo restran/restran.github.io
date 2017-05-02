@@ -38,6 +38,9 @@
   {{ sidebar_template.render(true) }}
 {% endblock %}
 
+{% block script_pre_extra %}
+  {% include '_scripts/pages/post-highlight-lang.swig' %}
+{% endblock %}
 
 {% block script_extra %}
   {% include '_scripts/pages/post-details.swig' %}

@@ -3,6 +3,7 @@ title: Python 入门教程 - 课程大纲
 layout: post
 category: [Python]
 tagline: 
+keywords: [python, 教程, 入门, tornado]
 tags: [Python]
 toc_number: false
 ---

@@ -3,6 +3,7 @@ title: MacBook Pro 一月使用体验
 layout: post
 category: [工具]
 tagline: 
+keywords: [mac, mbp, 苹果电脑, 使用技巧, 教程]
 tags: [MBP, 苹果]
 ---
 

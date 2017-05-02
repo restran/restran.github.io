@@ -3,6 +3,7 @@ title: Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境
 layout: post
 category : [技术]
 tagline: 
+keywords: [python, 教程, oracle, cx_oracle, tornado, postman, SQLAlchemy]
 tags : [Python]
 ---
 
@@ -25,7 +26,7 @@ Windows 可以去 [pypi](https://pypi.python.org/pypi/cx_Oracle/) 下载 exe 文
 
 如果安装的 Python 是 64 位的，但是操作系统的环境变量 PATH 配置的是 32 位的 Oracle Instant Client，例如需要使用 32 位的 PL/SQL Developer。可以在 Python 程序中，手动设置环境变量，将 64 位的 Oracle Instant Client 所在路径放在环境变量的第1个位置，覆盖掉操作系统的配置。
 
-```py
+```python
 import os
 os.environ['PATH'] = 'D:\Program Files\Oracle\instantclient_11_2;' + os.environ['PATH']
 ```
@@ -56,7 +57,7 @@ os.environ['PATH'] = 'D:\Program Files\Oracle\instantclient_11_2;' + os.environ[
 
 records 使用举例
 
-```py
+```python
 import records
 
 db = records.Database('oracle://...')
@@ -69,7 +70,7 @@ for r in rows:
 
 以下是使用 Tornado 框架做的 API，使用了 records。APIHandler 为封装好的 API 处理基类，详细内容不展开介绍，主要介绍 SQL 和存储过程的使用方法。 
 
-```py
+```python
 class APIHandler(RequestHandler):
     def __init__(self, app, request, **kwargs):
         super(APIHandler, self).__init__(app, request, **kwargs)
@@ -92,7 +93,7 @@ class APIHandler(RequestHandler):
 
 SQL 和存储过程的使用方法
 
-```py
+```python
 # -*- coding: utf-8 -*-
 # Created by restran on 2017/3/7
 from __future__ import unicode_literals, absolute_import
@@ -283,9 +284,10 @@ class ProcedureReturnCursorHandler(APIHandler):
 ```
 
 ## PyCharm 类型注释
+
 因为 Python 是动态类型的，因此在 PyCharm 经常遇到对应的变量没有自动完成的提示，原因在于 PyCharm 不知道该变量是什么类型。
 
-```py
+```python
 # 可以在参数上设置类型提示，但是只支持 Python 3.5 以上
 # 这里注释 param1 为 int 类型，该函数返回 list 类型
 def func(param1: int, param2) -> list: 
@@ -299,7 +301,7 @@ a = func(p1, p2)
 
 PyCharm 也支持在文档字符串中设置类型注释
 
-```py
+```python
 def func(param1, param2):
     """
     :type app: int

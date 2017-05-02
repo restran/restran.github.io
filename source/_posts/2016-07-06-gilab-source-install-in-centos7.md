@@ -3,6 +3,7 @@ title: CentOS 7 Minimal 安装 Gitlab 8.9
 layout: post
 category : [Git]
 tagline: 
+keywords: [gitlab, centos, centos7, git, 源码安装]
 tags : [Gitlab, Git]
 ---
 

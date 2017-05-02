@@ -1,9 +1,10 @@
 ---
 title: 基于 Tornado 实现的 Web 站点反向代理
 layout: post
-category : [Python]
+category: [Python]
 tagline: 
-tags : [Python, Web, Proxy, Tornado]
+keywords: [python, web, proxy, tornado, 开源, 代理, http]
+tags: [Python, Web, Proxy, Tornado]
 ---
 
 因为一个奇怪的需求，使用 Python 和 Tornado 框架实现了一个 Web 站点的反向代理。实现的功能是这样：

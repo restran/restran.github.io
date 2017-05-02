@@ -3,6 +3,7 @@ title: 基于 Lucene 的桌面文件搜索
 layout: post
 category : [开源]
 tagline: 
+keywords: [lucene, c#, csharp, 搜索, winform, 桌面搜索, 文件搜索]
 tags : [Lucene, C#, 搜索]
 ---
 

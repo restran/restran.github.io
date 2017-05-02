@@ -3,6 +3,7 @@ title: Python 入门教程 Lesson 2.2 - Web 开发入门
 layout: post
 category : [技术]
 tagline: 
+keywords: [python, 教程, 入门, web, http协议, web api, web框架]
 tags : [Python]
 ---
 

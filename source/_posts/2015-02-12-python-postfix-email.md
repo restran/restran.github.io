@@ -3,6 +3,7 @@ title: Python 使用 Postfix 发送邮件
 layout: post
 category : [Python]
 tagline: 
+keywords: [python, email, posifx, 发邮件, 代码, 教程]
 tags : [Python, Email, Postfix]
 ---
 

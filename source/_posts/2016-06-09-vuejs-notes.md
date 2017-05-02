@@ -3,6 +3,7 @@ title: Vue.js 1.0 学习笔记
 layout: post
 category : [前端]
 tagline: 
+keywords: [vuejs, 知识框架, 界面, 教程]
 tags : [Vue]
 ---
 

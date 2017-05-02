@@ -32,17 +32,26 @@
 
 <link rel="stylesheet" type="text/css" href="{{ url_for(theme.css) }}/main.css?v={{ theme.version }}"/>
 
+{# 在 open_graph 中会自动生成
+https://hexo.io/zh-cn/docs/helpers.html
 {% if config.description %}
-    <meta name="description" content="{{ config.description }}" />
+  <meta name="description" content="{{ config.description }}" />
+{% endif %}
+#}
+
+{% if config.author %}
+  <meta name="author" content="{{ config.author }}" />
 {% endif %}
 
+{# 在 open_graph 中会自动生成
 {% if page.keywords %}
   <meta name="keywords" content="{{ page.keywords }}" />
 {% elif page.tags and page.tags.length %}
   <meta name="keywords" content="{% for tag in page.tags %}{{ tag.name }},{% endfor %}" />
 {% elif theme.keywords %}
-  <meta name="keywords" content="{{ theme.keywords }}" />
+  <meta name="keywords" content="{{ config.keywords }}" />
 {% endif %}
+#}
 
 {% if theme.rss %}
   <link rel="alternate" href="{{ url_for(theme.rss) }}" title="{{ config.title }}" type="application/atom+xml" />

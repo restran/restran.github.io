@@ -3,6 +3,7 @@ title: 一次使用 Redis 优化查询性能的实践
 layout: post
 category : [数据库]
 tagline: 
+keywords: [redis, 内存优化, 性能分析, oracle, 关联查询, 速度优化, 查询优化]
 tags : [Redis]
 ---
 
@@ -39,23 +40,25 @@ ziplist的详细信息请看 [Redis book ziplist 章节][5]
 
 查看 Redis 的 .conf 文件，可以查看到转换条件的设置信息。
 
-    # Hashes are encoded using a memory efficient data structure when they have a
-    # small number of entries, and the biggest entry does not exceed a given
-    # threshold. These thresholds can be configured using the following directives.
-    hash-max-ziplist-entries 512
-    hash-max-ziplist-value 64
+```
+# Hashes are encoded using a memory efficient data structure when they have a
+# small number of entries, and the biggest entry does not exceed a given
+# threshold. These thresholds can be configured using the following directives.
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
     
-    # Similarly to hashes, small lists are also encoded in a special way in order
-    # to save a lot of space. The special representation is only used when
-    # you are under the following limits:
-    list-max-ziplist-entries 512
-    list-max-ziplist-value 64
+# Similarly to hashes, small lists are also encoded in a special way in order
+# to save a lot of space. The special representation is only used when
+# you are under the following limits:
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
     
-    # Similarly to hashes and lists, sorted sets are also specially encoded in
-    # order to save a lot of space. This encoding is only used when the length and
-    # elements of a sorted set are below the following limits:
-    zset-max-ziplist-entries 128
-    zset-max-ziplist-value 64
+# Similarly to hashes and lists, sorted sets are also specially encoded in
+# order to save a lot of space. This encoding is only used when the length and
+# elements of a sorted set are below the following limits:
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+```
 
 ziplist 查找的时间复杂度是 O(N)，但是数据量较少，第二级Hash的查询速度依然在O(1)级别。
 
@@ -110,8 +113,6 @@ Redis Lua 脚本具有原子性，执行过程会锁住 Redis Server，因此 Re
 
 查询速度受存储数据量的影响较小。当存储的数据量较多时，第二级hash存储的数据量就会更多，因此查询时间会有略微的上升，但依然很快。
 
-
-
 **参考文献**
 
 1. Redis book（Redis设计与实现）
@@ -126,6 +127,6 @@ Redis Lua 脚本具有原子性，执行过程会锁住 Redis Server，因此 Re
   [6]: http://redis.io/topics/pipelining
   [7]: http://redis.io/commands/eval
   [8]: http://blog.csdn.net/wzzfeitian/article/details/42081837
-  [9]: http://oxygen.qiniudn.com/img2015021730.jpg
-  [10]: http://oxygen.qiniudn.com/img2015021731.jpg
-  [11]: http://oxygen.qiniudn.com/img2015021732.jpg
+  [9]: /uploads/post_img/2015/02/img2015021730.jpg
+  [10]: /uploads/post_img/2015/02/img2015021731.jpg
+  [11]: /uploads/post_img/2015/02/img2015021732.jpg

@@ -3,6 +3,7 @@ title: Linux 踩坑记
 layout: post
 category : [Linux]
 tagline: 
+keywords: [linux, 使用帮助, 文件管理, 命令, 进程管理, centos]
 tags : [Linux, 错误解决]
 ---
 
@@ -77,8 +78,6 @@ ls -d .*
     chown -R [用户名] [文件夹] 
     chown -R user /tmp/folder
 
-
-
 ## 查看硬盘及内存空间
 
 ```bash
@@ -99,6 +98,15 @@ du -sh [目录名]
 # 返回该文件夹总M数
 du -sm [文件夹] 
 ```
+
+## 日志相关
+
+实时显示日志文件，如果日志文件有更新，会自动滚动到文件最后，并实时显示
+    
+    # 默认查看最新的10行
+    tail -f /var/log/nginx/access.log
+    # 查看20行
+    tail -n 20 -f /var/log/nginx/access.log
 
 ## 端口相关
 
@@ -262,8 +270,9 @@ ps auxw --sort=%cpu
 
 ## 关机与重启命令
 
+重启命令
+
 ```
-重启命令：
 1、reboot
 2、shutdown -r now 立刻重启(root用户使用)
 3、shutdown -r 10 过10分钟自动重启(root用户使用) 
@@ -271,8 +280,9 @@ ps auxw --sort=%cpu
 如果是通过shutdown命令设置重启的话，可以用shutdown -c命令取消重启
 ```
 
+关机命令
+
 ```
-关机命令：
 1、halt   立刻关机
 2、poweroff  立刻关机
 3、shutdown -h now 立刻关机(root用户使用)

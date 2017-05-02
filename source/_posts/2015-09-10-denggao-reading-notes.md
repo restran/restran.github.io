@@ -3,6 +3,7 @@ title: 我从登高四书里学到的
 layout: post
 category : [读书]
 tagline: 
+keywords: [精益创业, 罗胖, 登高四书]
 tags : [读书]
 ---
 

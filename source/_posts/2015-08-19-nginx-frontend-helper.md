@@ -3,6 +3,7 @@ title: Nginx 是前端工程师的好帮手
 layout: post
 category : [前端]
 tagline: 
+keywords: [nginx, 前端, 代理, proxy, api中转, 反向代理]
 tags : [Nginx]
 ---
 

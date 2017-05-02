@@ -4,7 +4,8 @@ layout: post
 toc_number: false
 category: [工具]
 tagline: 
-tags: [抓包]
+keywords: [抓包, 安卓, android, app, ios, 安卓抓包, android抓包, 手机抓包, iOS抓包, app抓包]
+tags: [抓包, Android]
 ---
 
 在开发 App 的时候，大多数都需要请求服务端的 API 完成数据的交互，于是调式 API 或者分析 App 的时候就经常需要抓包。我现在用的抓包方式有两种，一种是通过代理连接到电脑上的抓包软件，另外一种是直接在手机上进行抓包。

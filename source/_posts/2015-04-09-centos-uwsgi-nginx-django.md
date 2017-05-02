@@ -3,6 +3,7 @@ title: CentOS 环境下基于 Nginx uwsgi 搭建 Django 站点
 layout: post
 category : [服务器]
 tagline: 
+keywords : [Centos, Nginx, uwsgi, Django, 部署, 服务器]
 tags : [Centos, Nginx, uwsgi, Django]
 ---
 

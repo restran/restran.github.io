@@ -1,8 +1,9 @@
 ---
-title: CentOS 6.5 Minimal 安装 Gitlab 7.5
+title: CentOS 6.5 环境下 Gitlab 7.5 安装和维护笔记
 layout: post
 category : [Git]
 tagline: 
+keywords: [gitlab, git, 源码安装, centos, 社区版, 部署, 维护, 指南]
 tags : [Gitlab, Git]
 ---
 

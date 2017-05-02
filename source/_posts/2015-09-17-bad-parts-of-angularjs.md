@@ -3,6 +3,7 @@ title: AngularJS 的缺点是什么
 layout: post
 category : [前端]
 tagline: 
+keywords: [angularjs, 服务端渲染, seo]
 tags : [AngularJS]
 ---
 

@@ -5,11 +5,13 @@
 # Site
 title: 淡水网志
 subtitle: 
-description: 在位流的海洋里徜徉～
+description: 嗨，我是 restran，也使用淡水这个网名，我是一名 Web 开发者，喜欢 Python 和 Vue，是一名走在文艺路上的工程师。
 author: restran
 language: zh-Hans
 timezone:
 since: 2014
+# Set default keywords (Use a comma to separate)
+keywords: restran,restran.net,淡水,淡水网志,blog,博客,python,vuejs
 
 # Social links
 social:
@@ -28,8 +30,7 @@ links_title: Links
 # links
 links:
   北在南方: http://blog.itpub.net/22664653/
-  onlycc: http://www.onlycc.link/
-  fredliu: https://qzcool.com/
+  fredliu: http://qzcool.com/
   依依呀呀: http://linyuhao.cc/
 
 # URL
@@ -63,7 +64,7 @@ future: true
 highlight:
   enable: true
   line_number: true
-  auto_detect: true
+  auto_detect: false
   tab_replace:
 
 # Category & Tag
@@ -92,12 +93,13 @@ theme: next
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:restran/restran.github.io.git
-  branch: master
+  repo: 
+    github: git@github.com:restran/restran.github.io.git,master
+    coding: git@git.coding.net:restran/restran.git,coding-pages
 
 # 统计
 google_analytics: 'UA-38277310-2'
-# baidu_analytics: 'a060ea3ffa16e451223f396f226de9c7'
+baidu_analytics: 'a060ea3ffa16e451223f396f226de9c7'
 # tencent_analytics: '51258575'
 
 # google_adsense: 'ca-pub-2652261158773851'
@@ -125,3 +127,7 @@ feed:
   path: atom.xml
   limit: 10
   hub:
+
+sitemap:
+  path: sitemap.xml
+

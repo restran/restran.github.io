@@ -3,6 +3,7 @@ title: PHP 学习笔记和安全漏洞
 layout: post
 category : [技术]
 tagline: 
+keywords: [php, 安全, 漏洞, 教程]
 tags : [PHP, 安全]
 ---
 

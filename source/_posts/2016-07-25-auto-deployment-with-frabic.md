@@ -3,6 +3,7 @@ title: 使用 Fabric 自动化部署 Python 项目
 layout: post
 category : [Python]
 tagline: 
+keywords: [python, fabric, linux, 部署, 服务器, 自动化]
 tags : [Python, Fabric, Linux]
 ---
 

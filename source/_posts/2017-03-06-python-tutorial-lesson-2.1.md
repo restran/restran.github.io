@@ -3,6 +3,7 @@ title: Python 入门教程 Lesson 2.1 - Python 知识进阶
 layout: post
 category : [技术]
 tagline: 
+keywords: [python, 代码执行, 原理, 装饰器, decorator]
 tags : [Python]
 ---
 

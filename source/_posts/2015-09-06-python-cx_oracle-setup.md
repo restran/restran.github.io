@@ -3,21 +3,30 @@ title: Python cx_Oracle 安装小记
 layout: post
 category : [Python]
 tagline: 
+keywords: [python, cx_oracle, 安装, oracle, sqlalchemy, windows, linux, 中文乱码]
 tags : [Python, Oracle, SQLAlchemy]
 ---
 
 [SQLAlchemy](http://www.sqlalchemy.org/ "") 是 Python 中用来操作数据库的一个利器，支持 MySQL、Oracle、PostgreSQL、SQLite。使用 SQLAlchemy 来管理 Oracle 的数据需要安装依赖 [cx_Oracle](http://cx-oracle.sourceforge.net/ "")。在这过程中遇到不少问题，记录如下。
 
-cx_Oracle 可以到这里下载：http://cx-oracle.sourceforge.net/
-旧版本的下载地址：http://sourceforge.net/projects/cx-oracle/files/
+- cx_Oracle 可以到这里下载：http://cx-oracle.sourceforge.net/
+- 旧版本的下载地址：http://sourceforge.net/projects/cx-oracle/files/
+- pypi 地址: https://pypi.python.org/pypi/cx_Oracle/5.3
 
-现在也可以通过 `pip install cx_Oracle` 安装
+> 现在已经可以通过 `pip install cx_Oracle` 来安装
 
 ## Windows 
 
-安装 cx_Oracle 正确版本，需要区分 10g，11g，安装 instantclient_11_2（请到 Oracle 官网下载）
+### Oracle 客户端环境
 
-### 问题 
+因为 Oracle 需要客户端才能使用，推荐下载绿色版的 instantclient，请到 [Oracle 官网下载](http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html)，如果是10g或者11g，可以选择 instantclient_11_2
+
+### 安装 cx_Oracle
+
+安装 cx_Oracle 正确版本，需要区分数据库为 10g 还是 11g。然后可以从 pypi 上下载对应版本的 exe 来安装。
+
+
+### 可能遇到的问题 
 
 ```
 ImportError: DLL load failed: 找不到指定的模块。
@@ -50,22 +59,33 @@ orannzsbb10.dll
 
 ## Linux
 
-```sh
-# 先安装 rpm
-yum install rpm
-```
+### Oracle  客户端环境
 
-```sh
-# oracle-instantclient-basic-10.2.0.3-1.x86_64.rpm 请到 Oracle 官网下载
-rpm -ivh oracle-instantclient-basic-10.2.0.3-1.x86_64.rpm
-rpm -ivh cx_Oracle-5.1.2-10g-py27-1.x86_64.rpm 
-# 有这个文件表示安装成功，根据 python 的位置，也可能在其他地方
-ls /usr/lib/python2.7/site-packages/cx_Oracle.so 
-```
+先安装 rpm
 
-### 问题 1
+	yum install rpm
+	
+下载 oracle-instantclient-basic-10.2.0.3-1.x86_64.rpm，请到 [Oracle 官网下载](http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html)
 
-```py
+安装 Oracle 客户端
+
+	rpm -ivh oracle-instantclient-basic-10.2.0.3-1.x86_64.rpm
+
+### 安装 cx_Oracle
+
+先从 pypi 上下载好指定版本的 cx_Oracle，然后安装
+
+	rpm -ivh cx_Oracle-5.1.2-10g-py27-1.x86_64.rpm 
+
+验证是否安装成功
+
+	# 有这个文件表示安装成功，根据 python 的位置，也可能在其他地方
+	ls /usr/lib/python2.7/site-packages/cx_Oracle.so 
+
+
+### 可能的问题 1
+
+```python
 import cx_Oracle
    Traceback (most recent call last):
      File "<stdin>", line 1, in <module>
@@ -92,7 +112,7 @@ export PATH
 
 在文件末尾添加
 
-```sh
+```bash
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/oracle/10.2.0.3/client64/lib
 export LD_LIBRARY_PATH
 ```
@@ -112,16 +132,16 @@ export LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/oracle/10.2.0.3/client64/lib
 ```
 
-### 问题 2
+### 可能的问题 2
 
-```
+```python
 import cx_Oracle
 ImportError: No module named cx_Oracle
 ```
 
 如果安装的 python 64 位，需要把cx_Oracle文件复制到 /usr/lib64/python2.7/site-packages/ 目录下
 
-```sh
+```bash
 cd /usr/lib/python2.7/site-packages/
 cp cx_Oracle.so /usr/lib64/python2.7/site-packages/cx_Oracle.so
 cp cx_Oracle-5.1.2-py2.7.egg-info /usr/lib64/python2.7/site-packages/cx_Oracle-5.1.2-py2.7.egg-info
@@ -147,7 +167,7 @@ sudo ldconfig
 
 你可以在 Python 代码中这么设置环境变量
 
-```py
+```python
 # 设置编码，否则：
 # 1. Oracle 查询出来的中文是乱码
 # 2. 插入数据时有中文，会导致

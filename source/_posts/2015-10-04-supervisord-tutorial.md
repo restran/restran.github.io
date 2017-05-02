@@ -3,6 +3,7 @@ title: Python 进程管理工具 Supervisor 使用教程
 layout: post
 category : [Python]
 tagline: 
+keywords: [python, supervisor, supervisord, 开机启动, 教程, 配置, command, linux, supervisorctl]
 tags : [Python, Supervisor, Linux]
 ---
 
@@ -234,7 +235,7 @@ priority=999                  ; the relative start priority (default 999)
 
 执行 supervisord 命令，将会启动 supervisord 进程，同时我们在配置文件中设置的进程也会相应启动。
 
-```sh
+```bash
 # 使用默认的配置文件 /etc/supervisord.conf
 supervisord
 # 明确指定配置文件
@@ -247,7 +248,7 @@ supervisord -u user
 
 ## supervisorctl 命令介绍
 
-```sh
+```bash
 # 停止某一个进程，program_name 为 [program:x] 里的 x
 supervisorctl stop program_name
 # 启动某个进程
@@ -270,6 +271,35 @@ supervisorctl update
 
 ## 开机自动启动 Supervisord
 
+### 方法1
+
+有一个简单的方法，因为 Linux 在启动的时候会执行 `/etc/rc.local` 里面的脚本，所以只要在这里添加执行命令就可以
+
+```sh
+# 如果是 Ubuntu 添加以下内容
+/usr/local/bin/supervisord -c /etc/supervisord.conf
+```
+
+```sh
+# 如果是 Centos 添加以下内容
+/usr/bin/supervisord -c /etc/supervisord.conf
+```
+
+以上内容需要添加在 exit 命令前，而且由于在执行 rc.local 脚本时，PATH 环境变量未全部初始化，因此命令需要使用绝对路径。可以用 `which supervisord` 查看一下 supervisord 所在的路径。
+
+在添加前，先在终端测试一下命令是否能正常执行，如果找不到 supervisord，可以用如下命令找到
+
+    sudo find / -name supervisord
+
+> 如果是 Ubuntu 16.04 以上，rc.local 被当成了服务，而且默认是不会启动，需要手动启用一下服务。
+> https://askubuntu.com/questions/765120/after-upgrade-to-16-04-lts-rc-local-not-executing-command
+
+启用 rc.local 服务
+
+    sudo systemctl enable rc-local.service
+
+### 方法2
+
 Supervisord 默认情况下并没有被安装成服务，它本身也是一个进程。官方已经给出了脚本可以将 Supervisord 安装成服务，可以参考[这里](https://github.com/Supervisor/initscripts)查看各种操作系统的安装脚本，但是我用官方这里给的 Ubuntu 脚本却无法运行。
 
 安装方法可以参考 [serverfault](http://serverfault.com/questions/96499/how-to-automatically-start-supervisord-on-linux-ubuntu) 上的回答。
@@ -289,22 +319,3 @@ service supervisord start
 ```
 
 **注意**：这个脚本下载下来后，还需检查一下与我们的配置是否相符合，比如默认的配置文件路径，pid 文件路径等，如果存在不同则需要进行一些修改。
-
-其实还有一个简单的方法，因为 Linux 在启动的时候会执行 `/etc/rc.local` 里面的脚本，所以只要在这里添加执行命令就可以
-
-```sh
-# 如果是 Ubuntu 添加以下内容
-/usr/local/bin/supervisord -c /etc/supervisord.conf
-```
-
-```sh
-# 如果是 Centos 添加以下内容
-/usr/bin/supervisord -c /etc/supervisord.conf
-```
-
-以上内容需要添加在 exit 命令前，而且由于在执行 rc.local 脚本时，PATH 环境变量未全部初始化，因此命令需要使用绝对路径。
-
-在添加前，先在终端测试一下命令是否能正常执行，如果找不到 supervisord，可以用如下命令找到
-
-    sudo find / -name supervisord
-

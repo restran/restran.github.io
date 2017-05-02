@@ -3,6 +3,7 @@ title: Git 代码版本还原方法
 layout: post
 category: [工具]
 tagline: 
+keywords: [git, 还原, 恢复, 教程, 版本还原, tortoise git]
 tags: [Git]
 ---
 

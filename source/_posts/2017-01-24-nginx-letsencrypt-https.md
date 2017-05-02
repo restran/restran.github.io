@@ -1,8 +1,9 @@
 ---
-title: Nginx 使用 Let's Encrypt 配置 HTTPS 和 HTTP2
+title: Nginx 使用 Let's Encrypt 配置 HTTPS 和 HTTP/2
 layout: post
 category : [技术]
 tagline: 
+keywords: [nginx, lets encrypt, https, http2, h2, 证书, 教程, centos, openssl, 编译]
 tags : [Web]
 ---
 
@@ -12,14 +13,14 @@ HTTPS 目前已经逐渐成为标配，利用 [Lets Encrypt](https://letsencrypt
 
 ### 安装 letsencrypt
 
-```
+```bash
 yum update
 yum install letsencrypt
 ```
 
 ### 创建 Nginx 配置文件
 
-```
+```nginx
 server {
     listen 80;
     server_name www.example.com;
@@ -40,7 +41,7 @@ server {
 
 ### 验证域名所有权并申请证书
 
-```
+```bash
 sudo letsencrypt certonly -a webroot --webroot-path=/var/www/html -d www.example.com
 ```
 
@@ -52,7 +53,7 @@ http://www.example.com/.well-known/acme-challenge/p1jaEziikiiKer311uQ9fh03_pJmiP
 
 可以让多个域名使用相同的证书
 
-```
+```bash
 sudo letsencrypt certonly -a webroot --webroot-path=/var/www/html -d www.example.com -d example.com
 ```
 
@@ -62,7 +63,7 @@ sudo letsencrypt certonly -a webroot --webroot-path=/var/www/html -d www.example
 
 To further increase security, you should also generate a strong Diffie-Hellman group. To generate a 2048-bit group, use this command:
 
-```
+```bash
 sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 ```
 
@@ -110,7 +111,7 @@ ssl_dhparam /etc/ssl/certs/dhparam.pem;
 
 配置 Nginx 支持 HTTPS
 
-```
+```nginx
 server {
     listen 443 ssl http2 default_server;
     server_name www.example.com;
@@ -182,7 +183,7 @@ openssl 在[大于1.1.0版本](https://www.openssl.org/news/changelog.html#x2)�
 
 编译安装
 
-```
+```bash
 cd /usr/src
 wget https://www.openssl.org/source/openssl-1.1.0e.tar.gz
 tar -zxf openssl-1.1.0e.tar.gz
@@ -205,7 +206,7 @@ ln -s /usr/local/ssl/bin/openssl /usr/bin/openssl
 
 使用如下方式解决
 
-```
+```bash
 ln -s /usr/local/lib64/libssl.so.1.1 /usr/lib64/libssl.so.1.1
 ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 ```
@@ -213,7 +214,7 @@ ln -s /usr/local/lib64/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1
 
 创建新版本的符号链接
 
-```
+```bash
 # 删除旧的符号链接
 rm /bin/openssl
 # 添加新的
@@ -263,7 +264,7 @@ ln -s /usr/local/bin/openssl /bin/openssl
 
 加上所需参数开始编译
 
-```
+```bash
 ./configure \
 --with-openssl=/usr/src/openssl-1.1.0e \
 --prefix=/etc/nginx \
@@ -308,7 +309,7 @@ ln -s /usr/local/bin/openssl /bin/openssl
 
 编译安装
 
-```
+```bash
 # 执行 make 编译，但是不要执行 make install
 make
 # 重命名nginx旧版本二进制文件，即sbin目录下的nginx（期间nginx并不会停止服务）

@@ -3,6 +3,7 @@ title: Python 入门教程 Lesson 1 - 初识 Python
 layout: post
 category : [技术]
 tagline: 
+keywords: [python, 教程, 入门, 开发环境, ide, 推荐, sublimetext, ipyhton, jupyter, pycharm]
 tags : [Python]
 ---
 

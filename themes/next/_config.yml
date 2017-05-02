@@ -12,7 +12,8 @@ menu:
 favicon: /favicon.ico
 
 # Set default keywords (Use a comma to separate)
-keywords: "restran,restran.net,淡水,淡水网志,blog,博客,python,vuejs"
+# keywords: restran,restran.net,淡水,淡水网志,blog,博客,python,vuejs
+slogn: 在位流的海洋里徜徉～
 
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.

@@ -3,6 +3,7 @@ title: Tornado 中 PyMongo Motor MongoEngine 的性能测试
 layout: post
 category: [Python]
 tagline: 
+keywords: [python, mongodb, tornado, pymongo, motor, mongoengine, 性能, 测试, benchmark, performance]
 tags: [Python, MongoDB, Tornado]
 ---
 
