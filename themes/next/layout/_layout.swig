@@ -58,6 +58,38 @@
 
   <script type="text/javascript" src="{{ url_for(theme.vendors) }}/jquery/index.js?v=2.1.3"></script>
 
+  {# LazyLoad #}
+  <script type="text/javascript" src="{{ url_for(theme.js) }}/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "{{ url_for(theme.images) }}/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  {# Use echo to lazyload, works at IE8+
+  <script type="text/javascript" src="{{ url_for(theme.vendors) }}echo/echo.min.js"></script>
+  <script type="text/javascript">
+    echo.init({
+    offset: 100,
+    throttle: 250,
+    unload: false,
+    callback: function (element, op) {
+      console.log(element, 'has been', op + 'ed')
+    }
+  });
+  </script>
+  #}
+
   {% block script_pre_extra %}{% endblock %}
 
   {# This block is used to set options before any other scripts run #}
@@ -88,19 +120,10 @@
     });
   </script>
 
+{#
   <!-- {% include '_scripts/mathjax.swig' %} -->
   <!-- {% block comment_system %}{% endblock %} -->
   <!-- {% include '_scripts/baidushare.swig' %} -->
-
-  {# LazyLoad #}
-  <script type="text/javascript" src="{{ url_for(theme.js) }}/lazyload.js"></script>
-  <script type="text/javascript">
-    $(function () {
-      $("#posts").find('img').lazyload({
-        placeholder: "{{ url_for(theme.images) }}/loading.gif",
-        effect: "fadeIn"
-      });
-    });
-  </script>
+#}
 </body>
 </html>

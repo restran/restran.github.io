@@ -76,7 +76,6 @@ https://hexo.io/zh-cn/docs/helpers.html
     scheme: '{{ theme.scheme }}',
     sidebar: '{{ theme.sidebar }}'
   };
-  Pace.start();
 </script>
 
 {% if theme.facebook_sdk.enable and theme.facebook_sdk.webmaster %}
