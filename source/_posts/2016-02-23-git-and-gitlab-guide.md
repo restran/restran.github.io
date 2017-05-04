@@ -4,6 +4,7 @@ layout: post
 toc_number: false
 category: [工具]
 tagline: 
+show_reward: true
 keywords: [Git, Gitlab, 教程, 教学, 指南, 入门]
 tags: [Git]
 ---

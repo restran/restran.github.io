@@ -1,10 +1,11 @@
 ---
 title: Python 进程管理工具 Supervisor 使用教程
 layout: post
-category : [Python]
+category: [Python]
 tagline: 
+show_reward: true
 keywords: [python, supervisor, supervisord, 开机启动, 教程, 配置, command, linux, supervisorctl]
-tags : [Python, Supervisor, Linux]
+tags: [Python, Supervisor, Linux]
 ---
 
 [Supervisor](http://supervisord.org/ "") 是基于 Python 的进程管理工具，只能运行在 Unix-Like 的系统上，也就是无法运行在 Windows 上。Supervisor 官方版目前只能运行在 Python 2.4 以上版本，但是还无法运行在 Python 3 上，不过已经有一个 Python 3 的移植版 [supervisor-py3k](https://github.com/palmkevin/supervisor-py3k)。

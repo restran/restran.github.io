@@ -1,5 +1,6 @@
 title: about
 date: 2015-10-19 20:42:40
+show_reward: true
 ---
 
 嗨，我是 restran，也使用淡水这个网名，我是一名 Web 开发者，喜欢 Python 和 Vue，是一名走在文艺路上的工程师。你可以通过 [Email](mailto:grestran@gmail.com) 与我取得联系。

@@ -3,7 +3,8 @@ title: 谈谈 Python 程序的运行原理
 layout: post
 category: [Python]
 tagline: 
-keywords: [python, 运行原理, 源码剖析, 教程, 揭秘]
+show_reward: true
+keywords: [python, 运行原理, 源码剖析, 教程, 揭秘, 指南]
 tags: [Python]
 toc_number: false
 ---
@@ -382,8 +383,6 @@ Python 在`引用计数机制`的基础上，使用了主流垃圾收集技术�
 关于垃圾回收，可以参考 
 
 http://hbprotoss.github.io/posts/pythonla-ji-hui-shou-ji-zhi.html
-
-
 
 ## 4. 参考文献
 

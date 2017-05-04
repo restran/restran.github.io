@@ -45,6 +45,10 @@
     {% else %}
       {{ page.content }}
     {% endif %}
+
+    {% if page.show_reward %}
+      {% include '_macro/reward.swig' %}
+    {% endif %}
   </div>
 
 {% endblock %}

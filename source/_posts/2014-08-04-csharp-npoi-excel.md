@@ -9,7 +9,7 @@ tags: [C#]
 
 [NPOI][1] 是开源的 [POI][2] 项目的.NET版，可以用来读写Excel，Word，PPT文件。在处理Excel文件上，NPOI 可以同时兼容 xls 和 xlsx。官网提供了一份 [Examples][3]，给出了很多应用场景的例子，打包好的二进制文件类库，也仅有几MB，使用非常方便。
 
-**读Excel**
+## 读Excel
 
 NPOI使用`HSSFWorkbook`类来处理xls，`XSSFWorkbook`类来处理xlsx，它们都继承接口`IWorkbook`，因此可以通过`IWorkbook`来统一处理xls和xlsx格式的文件。
 
@@ -114,7 +114,7 @@ public object GetCellValue(ICell cell)
 }
 ```
 
-**特别注意**的是`CellType`中没有Date，而日期类型的数据类型是`Numeric`，其实日期的数据在Excel中也是以数字的形式存储。可以使用`DateUtil.IsCellDateFormatted`方法来判断是否是日期类型。
+> **特别注意**的是`CellType`中没有Date，而日期类型的数据类型是`Numeric`，其实日期的数据在Excel中也是以数字的形式存储。可以使用`DateUtil.IsCellDateFormatted`方法来判断是否是日期类型。
 
 有了`GetCellValue`方法，写数据到Excel中的时候就要有`SetCellValue`方法，缺的类型可以自己补。
 
@@ -156,7 +156,7 @@ public static void SetCellValue(ICell cell, object obj)
 `cell.SetCellValue()`方法只有四种重载方法，参数分别是`string`, `bool`, `DateTime`, `double`, `IRichTextString`
 设置公式使用`cell.SetCellFormula(string formula)`
 
-**写Excel**
+## 写Excel
 
 以下是简单的例子，更多信息可以参见官网提供的[Examples][4]。
 

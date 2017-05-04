@@ -131,6 +131,10 @@
       {% endif  %}
     </div>
 
+    {% if post.show_reward and not is_index %}
+      {% include 'reward.swig' %}
+    {% endif %}
+
     <footer class="post-footer">
       {% if post.tags and post.tags.length and not is_index %}
         <div class="post-tags">

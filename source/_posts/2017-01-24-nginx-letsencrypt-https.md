@@ -1,10 +1,12 @@
 ---
 title: Nginx 使用 Let's Encrypt 配置 HTTPS 和 HTTP/2
 layout: post
-category : [技术]
+category: [技术]
 tagline: 
+show_reward: true
+reward_comment: 如果觉得有帮助，请任意打赏
 keywords: [nginx, lets encrypt, https, http2, h2, 证书, 教程, centos, openssl, 编译]
-tags : [Web]
+tags: [Web]
 ---
 
 HTTPS 目前已经逐渐成为标配，利用 [Lets Encrypt](https://letsencrypt.org/) 可以免费实现网站的 HTTPS，保证传输安全，以下环境使用 CentOS 7。

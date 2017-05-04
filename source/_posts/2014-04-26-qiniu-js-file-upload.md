@@ -1,5 +1,5 @@
 ---
-title: 七牛云存储的 Web 前端文件上传
+title: 七牛云存储的 JavaScript 文件上传方法
 layout: post
 category: [技术]
 tagline: 

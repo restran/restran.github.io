@@ -15,6 +15,15 @@ favicon: /favicon.ico
 # keywords: restran,restran.net,淡水,淡水网志,blog,博客,python,vuejs
 slogn: 在位流的海洋里徜徉～
 
+# 微信支付的扫码图片
+wechat_pay: /uploads/wechat_pay.png
+# 支付宝的扫码图片
+alipay: /uploads/alipay.png
+# 赞赏介绍语
+reward_comment: 支持我写出更好的文章
+# 赞赏感谢语
+reward_thanks: 感谢您的支持
+
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
 # Set rss to specific value if you have burned your feed already.

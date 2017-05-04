@@ -94,15 +94,15 @@
 
   {# This block is used to set options before any other scripts run #}
   {% block script_extra_before %}{% endblock %}
-  {% block comment_system %}
-    {% include '_scripts/comments/disqus.swig' %}
-  {% endblock %}
   {% include '_scripts/fancy-box.swig' %}
+
+  {% if theme.alipay || theme.wechat_pay %}
+    {% include '_scripts/reward.swig' %}
+  {% endif %}
+
   {% include '_scripts/helpers.swig' %}
   {% include '_scripts/motion.swig' %}
-  {% if theme.leancloud_visitors.enable %}
-    {% include '_scripts/lean-analytics.swig' %}
-  {% endif %}
+
 
   <script type="text/javascript" src="{{ url_for(theme.js) }}/nav-toggle.js?v={{ theme.version }}"></script>
   <script type="text/javascript" src="{{ url_for(theme.vendors) }}/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
@@ -125,5 +125,15 @@
   <!-- {% block comment_system %}{% endblock %} -->
   <!-- {% include '_scripts/baidushare.swig' %} -->
 #}
+
+  {% if theme.leancloud_visitors.enable %}
+    {% include '_scripts/lean-analytics.swig' %}
+  {% endif %}
+  
+  {% block comment_system %}
+    {% include '_scripts/comments/disqus.swig' %}
+  {% endblock %}
+
+  {% block script_tail_extra %}{% endblock %}
 </body>
 </html>
