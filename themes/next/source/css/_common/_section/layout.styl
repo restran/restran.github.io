@@ -23,14 +23,20 @@ html, body { height: 100%; }
 
 // Main Section
 // --------------------------------------------------
-.main { padding-bottom: $footer-height + $gap-between-main-and-footer; }
+.main { 
+  padding-top: 60px;
+  padding-bottom: $footer-height + $gap-between-main-and-footer; 
+}
 .main-inner {
   margin: 60px auto 0;
   width: $main-desktop;
 
   .one-column & { width: $content-desktop; }
 
-  .content { margin-top: 120px; width: $content-desktop; }
+  .content { 
+    /*margin-top: 120px; */
+    width: $content-desktop; 
+  }
 }
 
 

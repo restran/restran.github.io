@@ -8,11 +8,17 @@ keywords: [python, supervisor, supervisord, 开机启动, 教程, 配置, comman
 tags: [Python, Supervisor, Linux]
 ---
 
-[Supervisor](http://supervisord.org/ "") 是基于 Python 的进程管理工具，只能运行在 Unix-Like 的系统上，也就是无法运行在 Windows 上。Supervisor 官方版目前只能运行在 Python 2.4 以上版本，但是还无法运行在 Python 3 上，不过已经有一个 Python 3 的移植版 [supervisor-py3k](https://github.com/palmkevin/supervisor-py3k)。
+[Supervisor](http://supervisord.org/ "") 是基于 Python 的进程管理工具，可以帮助我们更简单的启动、重启和停止服务器上的后台进程，是 Linux 服务器管理的效率工具。
 
-什么情况下我们需要进程管理呢？就是执行一些需要以守护进程方式执行的程序，比如一个后台任务，我最常用的是用来启动和管理基于 Tornado 写的 Web 程序。
+什么情况下我们需要进程管理呢？就是执行一些需要以守护进程方式启动的程序，比如一个后台任务、一组 Web 服务的进程（说是一组，是因为经常用 Nginx 来做负载均衡），这些很可能是一些网站、REST API 的服务、消息推送的后台服务、日志数据的处理分析服务等等。
+
+> 需要注意的是 Supervisor 是通用的进程管理工具，可以用来启动任意进程，不仅仅是用来管理 Python 进程。
+
+Supervisor 经常被用来管理由 gunicorn 启动的 Django 或 Flask 等 Web 服务的进程。我最常用的是用来管理和启动一组 Tornado 进程来实现负载均衡。
 
 除此之外，Supervisor 还能很友好的管理程序在命令行上输出的日志，可以将日志重定向到自定义的日志文件中，还能按文件大小对日志进行分割。 
+
+目前 Supervisor 只能运行在 Unix-Like 的系统上，也就是无法运行在 Windows 上。Supervisor 官方版目前只能运行在 Python 2.4 以上版本，但是还无法运行在 Python 3 上，不过已经有一个 Python 3 的移植版 [supervisor-py3k](https://github.com/palmkevin/supervisor-py3k)。
 
 Supervisor 有两个主要的组成部分：
 
@@ -44,11 +50,15 @@ Supervisor 有两个主要的组成部分：
 
 因此可以单独建一个文件夹，来存放这些文件，比如放在 `/home/supervisor/`
 
+创建文件夹
+
+	mkdir /home/supervisor
+
 ```ini
 [unix_http_server]
 ;file=/tmp/supervisor.sock   ; (the path to the socket file)
-;修改为 /var/run 目录，避免被系统删除
-file=/var/run/supervisor.sock   ; (the path to the socket file)
+;修改为 /home/supervisor 目录，避免被系统删除
+file=/home/supervisor.sock   ; (the path to the socket file)
 ;chmod=0700                 ; socket file mode (default 0700)
 ;chown=nobody:nogroup       ; socket file uid:gid owner
 ;username=user              ; (default is no username (open server))
@@ -64,7 +74,9 @@ file=/var/run/supervisor.sock   ; (the path to the socket file)
 ;logfile=/tmp/supervisord.log ; (main log file;default $CWD/supervisord.log)
 ;修改为 /var/log 目录，避免被系统删除
 logfile=/var/log/supervisor/supervisord.log ; (main log file;default $CWD/supervisord.log)
+; 日志文件多大时进行分割
 logfile_maxbytes=50MB        ; (max main logfile bytes b4 rotation;default 50MB)
+; 最多保留多少份日志文件
 logfile_backups=10           ; (num of main logfile rotation backups;default 10)
 loglevel=info                ; (log level;default info; others: debug,warn,trace)
 ;pidfile=/tmp/supervisord.pid ; (supervisord pidfile;default supervisord.pid)
@@ -319,4 +331,4 @@ service supervisord stop
 service supervisord start
 ```
 
-**注意**：这个脚本下载下来后，还需检查一下与我们的配置是否相符合，比如默认的配置文件路径，pid 文件路径等，如果存在不同则需要进行一些修改。
+> **注意**：这个脚本下载下来后，还需检查一下与我们的配置是否相符合，比如默认的配置文件路径，pid 文件路径等，如果存在不同则需要进行一些修改。

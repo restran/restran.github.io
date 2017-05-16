@@ -20,7 +20,7 @@ wechat_pay: /uploads/wechat_pay.png
 # 支付宝的扫码图片
 alipay: /uploads/alipay.png
 # 赞赏介绍语
-reward_comment: 支持我写出更好的文章
+reward_comment: 予人赞赏，手留余香
 # 赞赏感谢语
 reward_thanks: 感谢您的支持
 

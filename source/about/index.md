@@ -15,6 +15,6 @@ show_reward: true
 
 2015 年，我做了一次更新，将这个网站改成由 [Hexo](https://hexo.io/zh-cn/) 生成。你现在看到的页面使用了 [NexT](https://github.com/iissnan/hexo-theme-next) 主题，我对一些样式进行了修改，尽可能让你看起来简洁优雅。
 
-2017 年，因为多说关闭，我将评论迁移到了 [Disqus](https://disqus.com)，意味着以后国内的用户可能无法评论，同时也丢失了过去的评论数据。
+2017 年，因为多说关闭，我将评论迁移到了 [Disqus](https://disqus.com)，意味着以后国内的用户可能无法评论，使用了 [JamesPan](https://github.com/JamesPan/duoshuo-migrator) 的脚本将以前的评论数据也导入到了 Disqus。
 
-<div style="color:#999; font-size:14px"># 更新于 2017-03-30</div>  
+<div style="color:#999; font-size:14px"># 更新于 2017-05-09</div>  

@@ -7,8 +7,7 @@
     {% if theme.wechat_pay %}
     <div class="wechat">
       <a href="{{ theme.wechat_pay }}" class="fancybox">
-        <img src="{{ theme.wechat_pay }}" alt="{{ theme.author }} WeChat Pay" 
-         width="168px" height="168px" class="skip" title="微信打赏">
+        <img src="{{ theme.wechat_pay }}" alt="{{ theme.author }} WeChat Pay" class="skip" title="微信打赏">
       </a>
     </div>
     {% endif %}
@@ -16,8 +15,7 @@
     {% if theme.alipay %}
     <div class="alipay">
       <a href="{{ theme.alipay }}" class="fancybox">
-        <img src="{{ theme.alipay }}" alt="{{ theme.author }} Alipay" 
-         width="168px" height="168px" class="skip" title="支付宝打赏">
+        <img src="{{ theme.alipay }}" alt="{{ theme.author }} Alipay" class="skip" title="支付宝打赏">
       </a>
     </div>
     {% endif %}

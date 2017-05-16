@@ -18,10 +18,9 @@ $(document).ready(function () {
 
   function backToTop() {
     $('.back-to-top').on('click', function () {
-      $('html, body').animate({
+      $('html').animate({
         scrollTop: 0
       }, DURATION);
     });
   }
-
 });

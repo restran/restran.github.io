@@ -1,7 +1,7 @@
 <script type="text/javascript">
   $(".reward-wrapper .reward-btn").fancybox({
-      maxWidth: 600,
-      maxHeight: 345,
+      maxWidth: 650,
+      maxHeight: 350,
       fitToView: true,
       autoSize: true,
       closeClick: false,
