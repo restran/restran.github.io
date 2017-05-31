@@ -6,7 +6,7 @@
 
 	npm install --no-optional
 
-因为有个 bunyan 的依赖 使用了可选的依赖 dtrace-provider，但是 Mac 不支持，因此需要添加 --no-optional
+因为有个 bunyan 的依赖，使用了可选的依赖 dtrace-provider，但是 Mac 不支持，因此需要添加 --no-optional
 
 调试预览
 
