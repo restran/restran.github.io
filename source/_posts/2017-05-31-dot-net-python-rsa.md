@@ -29,9 +29,9 @@ public void GenerateRSAKey()
 }
 ```
 
-## 将 RSA 由 xml 转成 pem 格式
+## 将 RSA 密钥由 xml 转成 pem 格式
 
-可以使用[这个在线工具](https://superdry.apphb.com/tools/online-rsa-key-converter)，但是在线工具毕竟有数据泄露的风险，最后参考了[这篇文章](http://www.platanus.cz/blog/converting-rsa-xml-key-to-pem)，代码在这里 [XMLSec2PEM.java](http://www.platanus.cz/uploads/production/document/3/XMLSec2PEM.java.txt)。
+可以使用[这个在线工具](https://superdry.apphb.com/tools/online-rsa-key-converter)，但是在线工具毕竟有数据泄露的风险，最后参考了[这篇文章](http://www.platanus.cz/blog/converting-rsa-xml-key-to-pem)，代码在这里 [XMLSec2PEM.java](/uploads/attachment/2017/05/XMLSec2PEM.java.txt)。
 
 编译代码
 

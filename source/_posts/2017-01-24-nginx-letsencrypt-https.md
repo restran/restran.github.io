@@ -6,10 +6,10 @@ tagline:
 show_reward: true
 reward_comment: 如果觉得有帮助，请任意打赏
 keywords: [nginx, lets encrypt, https, http2, h2, 证书, 教程, centos, openssl, 编译]
-tags: [Web]
+tags: [Web, Linux, HTTPS]
 ---
 
-HTTPS 目前已经逐渐成为标配，利用 [Lets Encrypt](https://letsencrypt.org/) 可以免费实现网站的 HTTPS，保证传输安全，以下环境使用 CentOS 7。
+HTTPS 目前已经逐渐成为标配，利用 [Lets Encrypt](https://letsencrypt.org/) 可以免费实现网站的 HTTPS，保证传输安全。关于 Lets Encrypt 的使用问题可以查看[官方的FAQ](https://letsencrypt.org/docs/faq/)，目前不支持泛解析的域名，但是在将来可能会实现。以下环境使用 CentOS 7。
 
 ## letsencrypt 安装和配置
 
