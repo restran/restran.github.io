@@ -54,6 +54,8 @@ Supervisor 有两个主要的组成部分：
 
 	mkdir /home/supervisor
 
+然后对一些配置进行修改
+
 ```ini
 [unix_http_server]
 ;file=/tmp/supervisor.sock   ; (the path to the socket file)

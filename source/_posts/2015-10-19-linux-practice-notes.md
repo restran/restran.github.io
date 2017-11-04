@@ -64,6 +64,13 @@ ls -d .*
 
     unzip mydata.zip -d mydatabak
     
+### 批量删除 .DS_Store 文件
+
+删除指定目录下所有的 .DS_Store 文件
+
+```
+sudo find /home/path -name ".DS_Store" -type f -delete
+```
 
 ### 修改文件的拥有者和权限
 
@@ -98,6 +105,26 @@ du -sh [目录名]
 # 返回该文件夹总M数
 du -sm [文件夹] 
 ```
+
+## 用户相关
+
+Linux查看当前系统登录用户、登录日志、登录错误日志
+查看当前系统的登录用户
+
+    w
+    who
+
+查看成功登录历史记录
+
+    last
+
+查看尝试登录失败的历史记录
+
+    lastb
+
+显示每个用户最近一次登录成功的信息
+
+    lastlog
 
 ## 日志相关
 
@@ -288,6 +315,13 @@ ps auxw --sort=%cpu
 3、shutdown -h now 立刻关机(root用户使用)
 4、shutdown -h 10 10分钟后自动关机
 如果是通过shutdown命令设置关机的话，可以用shutdown -c命令取消重启
+```
+
+## Curl
+
+```
+# 强制指定本地端口
+curl --local-port 51 http://web.example.com
 ```
 
 ## 最小化安装完 CentOS 7 之后出现的问题
