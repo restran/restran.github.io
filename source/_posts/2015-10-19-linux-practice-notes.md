@@ -126,6 +126,64 @@ Linux查看当前系统登录用户、登录日志、登录错误日志
 
     lastlog
 
+Ubuntu 切换到 root
+
+    sudo su
+
+Ubuntu 修改 root 密码
+
+    sudo passwd root
+
+修改完毕以后，执行 su root 命令时，输入新的 root 密码即可
+
+在 root 下，可以切换到其他用户
+
+    su - usernmae
+
+### 用户创建和删除
+
+创建用户（useradd/adduser）：
+
+    useradd [所要创建的用户名] -p [加密后的密码]
+    # 会自动创建目录，会提示设置密码
+    adduser [所要创建的用户名] 
+    
+删除用户
+
+    userdel [-r] [要删除的用户的名称]
+
+修改用户密码
+
+    passwd [用户名]
+
+创建用户，但是不创建 home 目录
+
+    sudo useradd -M username
+
+### 用户组管理
+
+添加用户到组里面
+
+	usermod -a -G apache username
+	
+创建用户组
+
+	groupadd developers
+
+### Ubuntu Home 目录加密问题
+
+如果在安装 Ubuntu 的时候，选择加密 home 目录，在重启的时候，可能会遇到需要解密 home 目录的问题，这时在 home 目录下的用户名文件夹中，只能看到两个文件。提示要运行 `ecryptfs-mount-private` 来解密文件
+
+```
+Access-Your-Private-Data.desktop  README.txt
+```
+
+使用方法如下
+
+    ecryptfs-mount-private /home/.ecryptfs/your_username/.Private
+
+执行的时候需要输入用户密码，然后文件就会解密了
+
 ## 日志相关
 
 实时显示日志文件，如果日志文件有更新，会自动滚动到文件最后，并实时显示
@@ -135,15 +193,38 @@ Linux查看当前系统登录用户、登录日志、登录错误日志
     # 查看20行
     tail -n 20 -f /var/log/nginx/access.log
 
-## 端口相关
+清除登录痕迹
+
+```
+# 清除登录系统失败的记录
+echo "" > /var/log/btmp
+# 清除登录系统成功的记录
+echo "" >/var/log/wtmp
+# 清除历史执行命令
+history -c
+```
+
+## 网络相关
+
+nslookup 指定 DNS 服务器
+
+    nslookup example.com 8.8.8.8
 
 查看端口占用情况
 
     netstat -ntlp
-
+    
+网卡配置
+    
+    # 查看网卡信息
+    ifconfig 
+    
+    # 查看网卡配置
+    vi /etc/sysconfig/network-scripts/ifcfg-eth0
+    
 ## 进程相关
 
-查询指定端口的进程id，如8108
+查询指定端口的进程id，如 8108
 
 grep 是搜索，`|` 是管道，下面命令的意思是将 netstat -ap 的结果作为下一个命令的输入
 
@@ -165,11 +246,21 @@ grep 是搜索，`|` 是管道，下面命令的意思是将 netstat -ap 的结�
 
     sudo -u username ./run.sh
 
+查看当前进程信息，显示完整的命令
 
+    ps -ef
+    
 使用 ax 和 aux 可以查看详细信息
 
     ps ax | grep uwsgi
     ps aux | grep uwsgi
+    
+### 强制杀死进程
+
+pid_num 是进程号
+
+    kill -s 9 pid_num
+    pkill -9 pid_num
     
 ### 强制杀死所有 uwsgi 进程
 
@@ -194,19 +285,19 @@ ps查看所有符合./cmd的进程，找出其对应的进程号
 ```
 [root@Cluster1 proc]# ll 22401  
 total 0  
--r--r--r-- 1 zhouys zhouys 0 Dec 11 11:10 cmdline  
--r--r--r-- 1 zhouys zhouys 0 Dec 11 11:10 cpu  
-lrwxrwxrwx 1 zhouys zhouys 0 Dec 11 11:10 cwd -> /home/zhouys/sbs/bin  
--r-------- 1 zhouys zhouys 0 Dec 11 11:10 environ  
-lrwxrwxrwx 1 zhouys zhouys 0 Dec 11 11:10 exe -> /home/zhouys/sbs/bin/cbs (deleted)  
-dr-x------ 2 zhouys zhouys 0 Dec 11 11:10 fd  
--r-------- 1 zhouys zhouys 0 Dec 11 11:10 maps  
--rw------- 1 zhouys zhouys 0 Dec 11 11:10 mem  
--r--r--r-- 1 zhouys zhouys 0 Dec 11 11:10 mounts  
-lrwxrwxrwx 1 zhouys zhouys 0 Dec 11 11:10 root -> /  
--r--r--r-- 1 zhouys zhouys 0 Dec 11 11:10 stat  
--r--r--r-- 1 zhouys zhouys 0 Dec 11 11:10 statm  
--r--r--r-- 1 zhouys zhouys 0 Dec 11 11:10 status 
+-r--r--r-- 1 jack jack 0 Dec 11 11:10 cmdline  
+-r--r--r-- 1 jack jack 0 Dec 11 11:10 cpu  
+lrwxrwxrwx 1 jack jack 0 Dec 11 11:10 cwd -> /home/jack/sbs/bin  
+-r-------- 1 jack jack 0 Dec 11 11:10 environ  
+lrwxrwxrwx 1 jack jack 0 Dec 11 11:10 exe -> /home/jack/sbs/bin/cbs (deleted)  
+dr-x------ 2 jack jack 0 Dec 11 11:10 fd  
+-r-------- 1 jack jack 0 Dec 11 11:10 maps  
+-rw------- 1 jack jack 0 Dec 11 11:10 mem  
+-r--r--r-- 1 jack jack 0 Dec 11 11:10 mounts  
+lrwxrwxrwx 1 jack jack 0 Dec 11 11:10 root -> /  
+-r--r--r-- 1 jack jack 0 Dec 11 11:10 stat  
+-r--r--r-- 1 jack jack 0 Dec 11 11:10 statm  
+-r--r--r-- 1 jack jack 0 Dec 11 11:10 status 
 ```
 
 /proc文件系统下的进程号目录下面的文件镜像了进程的当前运行信息，从中可以看到：
@@ -268,22 +359,6 @@ ps auxw --sort=%cpu
     # 将文件设置为可执行，/etc/rc.local 实际上链接到 /etc/rc.d/rc.local
     chmod +x /etc/rc.d/rc.local
 
-## 用户创建和删除
-
-创建用户（useradd/adduser）：
-
-    useradd [所要创建的用户名] -p [加密后的密码]
-    # 会自动创建目录，会提示设置密码
-    adduser [所要创建的用户名] 
-    
-删除用户
-
-    userdel [-r] [要删除的用户的名称]
-
-修改用户密码
-
-    passwd [用户名]
-
 ## SSH 相关
     
 生成 SSH 密钥
@@ -322,7 +397,17 @@ ps auxw --sort=%cpu
 ```
 # 强制指定本地端口
 curl --local-port 51 http://web.example.com
+
+# 查看连接的详细信息
+# --trace-time 跟踪/详细输出时，添加时间戳
+curl -Sv --trace-time http://web.example.com
 ```
+
+## 服务相关
+
+Ubuntu 设置开机启动的服务
+
+	sudo systemctl enable nginx
 
 ## 最小化安装完 CentOS 7 之后出现的问题
 
@@ -470,15 +555,6 @@ or
 ### 上传文件问题
 
 上传文件时，比较大的文件，文件数据会暂时存储在 `/var/lib/nginx/tmp/` 中，必须保证 nginx 的启动用户有该文件夹的权限。（如果不是以 nginx 用户启动的话）
-
-
-## 网卡配置
-    
-    # 查看网卡信息
-    ifconfig 
-    
-    # 查看网卡配置
-    vi /etc/sysconfig/network-scripts/ifcfg-eth0
     
 ## MySQL
 
@@ -605,7 +681,7 @@ OperationalError: (2006, 'MySQL server has gone away')
 
 ### gitlab-ci-runner
 
-如果 gitlab-ci-runner 有更新或者 docker 有更新，会出现无法连接到 gitlab，clone 代码
+如果 gitlab-ci-runner 有更新或者 docker 有更新，会出现无法连接到 gitlab 进行 clone 代码
  
 ```
 fatal: unable to access 'http://gitlab-ci-token:xxxxxx@your_gitlab/webport/fomalhaut.git/': Failed to connect to your_gitlab port 80: Operation timed out

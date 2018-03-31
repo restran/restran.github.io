@@ -53,14 +53,16 @@ Supervisor 有两个主要的组成部分：
 创建文件夹
 
 	mkdir /home/supervisor
-
+	mkdir /var/log/supervisor
+	mkdir /etc/supervisor.d
+	
 然后对一些配置进行修改
 
 ```ini
 [unix_http_server]
 ;file=/tmp/supervisor.sock   ; (the path to the socket file)
 ;修改为 /home/supervisor 目录，避免被系统删除
-file=/home/supervisor.sock   ; (the path to the socket file)
+file=/home/supervisor/supervisor.sock   ; (the path to the socket file)
 ;chmod=0700                 ; socket file mode (default 0700)
 ;chown=nobody:nogroup       ; socket file uid:gid owner
 ;username=user              ; (default is no username (open server))
@@ -139,7 +141,7 @@ supervisor 同时提供了通过浏览器来管理进程的方法，只需要注
 
 ```
 [include]
-files = /etc/supervisord.d/*.ini
+files = /etc/supervisor.d/*.ini
 ```
 
 ## 进程的配置样例
@@ -157,7 +159,7 @@ user=oxygen                 ; 使用 oxygen 用户来启动该进程
 ; 程序崩溃时自动重启，重启次数是有限制的，默认为3次
 autorestart=true            
 redirect_stderr=true        ; 重定向输出的日志
-stdout_logfile = /var/log/supervisord/tornado_server.log
+stdout_logfile = /var/log/supervisor/tornado_server.log
 loglevel=info
 ```
 
@@ -181,7 +183,7 @@ process_name=%(program_name)s_%(process_num)02d;
 user=oxygen                 ; 使用 oxygen 用户来启动该进程
 autorestart=true            ; 程序崩溃时自动重启
 redirect_stderr=true        ; 重定向输出的日志
-stdout_logfile = /var/log/supervisord/tornado_server.log
+stdout_logfile = /var/log/supervisor/tornado_server.log
 loglevel=info
 ```
 
