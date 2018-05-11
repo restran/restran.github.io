@@ -85,7 +85,7 @@ sudo find /home/path -name ".DS_Store" -type f -delete
     chown -R [用户名] [文件夹] 
     chown -R user /tmp/folder
 
-## 查看硬盘及内存空间
+### 查看硬盘及内存空间
 
 ```bash
 # 查看内存及swap大小
@@ -105,6 +105,12 @@ du -sh [目录名]
 # 返回该文件夹总M数
 du -sm [文件夹] 
 ```
+
+### 修改默认编辑器
+
+Ubuntu 默认使用 nano，如果不习惯可以使用这个命令修改
+
+    select-editor
 
 ## 用户相关
 
