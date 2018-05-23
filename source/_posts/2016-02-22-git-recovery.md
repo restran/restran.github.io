@@ -41,6 +41,58 @@ HEAD 指向 C， 并且暂存区（stage，或称为 index）matches C.
 
 如果比较悲剧，分支历史上已经找不到想要的那个版本的代码了，但是别急，只要是有提交的代码，Git 都能找回来。
 
+### 命令行操作
+
+查看引用记录
+
+	git reflog
+
+会输出类似如下的内容，所有的提交记录都能看到
+
+```
+22d3349 HEAD@{0}: checkout: moving from develop to master
+22d3349 HEAD@{1}: rebase -i (finish): returning to refs/heads/develop
+22d3349 HEAD@{2}: rebase -i (start): checkout 22d3349
+f671986 HEAD@{3}: checkout: moving from master to develop
+22d3349 HEAD@{4}: checkout: moving from develop to master
+f671986 HEAD@{5}: checkout: moving from master to develop
+22d3349 HEAD@{6}: checkout: moving from rctf to master
+f671986 HEAD@{7}: commit: Revert
+f4d0f6d HEAD@{8}: commit: Flag
+22d3349 HEAD@{9}: checkout: moving from master to rctf
+22d3349 HEAD@{10}: commit (initial): Initial Commit
+```
+
+还原到指定版本
+
+	git reset --hard  f4d0f6d
+	
+### ORIG_HEAD
+
+在 `.git` 目录里除了 HEAD 档案之外，还有另一个叫做ORIG_HEAD的档案，当你在做一些比较危险的操作（例如像merge，rebase 或 reset之类的），Git 就会把HEAD的状态存放在这里，让你随时可以跳回危险动作之前的状态。
+
+虽然 `git reflog` 指令也可以查到相关资讯，但 reflog 的资料比较杂一点，这个 ORIG_HEAD 会更方便的找到最近一次危险动作之前的SHA-1值。用下面这个命令可以查看危险操作日志，`-p` 参数后面，`-1` 表示上一条，`-2` 表示上两条
+
+	git log ORIG_HEAD -p -100
+
+输出类似如下的内容
+
+```
+commit f671986f9aaa4fc49d8f3eba916d7947dc9f7e46
+Author: xxxx <xxx@example.com>
+Date: Sun May 13 12:55:31 2018 +0800
+    Revert
+diff --git a/flag.txt b/flag.txt
+deleted file mode 100644
+index 82a7a33..0000000
+--- a/flag.txt
++++ /dev/null
+@@ -1 +0,0 @@
+-xxx{12345}
+```
+
+### 可视化界面操作
+
 我在 Windows 下使用 TortoiseGit，只要右键找到`显示引用记录`，就能找到所有的操作记录，然后选择想要的版本，重置过去就可以了。即便是现在这一步的重置操作选错了版本也没事，因为这个操作也被记录下来，你还是可以重置到正确的版本。
 
 ![git_0.png](/uploads/post_img/2016/02/git_1.png "")

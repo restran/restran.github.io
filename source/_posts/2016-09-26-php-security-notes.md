@@ -1,7 +1,7 @@
 ---
 title: CTF 中的 PHP 知识汇总
 layout: post
-category : [技术]
+category : [技术, CTF]
 tagline: 
 keywords: [php, 安全, 漏洞, 教程, CTF]
 tags : [PHP, 安全, CTF]
