@@ -1,0 +1,695 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="七牛是不错的云存储产品，特别是有免费的配额可供使用，存点小文件或者博客的插图什么的还是不错的。以下介绍在自己的 Web 应用中上传文件到七牛的方法。 基本思想当我们想把本地的文件通过浏览器上传到自己的七牛云存储空间上时，就有两种思路   将文件直接上传到服务端，再由服务端将文件传输至七牛 向服务端请求七牛的文件上传token，然后将文件上传至七牛（授权式上传）   第1种方法较好解决，参考七牛的文">
+<meta name="keywords" content="七牛,qiniu,前端,js,文件上传,web,uploader">
+<meta property="og:type" content="article">
+<meta property="og:title" content="七牛云存储的 JavaScript 文件上传方法">
+<meta property="og:url" content="http://www.restran.net/2014/04/26/qiniu-js-file-upload/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="七牛是不错的云存储产品，特别是有免费的配额可供使用，存点小文件或者博客的插图什么的还是不错的。以下介绍在自己的 Web 应用中上传文件到七牛的方法。 基本思想当我们想把本地的文件通过浏览器上传到自己的七牛云存储空间上时，就有两种思路   将文件直接上传到服务端，再由服务端将文件传输至七牛 向服务端请求七牛的文件上传token，然后将文件上传至七牛（授权式上传）   第1种方法较好解决，参考七牛的文">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-05-04T12:50:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="七牛云存储的 JavaScript 文件上传方法">
+<meta name="twitter:description" content="七牛是不错的云存储产品，特别是有免费的配额可供使用，存点小文件或者博客的插图什么的还是不错的。以下介绍在自己的 Web 应用中上传文件到七牛的方法。 基本思想当我们想把本地的文件通过浏览器上传到自己的七牛云存储空间上时，就有两种思路   将文件直接上传到服务端，再由服务端将文件传输至七牛 向服务端请求七牛的文件上传token，然后将文件上传至七牛（授权式上传）   第1种方法较好解决，参考七牛的文">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> 七牛云存储的 JavaScript 文件上传方法 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              七牛云存储的 JavaScript 文件上传方法
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2014-04-26T00:00:00+08:00" content="2014-04-26">
+            2014-04-26
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 1,495字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2014/04/26/qiniu-js-file-upload/"class="leancloud_visitors" data-flag-title="七牛云存储的 JavaScript 文件上传方法">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2014/04/26/qiniu-js-file-upload/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2014/04/26/qiniu-js-file-upload/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>七牛是不错的云存储产品，特别是有免费的配额可供使用，存点小文件或者博客的插图什么的还是不错的。以下介绍在自己的 Web 应用中上传文件到七牛的方法。</p>
+<h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>当我们想把本地的文件通过浏览器上传到自己的七牛云存储空间上时，就有两种思路</p>
+<blockquote>
+<ol>
+<li>将文件直接上传到服务端，再由服务端将文件传输至七牛</li>
+<li>向服务端请求七牛的文件上传token，然后将文件上传至七牛（授权式上传）</li>
+</ol>
+</blockquote>
+<p>第1种方法较好解决，参考<a href="http://developer.qiniu.com/docs/v6/index.html" target="_blank" rel="noopener">七牛的文档</a>即可，第2种方法效率较高，这里介绍第2种。使用Javascript在Web前端上传文件的方法，七牛官方给出了<a href="https://developer.qiniu.com/kodo/sdk/1283/javascript" target="_blank" rel="noopener">文档</a>和<a href="https://github.com/qiniupd/qiniu-js-sdk" target="_blank" rel="noopener">例子</a>。核心内容在于这几点：</p>
+<blockquote>
+<ol>
+<li>指定上传按钮的ID</li>
+<li>创建一个uploader<br>   2.1 绑定上传按钮的ID<br>   2.2 设置获取上传token的服务端url</li>
+</ol>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"btn-uploader"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"pickfiles"</span> <span class="attr">href</span>=<span class="string">"javascript:void 0;"</span>&gt;</span>Upload File<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里上传按钮的ID是pickfiles</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">uploader = Qiniu.uploader(&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="设置uploader的参数"><a href="#设置uploader的参数" class="headerlink" title="设置uploader的参数"></a>设置uploader的参数</h2><p>七牛的Javascript SDK使用到了<a href="http://www.plupload.com/" target="_blank" rel="noopener">Plupload</a>，在初始化<code>uploader</code>时，可以为其传递Plupload中给定的<a href="http://www.plupload.com/docs/Options" target="_blank" rel="noopener">Option</a>，而不仅局限于七牛例子中给出的。例如可以添加<code>multi_selection</code>和<code>filters</code>来限制上传时，文件的选择。</p>
+<h2 id="文件命名"><a href="#文件命名" class="headerlink" title="文件命名"></a>文件命名</h2><p>当文件上传至七牛云存储时，文件的命名显得尤为重要，缺省情况下，七牛会使用上传文件的名字命名，然而文件重名将难以避免，并且重名将导致无法上传或覆盖旧文件。为了解决这一问题，有三种方法</p>
+<blockquote>
+<ol>
+<li>由qiniu自动生成唯一的文件名，在<code>uploader</code>中设置<code>unique_names=true</code></li>
+<li>由服务端生成文件名，在<code>uploader</code>中设置<code>save_key=true</code>，并且在服务端返回token时，设置<code>policy.saveKey</code>的值为所要保存的文件名。</li>
+<li>Web 前端自定义文件名，<code>key</code>函数中设置文件名，缺点是文件名无法有效管理。</li>
+</ol>
+</blockquote>
+<p>以下使用Python和Flask框架为例，介绍服务端生成文件名的方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> qiniu.rs</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route("/qiniu-token/")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">qiniu_token</span><span class="params">()</span>:</span></span><br><span class="line">    policy = qiniu.rs.PutPolicy(<span class="string">'your-bucket-name'</span>)</span><br><span class="line">    policy.saveKey = <span class="string">'save_key'</span><span class="comment">#设置上传文件的文件名</span></span><br><span class="line">    uptoken = policy.token()</span><br><span class="line">    <span class="keyword">return</span> json.dumps(&#123;<span class="string">'uptoken'</span>: uptoken&#125;)</span><br></pre></td></tr></table></figure>
+<p>服务端会返回如下格式的JSON，里面已包含了文件名</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"uptoken"</span>: <span class="string">"0MLvWPnyya1WtPnXFy9KLyGHyFPNdZceomL..."</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是服务端仍无法获悉本地文件的文件类型，因此无法给出恰当的文件名，虽然设置文件名时缺失扩展名，不影响文件的下载，但明显不漂亮。</p>
+<p>这时就需要先在本地先获取文件扩展名后，再向服务端请求，由服务端安排一个文件名（服务端掌握所有文件的信息，可以方便文件的命名和管理）。</p>
+<p>在<code>uploader</code>的<code>init</code>参数中，有一个<code>key</code>参数，可以为其绑定函数来设置文件名。该函数启用的前提是<code>save_key</code>和<code>unique_names</code>设为<code>false</code>。</p>
+<p>在<code>key</code>对应的函数中使用ajax向服务端请求文件名，然后与文件的扩展名组合后就得到了恰当的文件名了。特别注意的是，这里的ajax调用用使用同步的方式，因为需要在该函数返回前就得到服务端回应的信息，如果使用异步的方式，函数都返回了，服务端还没响应呢。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">uploader = Qiniu.uploader(&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    init: &#123;</span><br><span class="line">        <span class="string">'Key'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">up, file</span>) </span>&#123;</span><br><span class="line">            <span class="comment">//当save_key和unique_names设为false时，该方法将被调用</span></span><br><span class="line">            <span class="keyword">var</span> key = <span class="string">""</span>;</span><br><span class="line">            $.ajax(&#123;</span><br><span class="line">                url: <span class="string">'/qiniu-token/get-key/'</span>,</span><br><span class="line">                type: <span class="string">'GET'</span>,</span><br><span class="line">                <span class="keyword">async</span>: <span class="literal">false</span>,<span class="comment">//这里应设置为同步的方式</span></span><br><span class="line">                success: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">var</span> ext = Qiniu.getFileExtension(file.name);</span><br><span class="line">                    key = data + <span class="string">'.'</span> + ext;</span><br><span class="line">                &#125;,</span><br><span class="line">                cache: <span class="literal">false</span></span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span> key;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>以下是uploader的详细设置，其他完整的信息请参考七牛的例子，并加以改造。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">uploader = Qiniu.uploader(&#123;</span><br><span class="line">    runtimes: <span class="string">'html5,flash,html4'</span>,</span><br><span class="line">    browse_button: <span class="string">'pickfiles'</span>,<span class="comment">//上传按钮的ID</span></span><br><span class="line">    container: <span class="string">'btn-uploader'</span>,<span class="comment">//上传按钮的上级元素ID</span></span><br><span class="line">    drop_element: <span class="string">'btn-uploader'</span>,</span><br><span class="line">    max_file_size: <span class="string">'100mb'</span>,<span class="comment">//最大文件限制</span></span><br><span class="line">    flash_swf_url: <span class="string">'/static/js/plupload/Moxie.swf'</span>,</span><br><span class="line">    dragdrop: <span class="literal">false</span>,</span><br><span class="line">    chunk_size: <span class="string">'4mb'</span>,<span class="comment">//分块大小</span></span><br><span class="line">    uptoken_url: <span class="string">'/qiniu-token/'</span>,<span class="comment">//设置请求qiniu-token的url</span></span><br><span class="line">    <span class="comment">//Ajax请求upToken的Url，**强烈建议设置**（服务端提供）</span></span><br><span class="line">    <span class="comment">// uptoken : '&lt;Your upload token&gt;',</span></span><br><span class="line">    <span class="comment">//若未指定uptoken_url,则必须指定 uptoken ,uptoken由其他程序生成</span></span><br><span class="line">    <span class="comment">// unique_names: true,</span></span><br><span class="line">    <span class="comment">// 默认 false，key为文件名。若开启该选项，SDK会为每个文件自动生成key（文件名）</span></span><br><span class="line">    <span class="comment">// save_key: true,</span></span><br><span class="line">    <span class="comment">// 默认 false。若在服务端生成uptoken的上传策略中指定了 `sava_key`，则开启，SDK在前端将不对key进行任何处理</span></span><br><span class="line">    domain: <span class="string">'http://your-bucket-name.qiniudn.com/'</span>,<span class="comment">//自己的七牛云存储空间域名</span></span><br><span class="line">    multi_selection: <span class="literal">false</span>,<span class="comment">//是否允许同时选择多文件</span></span><br><span class="line">    <span class="comment">//文件类型过滤，这里限制为图片类型</span></span><br><span class="line">    filters: &#123;</span><br><span class="line">      mime_types : [</span><br><span class="line">        &#123;<span class="attr">title</span> : <span class="string">"Image files"</span>, <span class="attr">extensions</span>: <span class="string">"jpg,jpeg,gif,png"</span>&#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    auto_start: <span class="literal">true</span>,</span><br><span class="line">    init: &#123;</span><br><span class="line">        <span class="string">'FilesAdded'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">up, files</span>) </span>&#123;</span><br><span class="line">            <span class="comment">//do something</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'BeforeUpload'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">up, file</span>) </span>&#123;</span><br><span class="line">            <span class="comment">//do something</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'UploadProgress'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">up, file</span>) </span>&#123;</span><br><span class="line">            <span class="comment">//可以在这里控制上传进度的显示</span></span><br><span class="line">            <span class="comment">//可参考七牛的例子</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'UploadComplete'</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="comment">//do something</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'FileUploaded'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">up, file, info</span>) </span>&#123;</span><br><span class="line">           <span class="comment">//每个文件上传成功后,处理相关的事情</span></span><br><span class="line">           <span class="comment">//其中 info 是文件上传成功后，服务端返回的json，形式如</span></span><br><span class="line">           <span class="comment">//&#123;</span></span><br><span class="line">           <span class="comment">//  "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",</span></span><br><span class="line">           <span class="comment">//  "key": "gogopher.jpg"</span></span><br><span class="line">           <span class="comment">//&#125;</span></span><br><span class="line">           <span class="keyword">var</span> domain = up.getOption(<span class="string">'domain'</span>);</span><br><span class="line">           <span class="keyword">var</span> res = <span class="built_in">eval</span>(<span class="string">'('</span> + info + <span class="string">')'</span>);</span><br><span class="line">           <span class="keyword">var</span> sourceLink = domain + res.key;<span class="comment">//获取上传文件的链接地址</span></span><br><span class="line">           <span class="comment">//do something</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'Error'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">up, err, errTip</span>) </span>&#123;</span><br><span class="line">            alert(errTip);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'Key'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">up, file</span>) </span>&#123;</span><br><span class="line">            <span class="comment">//当save_key和unique_names设为false时，该方法将被调用</span></span><br><span class="line">            <span class="keyword">var</span> key = <span class="string">""</span>;</span><br><span class="line">            $.ajax(&#123;</span><br><span class="line">                url: <span class="string">'/qiniu-token/get-key/'</span>,</span><br><span class="line">                type: <span class="string">'GET'</span>,</span><br><span class="line">                <span class="keyword">async</span>: <span class="literal">false</span>,<span class="comment">//这里应设置为同步的方式</span></span><br><span class="line">                success: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">var</span> ext = Qiniu.getFileExtension(file.name);</span><br><span class="line">                    key = data + <span class="string">'.'</span> + ext;</span><br><span class="line">                &#125;,</span><br><span class="line">                cache: <span class="literal">false</span></span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span> key;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag">#前端</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/10/bootstrap-rating/" rel="prev">Bootstrap 星型评分插件</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本思想"><span class="nav-number">1.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置uploader的参数"><span class="nav-number">2.</span> <span class="nav-text">设置uploader的参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件命名"><span class="nav-number">3.</span> <span class="nav-text">文件命名</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2014/04/26/qiniu-js-file-upload/';
+      var disqus_title = '七牛云存储的 JavaScript 文件上传方法';
+      var disqus_url = 'http://www.restran.net/2014/04/26/qiniu-js-file-upload/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

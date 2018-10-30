@@ -1,0 +1,808 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="最近整理的移动端 Web 开发前端知识，不定期更新。 HTML5 可以做什么 拍照 获取地理位置 手势 canvas 绘图和动画(硬件加速) localstorage，本地缓存  HTML5 动画效果 demo  http://fff.cmiscm.com/#!/main CSS3 动画 http://isux.tencent.com/css3/index.html http://beiyuu.c">
+<meta name="keywords" content="web,前端,知识整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动端 Web 开发前端知识整理">
+<meta property="og:url" content="http://www.restran.net/2015/05/14/mobile-web-front-end-collections/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="最近整理的移动端 Web 开发前端知识，不定期更新。 HTML5 可以做什么 拍照 获取地理位置 手势 canvas 绘图和动画(硬件加速) localstorage，本地缓存  HTML5 动画效果 demo  http://fff.cmiscm.com/#!/main CSS3 动画 http://isux.tencent.com/css3/index.html http://beiyuu.c">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oxygen.qiniudn.com/img2015051433.png">
+<meta property="og:updated_time" content="2017-04-26T06:26:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="移动端 Web 开发前端知识整理">
+<meta name="twitter:description" content="最近整理的移动端 Web 开发前端知识，不定期更新。 HTML5 可以做什么 拍照 获取地理位置 手势 canvas 绘图和动画(硬件加速) localstorage，本地缓存  HTML5 动画效果 demo  http://fff.cmiscm.com/#!/main CSS3 动画 http://isux.tencent.com/css3/index.html http://beiyuu.c">
+<meta name="twitter:image" content="http://oxygen.qiniudn.com/img2015051433.png">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> 移动端 Web 开发前端知识整理 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              移动端 Web 开发前端知识整理
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2015-05-14T00:00:00+08:00" content="2015-05-14">
+            2015-05-14
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 2,223字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/知识整理/" itemprop="url" rel="index">
+                  <span itemprop="name">知识整理</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2015/05/14/mobile-web-front-end-collections/"class="leancloud_visitors" data-flag-title="移动端 Web 开发前端知识整理">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/05/14/mobile-web-front-end-collections/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/14/mobile-web-front-end-collections/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>最近整理的移动端 Web 开发前端知识，不定期更新。</p>
+<h2 id="HTML5-可以做什么"><a href="#HTML5-可以做什么" class="headerlink" title="HTML5 可以做什么"></a>HTML5 可以做什么</h2><ol>
+<li>拍照</li>
+<li>获取地理位置</li>
+<li>手势</li>
+<li>canvas 绘图和动画(硬件加速)</li>
+<li>localstorage，本地缓存</li>
+</ol>
+<p>HTML5 动画效果 demo </p>
+<p><a href="http://fff.cmiscm.com/#!/main" target="_blank" rel="noopener">http://fff.cmiscm.com/#!/main</a></p>
+<p><strong>CSS3 动画</strong></p>
+<p><a href="http://isux.tencent.com/css3/index.html" target="_blank" rel="noopener">http://isux.tencent.com/css3/index.html</a></p>
+<p><a href="http://beiyuu.com/css3-animation/" target="_blank" rel="noopener">http://beiyuu.com/css3-animation/</a></p>
+<p><a href="http://www.cnblogs.com/lhb25/p/loading-spinners-animated-with-css3.html" target="_blank" rel="noopener">CSS3 实现的 Loading（加载）动画效果</a></p>
+<p><strong>基本的 HTML 文件结构</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE HTML&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"Content-Type"</span> <span class="attr">content</span>=<span class="string">"text/html; charset=UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 设置初始缩放比例为1.0，使用设备宽度  --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span></span></span><br><span class="line"><span class="tag">          <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 在iOS下开启全屏模式  --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"apple-mobile-web-app-capable"</span> <span class="attr">content</span>=<span class="string">"yes"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 隐藏 Sarafi 状态栏  --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"apple-mobile-web-app-status-bar-style"</span> <span class="attr">content</span>=<span class="string">"black"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"/static/css/your_css.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/static/js/your_js.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="DOM-操作库"><a href="#DOM-操作库" class="headerlink" title="DOM 操作库"></a>DOM 操作库</h2><p><a href="http://zeptojs.com/" target="_blank" rel="noopener">zepto.js</a></p>
+<p><a href="https://jquery.com/" target="_blank" rel="noopener">jQuery</a></p>
+<blockquote>
+<ol>
+<li>jQuery 的目标是兼容所有主流浏览器，这就意味着它的大量代码对移动端的浏览器是无用或者低效的</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>Zepto是一个轻量级的针对现代高级浏览器的JavaScript库，只针对移动端浏览器编写，因此体积更小、效率更高，更重要的是，它的 API 完全仿照 jQuery，如果你会用jquery，那么你也会用zepto。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>Zepto的设计目的是提供 jQuery 的类似的API，但并不是100%覆盖 jQuery 。Zepto设计的目的是有一个5-10k的通用库（目前最新版，gzip 压缩后只有 9.1k）、下载并快速执行、有一个熟悉通用的API，所以你能把你主要的精力放到应用开发上。</li>
+</ol>
+</blockquote>
+<p><strong>todo：zepto 与 jQuery 冲突问题</strong></p>
+<p>很多插件是基于jQuery 的，如果想要使用这些插件，又引入了 jQuery 将引起冲突，而且这时候 zepto 就没有引入的意义，但是有些框架又是基于 zepto，例如 frozenui。</p>
+<h2 id="UI-框架"><a href="#UI-框架" class="headerlink" title="UI 框架"></a>UI 框架</h2><p><a href="http://frozenui.github.io/" target="_blank" rel="noopener">frozenui（腾讯开源）</a> 腾讯手 Q 风格</p>
+<p><a href="http://amazeui.org/" target="_blank" rel="noopener">Amaze ~ 妹子 UI（国内开源）</a> </p>
+<p><a href="http://mmenu.frebsite.nl/examples.html" target="_blank" rel="noopener">jQuery.mmenu</a> iOS 风格的菜单</p>
+<p><a href="http://www.bootcss.com/" target="_blank" rel="noopener">bootstrap</a></p>
+<ul>
+<li><a href="http://wrapbootstrap.com/preview/WB0L06586" target="_blank" rel="noopener">bootstrap UI 组件</a></li>
+</ul>
+<p><a href="http://www.semantic-ui.cn/" target="_blank" rel="noopener">semantic-ui</a></p>
+<p><a href="http://goratchet.com/" target="_blank" rel="noopener">ratchet</a></p>
+<p><a href="http://demos.jquerymobile.com/" target="_blank" rel="noopener">jquery mobile</a></p>
+<h2 id="字体图标"><a href="#字体图标" class="headerlink" title="字体图标"></a>字体图标</h2><p><a href="http://fortawesome.github.io/Font-Awesome/" target="_blank" rel="noopener">Font Awesome</a></p>
+<p>矢量，颜色大小可以自定义</p>
+<p><strong>自定义图标字体</strong></p>
+<p><a href="http://fontello.com/" target="_blank" rel="noopener">http://fontello.com/</a></p>
+<p>有时只需要使用到一部分的图标，可以通过自定义的方式来减小图标字体文件的大小。</p>
+<h2 id="HTML-模板引擎"><a href="#HTML-模板引擎" class="headerlink" title="HTML 模板引擎"></a>HTML 模板引擎</h2><h3 id="AngularJS（Google-开源）"><a href="#AngularJS（Google-开源）" class="headerlink" title="AngularJS（Google 开源）"></a>AngularJS（Google 开源）</h3><p>场景，需要要动态创建列表数据的时候</p>
+<p>没有 AngularJS 之前，用 js 拼接出 HTML 字符串</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render_order_data</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> obj_item_list = $(<span class="string">'#item-list'</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> arr = [];</span><br><span class="line">        <span class="keyword">var</span> d = data[i];</span><br><span class="line">        arr.push(<span class="string">'&lt;li class="ui-border-t"&gt;'</span>);</span><br><span class="line">        arr.push(<span class="string">'&lt;div class="item"&gt;&lt;div&gt;&lt;div&gt;工单流水号&lt;/div&gt;&lt;div&gt;'</span>);</span><br><span class="line">        arr.push(d[<span class="string">'id'</span>]);</span><br><span class="line">        arr.push(<span class="string">'&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;工单标题&lt;/div&gt;&lt;div&gt;'</span>);</span><br><span class="line">        arr.push(d[<span class="string">'title'</span>]);</span><br><span class="line">        arr.push(<span class="string">'&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;申请时间&lt;/div&gt;&lt;div&gt;'</span>);</span><br><span class="line">        arr.push(d[<span class="string">'createtime'</span>]);</span><br><span class="line">        arr.push(<span class="string">'&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;商铺关键字&lt;/div&gt;&lt;div&gt;'</span>);</span><br><span class="line">        arr.push(d[<span class="string">'shop_name'</span>]);</span><br><span class="line">        arr.push(<span class="string">'&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;覆盖范围&lt;/div&gt;&lt;div&gt;'</span>);</span><br><span class="line">        arr.push(d[<span class="string">'shop_lengths'</span>]);</span><br><span class="line">        arr.push(<span class="string">'&lt;/div&gt;&lt;/li&gt;'</span>);</span><br><span class="line">        obj_item_list.append(arr.join(<span class="string">''</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了 AngularJS 之后，利用 AngularJS 的数据绑定，直接写 HTML 模板，清晰易懂</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tr</span> <span class="attr">ng-repeat</span>=<span class="string">"entry in entries"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">ng-bind</span>=<span class="string">"page_info.offset + $index+1"</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">ng-bind</span>=<span class="string">"entry.status"</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">ng-bind</span>=<span class="string">"entry.elapsed + 'ms'"</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">ng-bind</span>=<span class="string">"entry.code"</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">ng-bind</span>=<span class="string">"entry.time"</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">ng-bind</span>=<span class="string">"entry.result ? 'Success' : 'Failure'"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">class</span>=<span class="string">"label &#123;&#123; entry.result ? 'label-success' : 'label-danger' &#125;&#125;"</span>&gt;</span>Success<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>AngularJS 学习资源</strong></p>
+<ul>
+<li>幕客网</li>
+<li><a href="http://angularjs.cn/T008" target="_blank" rel="noopener">http://angularjs.cn/T008</a></li>
+<li><a href="http://checkcheckzz.gitbooks.io/angularjs-learning-notes/content/index.html" target="_blank" rel="noopener">http://checkcheckzz.gitbooks.io/angularjs-learning-notes/content/index.html</a></li>
+</ul>
+<h2 id="表单验证"><a href="#表单验证" class="headerlink" title="表单验证"></a>表单验证</h2><p>HTML5 表单验证已经很强大，但是目前在 iOS 8 上面的浏览器仍然是不支持的，Android要 4.4 以上才支持。</p>
+<p><strong>boostrap 表单验证</strong></p>
+<p>Bootstrap Validator</p>
+<p><a href="http://1000hz.github.io/bootstrap-validator/" target="_blank" rel="noopener">http://1000hz.github.io/bootstrap-validator/</a></p>
+<p><strong>HAPPY.JS</strong></p>
+<p>Lightweight form validation for jQuery or Zepto.js</p>
+<p><a href="http://happyjs.com/" target="_blank" rel="noopener">http://happyjs.com/</a></p>
+<p><strong>jQuery Form Validator</strong></p>
+<p><a href="https://github.com/victorjonsson/jQuery-Form-Validator" target="_blank" rel="noopener">https://github.com/victorjonsson/jQuery-Form-Validator</a></p>
+<p>AngularJS 本身有提供表单验证的功能</p>
+<p><strong>jquery-validation</strong></p>
+<p><a href="https://github.com/jzaefferer/jquery-validation" target="_blank" rel="noopener">jquery-validation</a></p>
+<p>semantic-ui 自带表单验证</p>
+<h2 id="开发模式"><a href="#开发模式" class="headerlink" title="开发模式"></a>开发模式</h2><p>前后端分离，接口开发与 HTML，CSS，JS 这些前端开发分离。</p>
+<h2 id="相关工具"><a href="#相关工具" class="headerlink" title="相关工具"></a>相关工具</h2><h3 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h3><p><a href="http://www.sublimetext.com/" target="_blank" rel="noopener">Sublime Text</a></p>
+<blockquote>
+<p>Sublime Text is a sophisticated text editor for code, markup and prose.<br>You’ll love the slick user interface, extraordinary features and amazing performance.</p>
+</blockquote>
+<p><a href="https://www.jetbrains.com/webstorm/" target="_blank" rel="noopener">Jetbrains WebStorm</a>（The smartest JavaScript IDE）</p>
+<blockquote>
+<p>WebStorm is a lightweight yet powerful IDE, perfectly equipped for complex client-side development and server-side development with Node.js.</p>
+</blockquote>
+<h3 id="前端工具"><a href="#前端工具" class="headerlink" title="前端工具"></a>前端工具</h3><p><strong>静态文件缓存问题（重要）</strong></p>
+<p>由于默认情况下（服务器没有设置 expire header 为 -1 或 0） WebView 会缓存静态文件，如果没有更新静态文件的版本，会导致网站做了更新，而用户实际上仍在使用旧的文件。</p>
+<p>静态资源版本更新与缓存</p>
+<p><a href="http://www.infoq.com/cn/articles/front-end-engineering-and-performance-optimization-part1" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/front-end-engineering-and-performance-optimization-part1</a></p>
+<p><strong>使用 FIS 工具解决</strong></p>
+<p>FIS （百度开源）</p>
+<p><a href="http://fis.baidu.com/" target="_blank" rel="noopener">http://fis.baidu.com/</a></p>
+<p>FIS是专为解决前端开发中自动化工具、性能优化、模块化框架、开发规范、代码部署、开发流程等问题的工具框架。可以实现静态文件压缩、合并、为文件名添加版本 md5 Hash。</p>
+<h3 id="调试工具"><a href="#调试工具" class="headerlink" title="调试工具"></a>调试工具</h3><p>Chrome （Android iOS 都是 Webkit 内核）</p>
+<p>Fiddler（抓包工具，需要借助 wi-fi 热点分享）</p>
+<h3 id="HTTP-服务器-Nginx"><a href="#HTTP-服务器-Nginx" class="headerlink" title="HTTP 服务器 Nginx"></a>HTTP 服务器 Nginx</h3><p>Nginx是一款面向性能设计的HTTP服务器，相较于Apache、lighttpd具有占有内存少，稳定性高等优势。</p>
+<p>在前端开发中，经常作为反向代理服务器，用来在自己的开发电脑上，模拟生产环境，通过资源重定向和反向代理，可以同时访问部署在其他服务器上的接口或网站，以及自己电脑上正在开发的网页。</p>
+<p><a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">http://nginx.org/en/download.html</a></p>
+<p>nginx 配置的一个例子</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">  <span class="attribute">listen</span>  *:<span class="number">5005</span>;</span><br><span class="line">  <span class="attribute">access_log</span>  logs/my_site_access.log;</span><br><span class="line">  <span class="attribute">error_log</span>   logs/my_site_error.log;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 不缓存</span></span><br><span class="line">  <span class="attribute">expires</span>      <span class="number">0</span>;</span><br><span class="line">  <span class="comment"># add_header   Cache-Control private;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#location ~* \.html$ &#123;</span></span><br><span class="line">  <span class="comment">#  expires -1;</span></span><br><span class="line">  <span class="comment">#&#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">ssi</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="comment"># / 前缀的请求，定位到html目录下</span></span><br><span class="line">    <span class="attribute">root</span>  <span class="string">"D:/WebStorm/my_site/html"</span>;</span><br><span class="line">    <span class="attribute">index</span>  index.html index.htm;</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"> <span class="comment"># /static 前缀的 uri 请求，定位到这个目录 </span></span><br><span class="line"> <span class="attribute">location</span> /static &#123;</span><br><span class="line">    <span class="attribute">alias</span> <span class="string">"D:/WebStorm/my_site/static"</span>; </span><br><span class="line">  &#125; </span><br><span class="line"></span><br><span class="line">  <span class="comment"># /@api_my_site 前缀的 uri，反向代理到 http://192.168.14.93:9999</span></span><br><span class="line">  <span class="comment"># /@api_my_site 前缀的 uri 是 api_my_site 接口请求地址</span></span><br><span class="line">  <span class="attribute">location</span> /<span class="variable">@api_my_site</span> &#123;</span><br><span class="line">    <span class="comment"># 重写 uri，原本的 uri 是 /@api_my_site/... </span></span><br><span class="line">    <span class="comment"># 可以去掉前缀 /@api_my_site/</span></span><br><span class="line">    <span class="comment"># rewrite /@api_my_site/(.*) /$1  break;</span></span><br><span class="line">    </span><br><span class="line">    <span class="attribute">proxy_pass</span> http://192.168.14.93:9999;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Cookie <span class="variable">$http_cookie</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在线工具"><a href="#在线工具" class="headerlink" title="在线工具"></a>在线工具</h3><p><strong>jsfiddle</strong></p>
+<p>Test and share JavaScript, CSS, HTML or CoffeeScript online.</p>
+<p>在线即时展现 Html、JS、CSS 的编辑工具，可以有效的帮助 web 前端开发人员来有效分享和演示前端效果。</p>
+<p><a href="https://jsfiddle.net/" target="_blank" rel="noopener">https://jsfiddle.net/</a></p>
+<p><strong>CSS3 HTML5 兼容性查询</strong></p>
+<p>查询 HTML5 和 CSS3 语法兼容性</p>
+<p><a href="http://caniuse.com/" target="_blank" rel="noopener">http://caniuse.com/</a><br><a href="http://mobilehtml5.org/" target="_blank" rel="noopener">http://mobilehtml5.org/</a></p>
+<p><strong>CSS 语法手册</strong></p>
+<p><a href="http://tympanus.net/codrops/css_reference/" target="_blank" rel="noopener">http://tympanus.net/codrops/css_reference/</a></p>
+<h2 id="书"><a href="#书" class="headerlink" title="书"></a>书</h2><p>CSS设计指南（第3版）（文字版）</p>
+<h2 id="在线学习资源"><a href="#在线学习资源" class="headerlink" title="在线学习资源"></a>在线学习资源</h2><p><a href="http://www.imooc.com/course/list?c=fe" target="_blank" rel="noopener">慕课网</a></p>
+<p><a href="https://www.codeschool.com/" target="_blank" rel="noopener">codeschool</a></p>
+<p><a href="http://www.codecademy.com/zh/" target="_blank" rel="noopener">codeacademy</a></p>
+<h2 id="JS-模块化加载"><a href="#JS-模块化加载" class="headerlink" title="JS 模块化加载"></a>JS 模块化加载</h2><p><a href="https://github.com/seajs/seajs/issues/547" target="_blank" rel="noopener">前端模块化开发的价值</a></p>
+<p><a href="http://requirejs.org/" target="_blank" rel="noopener">Requirejs </a></p>
+<p><a href="http://seajs.org/docs/" target="_blank" rel="noopener">Seajs （淘宝开源）</a></p>
+<h2 id="常用组件"><a href="#常用组件" class="headerlink" title="常用组件"></a>常用组件</h2><p>回到页首</p>
+<h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><ol>
+<li>移动网络的环境比较复杂，在调试的时候可以用 Chrome 模拟不同的网络环境，关注页面加载的数据量，和加载时间。</li>
+</ol>
+<p><img src="http://oxygen.qiniudn.com/img2015051433.png" alt="http://oxygen.qiniudn.com/img2015051433.png"></p>
+<ol start="2">
+<li>使用 CDN，常用的库一般会有 CDN 地址，也可以将自己的一些静态文件放在七牛上，七牛有免费的额度。</li>
+<li>小图片转成 base64，减少 HTTP 请求</li>
+<li>css，js 文件压缩，启用GZip（HTTP服务器已开启 gzip）</li>
+<li>服务器开启静态文件缓存，发布新版本时，需要对文件名加md5戳，使用 fis 工具（html 文件强制不缓存）。</li>
+<li>大量的图片显示，可以使用 Canvas 画图，而不用 img 标签，Canvas 有硬件加速</li>
+<li>无阻塞，写在HTML头部的JavaScript（无异步），和写在HTML标签中的Style会阻塞页面的渲染，因此CSS放在页面头部并使用Link方式引入，避免在HTML标签中写Style，JavaScript放在页面尾。</li>
+<li>网页的渲染不支持硬件加速，dom很多很大的时候会很卡，Facebook 曾经就是因为这个原因放弃了html5，但现在又推出了一个 react js</li>
+<li>javascript 单线程，不要执行太复杂的任务，否则会导致页面卡住。</li>
+<li><p>动画优化，尽量使用CSS3动画</p>
+</li>
+<li><p>HTML5 的 Manifest 和 localstorage，在本地缓存文件和数据。</p>
+</li>
+</ol>
+<h2 id="前端知识库"><a href="#前端知识库" class="headerlink" title="前端知识库"></a>前端知识库</h2><p>腾讯移动Web前端知识库 Mars</p>
+<p><a href="https://github.com/AlloyTeam/Mars" target="_blank" rel="noopener">https://github.com/AlloyTeam/Mars</a></p>
+<p>alloyteam 移动开发规范概述</p>
+<p><a href="http://alloyteam.github.io/Spirit/modules/Standard/index.html#overview" target="_blank" rel="noopener">http://alloyteam.github.io/Spirit/modules/Standard/index.html#overview</a></p>
+<p>移动H5前端性能优化指南</p>
+<p><a href="http://isux.tencent.com/h5-performance.html" target="_blank" rel="noopener">http://isux.tencent.com/h5-performance.html</a></p>
+<p>静态资源管理与模板框架</p>
+<p><a href="http://www.infoq.com/cn/articles/front-end-engineering-and-performance-optimization-part2" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/front-end-engineering-and-performance-optimization-part2</a></p>
+<p>HTML5中40个最重要的技术点</p>
+<p><a href="http://www.techug.com/40-important-html-5-interview-questions-with-answers" target="_blank" rel="noopener">http://www.techug.com/40-important-html-5-interview-questions-with-answers</a></p>
+<p>Webkit WebApp 开发技术要点总结</p>
+<p><a href="http://www.cnblogs.com/pifoo/archive/2011/05/28/webkit-webapp.html" target="_blank" rel="noopener">http://www.cnblogs.com/pifoo/archive/2011/05/28/webkit-webapp.html</a></p>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag">#前端</a>
+          
+            <a href="/tags/Web/" rel="tag">#Web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/05/31/lucene-file-finder/" rel="prev">基于 Lucene 的桌面文件搜索</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/09/centos-uwsgi-nginx-django/" rel="next">CentOS 环境下基于 Nginx uwsgi 搭建 Django 站点</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML5-可以做什么"><span class="nav-number">1.</span> <span class="nav-text">HTML5 可以做什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM-操作库"><span class="nav-number">2.</span> <span class="nav-text">DOM 操作库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UI-框架"><span class="nav-number">3.</span> <span class="nav-text">UI 框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体图标"><span class="nav-number">4.</span> <span class="nav-text">字体图标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML-模板引擎"><span class="nav-number">5.</span> <span class="nav-text">HTML 模板引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AngularJS（Google-开源）"><span class="nav-number">5.1.</span> <span class="nav-text">AngularJS（Google 开源）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表单验证"><span class="nav-number">6.</span> <span class="nav-text">表单验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发模式"><span class="nav-number">7.</span> <span class="nav-text">开发模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关工具"><span class="nav-number">8.</span> <span class="nav-text">相关工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IDE"><span class="nav-number">8.1.</span> <span class="nav-text">IDE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端工具"><span class="nav-number">8.2.</span> <span class="nav-text">前端工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调试工具"><span class="nav-number">8.3.</span> <span class="nav-text">调试工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-服务器-Nginx"><span class="nav-number">8.4.</span> <span class="nav-text">HTTP 服务器 Nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在线工具"><span class="nav-number">8.5.</span> <span class="nav-text">在线工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#书"><span class="nav-number">9.</span> <span class="nav-text">书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在线学习资源"><span class="nav-number">10.</span> <span class="nav-text">在线学习资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS-模块化加载"><span class="nav-number">11.</span> <span class="nav-text">JS 模块化加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用组件"><span class="nav-number">12.</span> <span class="nav-text">常用组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能优化"><span class="nav-number">13.</span> <span class="nav-text">性能优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端知识库"><span class="nav-number">14.</span> <span class="nav-text">前端知识库</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2015/05/14/mobile-web-front-end-collections/';
+      var disqus_title = '移动端 Web 开发前端知识整理';
+      var disqus_url = 'http://www.restran.net/2015/05/14/mobile-web-front-end-collections/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

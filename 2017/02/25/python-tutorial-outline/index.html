@@ -1,0 +1,802 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="本课程面向至少学习过一门计算机语言的人，例如 SQL、C 等。主要目标是作为开发的入门课程，并帮助建立起一个良好的开发环境和规范。预计使用4～5次课程，每次一个小时左右。课程内容涵盖从上手开发到如何在服务器上部署的整个过程。 这门课讲什么 Python 的基础知识，包括基本数据类型，文件处理，模块和包的概念等 Python 2 和 3 的主要区别 开发环境的搭建，包括 IDE 的选择、代码版本管理">
+<meta name="keywords" content="python,教程,入门,tornado">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 入门教程 - 课程大纲">
+<meta property="og:url" content="http://www.restran.net/2017/02/25/python-tutorial-outline/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="本课程面向至少学习过一门计算机语言的人，例如 SQL、C 等。主要目标是作为开发的入门课程，并帮助建立起一个良好的开发环境和规范。预计使用4～5次课程，每次一个小时左右。课程内容涵盖从上手开发到如何在服务器上部署的整个过程。 这门课讲什么 Python 的基础知识，包括基本数据类型，文件处理，模块和包的概念等 Python 2 和 3 的主要区别 开发环境的搭建，包括 IDE 的选择、代码版本管理">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-26T06:45:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 入门教程 - 课程大纲">
+<meta name="twitter:description" content="本课程面向至少学习过一门计算机语言的人，例如 SQL、C 等。主要目标是作为开发的入门课程，并帮助建立起一个良好的开发环境和规范。预计使用4～5次课程，每次一个小时左右。课程内容涵盖从上手开发到如何在服务器上部署的整个过程。 这门课讲什么 Python 的基础知识，包括基本数据类型，文件处理，模块和包的概念等 Python 2 和 3 的主要区别 开发环境的搭建，包括 IDE 的选择、代码版本管理">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Python 入门教程 - 课程大纲 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Python 入门教程 - 课程大纲
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2017-02-25T00:00:00+08:00" content="2017-02-25">
+            2017-02-25
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 595字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/Python/" itemprop="url" rel="index">
+                  <span itemprop="name">Python</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2017/02/25/python-tutorial-outline/"class="leancloud_visitors" data-flag-title="Python 入门教程 - 课程大纲">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2017/02/25/python-tutorial-outline/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/25/python-tutorial-outline/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>本课程面向至少学习过一门计算机语言的人，例如 SQL、C 等。主要目标是作为开发的入门课程，并帮助建立起一个良好的开发环境和规范。预计使用4～5次课程，每次一个小时左右。课程内容涵盖从上手开发到如何在服务器上部署的整个过程。</p>
+<h2 id="这门课讲什么"><a href="#这门课讲什么" class="headerlink" title="这门课讲什么"></a>这门课讲什么</h2><ul>
+<li>Python 的基础知识，包括基本数据类型，文件处理，模块和包的概念等</li>
+<li>Python 2 和 3 的主要区别</li>
+<li>开发环境的搭建，包括 IDE 的选择、代码版本管理 Git 的使用</li>
+<li>HTTP协议、Web 和 API 接口开发</li>
+<li>数据库的连接和使用，包括 Oracle</li>
+<li>在服务器上部署 Python 应用</li>
+<li>一些经验分享，包括如何获取更多的资料</li>
+</ul>
+<h2 id="这门课不讲什么"><a href="#这门课不讲什么" class="headerlink" title="这门课不讲什么"></a>这门课不讲什么</h2><ul>
+<li>不详细介绍 Python 的所有功能</li>
+<li>不详细介绍每一个框架的使用</li>
+</ul>
+<h2 id="课程安排"><a href="#课程安排" class="headerlink" title="课程安排"></a>课程安排</h2><ul>
+<li>Lesson 1，初识 Python<ul>
+<li>Python 是什么，能做什么，及应用案例展示<ul>
+<li>案例<ul>
+<li>发送邮件</li>
+<li>网站扫描</li>
+<li>Web 网站和接口</li>
+<li>数据可视化</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Python 版本的选择</li>
+<li>Python 2 和 3 的主要区别</li>
+<li>IDE 选择和开发环境的搭建<ul>
+<li>iPython</li>
+<li>Sublime Text</li>
+<li>PyCharm</li>
+</ul>
+</li>
+<li>基础语法知识<ul>
+<li>Python 语法特点</li>
+<li>基础数据类型<ul>
+<li>整型、浮点数、字符串、列表、元组、集合、字典</li>
+<li>可变类型和不可变类型</li>
+<li>函数</li>
+<li>类</li>
+</ul>
+</li>
+<li>循环</li>
+<li>模块和包的概念</li>
+<li>依赖管理<ul>
+<li>pip</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>开发规范<ul>
+<li>变量名小写</li>
+<li>缩进使用空格</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lesson 2，Python 知识进阶和 Web 开发入门<ul>
+<li>Python 知识进阶<ul>
+<li>字符串与编码<ul>
+<li>base64</li>
+<li>utf8</li>
+<li>unicode</li>
+</ul>
+</li>
+<li>文件处理<ul>
+<li>文本文件</li>
+<li>Excel 文件</li>
+</ul>
+</li>
+<li>FTP</li>
+<li>装饰器</li>
+<li>列表分片</li>
+<li>列表解析</li>
+<li>函数式编程<ul>
+<li>一些内置函数</li>
+<li>匿名函数</li>
+</ul>
+</li>
+<li>日志管理</li>
+</ul>
+</li>
+<li>Web 和 API 接口的本质<ul>
+<li>在浏览器中输入 URL 后会发生什么</li>
+<li>HTTP 协议</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lesson 3，Web 开发进阶和数据库操作<ul>
+<li>JSON</li>
+<li>Web 框架JSON<ul>
+<li>Django</li>
+<li>Tornado</li>
+</ul>
+</li>
+<li>Web 开发测试工具<ul>
+<li>Postman</li>
+</ul>
+</li>
+<li>数据库<ul>
+<li>Django ORM</li>
+<li>Sqlalchemy</li>
+<li>连接 Oracle<ul>
+<li>查询数据</li>
+<li>调用存储过程</li>
+</ul>
+</li>
+<li>SQL 注入问题</li>
+</ul>
+</li>
+<li>协作和版本管理<ul>
+<li>Git 的使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lesson 4，案例讲解和服务器部署<ul>
+<li>Web 工具库<ul>
+<li>requests</li>
+<li>BeautifulSoup</li>
+</ul>
+</li>
+<li>案例讲解<ul>
+<li>爬虫案例<ul>
+<li>异步编程</li>
+<li>MongoDB</li>
+</ul>
+</li>
+<li>接口案例</li>
+</ul>
+</li>
+<li>服务器上部署<ul>
+<li>Nginx</li>
+<li>Gunicorn</li>
+<li>Supervisor</li>
+<li>Fabric</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/01/python-tutorial-lesson-1/" rel="prev">Python 入门教程 Lesson 1 - 初识 Python</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/24/nginx-letsencrypt-https/" rel="next">Nginx 使用 Let&#39;s Encrypt 配置 HTTPS 和 HTTP/2</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#这门课讲什么"><span class="nav-text">这门课讲什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#这门课不讲什么"><span class="nav-text">这门课不讲什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#课程安排"><span class="nav-text">课程安排</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2017/02/25/python-tutorial-outline/';
+      var disqus_title = 'Python 入门教程 - 课程大纲';
+      var disqus_url = 'http://www.restran.net/2017/02/25/python-tutorial-outline/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

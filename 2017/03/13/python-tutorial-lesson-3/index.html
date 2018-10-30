@@ -1,0 +1,698 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="Web API 测试工具在测试 API 上，Postman 是目前最好用的。提供 Chrome 插件和独立安装包的方式。在 Windows 下，还需要先安装 .NET 4.5。  Postman使用手册 Postman 使用详解  Python Oracle 环境Oracle 客户端可以选择 Oracle Instant Client，体积小，又是绿色版。可以去 Oracle 的官网下载，注意选择">
+<meta name="keywords" content="python,教程,oracle,cx_oracle,tornado,postman,SQLAlchemy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境">
+<meta property="og:url" content="http://www.restran.net/2017/03/13/python-tutorial-lesson-3/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="Web API 测试工具在测试 API 上，Postman 是目前最好用的。提供 Chrome 插件和独立安装包的方式。在 Windows 下，还需要先安装 .NET 4.5。  Postman使用手册 Postman 使用详解  Python Oracle 环境Oracle 客户端可以选择 Oracle Instant Client，体积小，又是绿色版。可以去 Oracle 的官网下载，注意选择">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-05-01T05:51:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境">
+<meta name="twitter:description" content="Web API 测试工具在测试 API 上，Postman 是目前最好用的。提供 Chrome 插件和独立安装包的方式。在 Windows 下，还需要先安装 .NET 4.5。  Postman使用手册 Postman 使用详解  Python Oracle 环境Oracle 客户端可以选择 Oracle Instant Client，体积小，又是绿色版。可以去 Oracle 的官网下载，注意选择">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2017-03-13T00:00:00+08:00" content="2017-03-13">
+            2017-03-13
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 2,143字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2017/03/13/python-tutorial-lesson-3/"class="leancloud_visitors" data-flag-title="Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2017/03/13/python-tutorial-lesson-3/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/13/python-tutorial-lesson-3/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="Web-API-测试工具"><a href="#Web-API-测试工具" class="headerlink" title="Web API 测试工具"></a>Web API 测试工具</h2><p>在测试 API 上，<a href="https://www.getpostman.com/" target="_blank" rel="noopener">Postman</a> 是目前最好用的。提供 Chrome 插件和独立安装包的方式。在 Windows 下，还需要先安装 .NET 4.5。</p>
+<ul>
+<li><a href="http://www.jianshu.com/p/13c8017bb5c8" target="_blank" rel="noopener">Postman使用手册</a></li>
+<li><a href="https://juejin.im/entry/57597a62a341310061337885" target="_blank" rel="noopener">Postman 使用详解</a></li>
+</ul>
+<h2 id="Python-Oracle-环境"><a href="#Python-Oracle-环境" class="headerlink" title="Python Oracle 环境"></a>Python Oracle 环境</h2><h3 id="Oracle-客户端"><a href="#Oracle-客户端" class="headerlink" title="Oracle 客户端"></a>Oracle 客户端</h3><p>可以选择 Oracle Instant Client，体积小，又是绿色版。可以去 <a href="http://www.oracle.com/technetwork/database/features/instant-client/index-097480.html" target="_blank" rel="noopener">Oracle 的官网</a>下载，注意选择是 32 位还是 64 位。</p>
+<h3 id="cx-Oracle"><a href="#cx-Oracle" class="headerlink" title="cx_Oracle"></a>cx_Oracle</h3><p>Windows 可以去 <a href="https://pypi.python.org/pypi/cx_Oracle/" target="_blank" rel="noopener">pypi</a> 下载 exe 文件来安装。如果安装的 Python 是 64 位的，那么应该选择 64 位的，而且对应的 Oracle Instant Client 也需要是 64 位的。</p>
+<p>如果安装的 Python 是 64 位的，但是操作系统的环境变量 PATH 配置的是 32 位的 Oracle Instant Client，例如需要使用 32 位的 PL/SQL Developer。可以在 Python 程序中，手动设置环境变量，将 64 位的 Oracle Instant Client 所在路径放在环境变量的第1个位置，覆盖掉操作系统的配置。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'PATH'</span>] = <span class="string">'D:\Program Files\Oracle\instantclient_11_2;'</span> + os.environ[<span class="string">'PATH'</span>]</span><br></pre></td></tr></table></figure>
+<p>安装成功后，可以在命令行下输入 <code>python</code>，进入 Python 的交互式命令窗口，然后输入 </p>
+<pre><code>import cx_Oracle
+</code></pre><p>来验证是否安装成功</p>
+<h3 id="安装-SQLAlchemy"><a href="#安装-SQLAlchemy" class="headerlink" title="安装 SQLAlchemy"></a>安装 SQLAlchemy</h3><pre><code>pip install SQLAlchemy
+</code></pre><h2 id="SQLAlchemy"><a href="#SQLAlchemy" class="headerlink" title="SQLAlchemy"></a>SQLAlchemy</h2><p><a href="https://www.sqlalchemy.org/" target="_blank" rel="noopener">SQLAlchemy</a> 是 Python 中用来处理数据库连接的工具包，支持多种数据库，SQLite、MySQL、MSSQL、Oracle，支持使用 ORM 和 原始 SQL 的方式对数据库进行操作。</p>
+<ul>
+<li>ORM 对象关系映射，按操作类的方式来处理数据库中的数据</li>
+<li>RAW SQL</li>
+</ul>
+<p>如果是使用 Django Web 框架的话，其自带的 Django ORM 就十分强大，这里不介绍 ORM 的相关知识，可以自己查阅文档。</p>
+<h2 id="Records"><a href="#Records" class="headerlink" title="Records"></a>Records</h2><p>如果是使用 RAW SQL 的方式，可以使用 <a href="https://github.com/kennethreitz/records" target="_blank" rel="noopener">records</a>。records 基于 SQLAlchemy，并做了一些封装，可以更简单地用写 SQL 的方式来处理数据库的数据。</p>
+<p>records 使用举例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> records</span><br><span class="line"></span><br><span class="line">db = records.Database(<span class="string">'oracle://...'</span>)</span><br><span class="line">rows = db.query(<span class="string">'select * from active_users'</span>)</span><br><span class="line"><span class="keyword">for</span> r <span class="keyword">in</span> rows:</span><br><span class="line">    print(r.name)</span><br></pre></td></tr></table></figure>
+<h2 id="SQL-和存储过程的使用方法"><a href="#SQL-和存储过程的使用方法" class="headerlink" title="SQL 和存储过程的使用方法"></a>SQL 和存储过程的使用方法</h2><p>以下是使用 Tornado 框架做的 API，使用了 records。APIHandler 为封装好的 API 处理基类，详细内容不展开介绍，主要介绍 SQL 和存储过程的使用方法。 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">APIHandler</span><span class="params">(RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, app, request, **kwargs)</span>:</span></span><br><span class="line">        super(APIHandler, self).__init__(app, request, **kwargs)</span><br><span class="line">        <span class="comment"># 这里的参数 app 就是 runserver 中创建的 app</span></span><br><span class="line">        <span class="comment"># 把数据库的连接设置过来</span></span><br><span class="line">        self.db = app.db</span><br><span class="line">        <span class="comment"># 因为 records 没有实现调用存储过程的方法</span></span><br><span class="line">        <span class="comment"># 因此直接使用 sqlalchemy 调用存储过程的方法</span></span><br><span class="line">        self.db.callproc = self.db.db.connection.cursor().callproc</span><br><span class="line">        <span class="comment"># 这是游标，当存储过程有返回游标时，需要作为参数传入</span></span><br><span class="line">        self.db.cursor = self.db.db.connection.cursor</span><br><span class="line"></span><br><span class="line">        self.post_data = &#123;&#125;</span><br><span class="line">        self.init_post_data()</span><br><span class="line">        self.set_header(<span class="string">"Content-Type"</span>, <span class="string">"application/json; charset=utf-8"</span>)</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>SQL 和存储过程的使用方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Created by restran on 2017/3/7</span></span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> unicode_literals, absolute_import</span><br><span class="line"><span class="keyword">from</span> handlers <span class="keyword">import</span> APIHandler</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">QueryHandler</span><span class="params">(APIHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        从数据库中查询数据</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># 这里 SQL 使用了参数绑定，防止注入</span></span><br><span class="line">        sql = <span class="string">'select * from TEST_EMP t where t.salary &gt; :salary'</span></span><br><span class="line">        <span class="comment"># get_query_argument 获取 GET 的 query 查询</span></span><br><span class="line">        <span class="comment"># 'salary' 是参数名，后面的值是默认值，就是当参数不存在时使用</span></span><br><span class="line">        salary = self.get_query_argument(<span class="string">'salary'</span>, <span class="number">1000</span>)</span><br><span class="line">        params = &#123;</span><br><span class="line">            <span class="string">'salary'</span>: salary</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment"># **params 以字典的方式传入参数</span></span><br><span class="line">        <span class="comment"># 返回的是一个列表</span></span><br><span class="line">        rows = self.db.query(sql, **params)</span><br><span class="line">        <span class="comment"># 直接将返回列表中的数据项转换为字典</span></span><br><span class="line">        data = rows.as_dict()</span><br><span class="line">        <span class="keyword">return</span> self.success(data, msg=<span class="string">'获取数据成功'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        sql = <span class="string">'select * from TEST_EMP t where t.salary &gt; :salary'</span></span><br><span class="line">        <span class="comment"># 从 POST 数据中获取参数</span></span><br><span class="line">        salary = self.post_data.get(<span class="string">'salary'</span>, <span class="number">1000</span>)</span><br><span class="line">        params = &#123;</span><br><span class="line">            <span class="string">'salary'</span>: salary</span><br><span class="line">        &#125;</span><br><span class="line">        rows = self.db.query(sql, **params)</span><br><span class="line">        <span class="comment"># 手动创建列表中的字典</span></span><br><span class="line">        data = [&#123;</span><br><span class="line">                    <span class="string">'name'</span>: r.name,</span><br><span class="line">                    <span class="string">'salary'</span>: r.salary</span><br><span class="line">                &#125; <span class="keyword">for</span> r <span class="keyword">in</span> rows]</span><br><span class="line">        <span class="keyword">return</span> self.success(data, msg=<span class="string">'获取数据成功'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">InsertHandler</span><span class="params">(APIHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        logger.debug(self.post_data)</span><br><span class="line">        sql = <span class="string">'insert into TEST_EMP (EMP_NO, NAME, JOB, SALARY) values(:emp_no, :name, :job, :salary)'</span></span><br><span class="line">        params = &#123;</span><br><span class="line">            <span class="string">'emp_no'</span>: self.post_data.get(<span class="string">'emp_no'</span>, <span class="number">0</span>),</span><br><span class="line">            <span class="string">'name'</span>: self.post_data.get(<span class="string">'name'</span>, <span class="string">'no name'</span>),</span><br><span class="line">            <span class="string">'job'</span>: self.post_data.get(<span class="string">'job'</span>, <span class="string">'no job'</span>),</span><br><span class="line">            <span class="string">'salary'</span>: self.post_data.get(<span class="string">'salary'</span>, <span class="number">1000</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        self.db.query(sql, **params)</span><br><span class="line">        <span class="keyword">return</span> self.success(params, msg=<span class="string">'插入数据成功'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TransactionHandler</span><span class="params">(APIHandler)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    带有事务的操作</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        logger.debug(self.post_data)</span><br><span class="line">        t = self.db.transaction()</span><br><span class="line">        sql = <span class="string">'insert into TEST_EMP (EMP_NO, NAME, JOB, SALARY) values(:emp_no, :name, :job, :salary)'</span></span><br><span class="line">        params = &#123;</span><br><span class="line">            <span class="string">'emp_no'</span>: self.post_data.get(<span class="string">'emp_no'</span>, <span class="number">0</span>),</span><br><span class="line">            <span class="string">'name'</span>: self.post_data.get(<span class="string">'name'</span>, <span class="string">'no name'</span>),</span><br><span class="line">            <span class="string">'job'</span>: self.post_data.get(<span class="string">'job'</span>, <span class="string">'no job'</span>),</span><br><span class="line">            <span class="string">'salary'</span>: self.post_data.get(<span class="string">'salary'</span>, <span class="number">1000</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        self.db.query(sql, **params)</span><br><span class="line">        <span class="keyword">if</span> self.post_data.get(<span class="string">'rollback'</span>):</span><br><span class="line">            <span class="comment"># 回滚，不会插入数据</span></span><br><span class="line">            t.rollback()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 提交</span></span><br><span class="line">            t.commit()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> self.success(params, msg=<span class="string">'事务执行成功'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProcedureHandler</span><span class="params">(APIHandler)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    使用存储过程</span></span><br><span class="line"><span class="string">    create or replace procedure sp_update_salary</span></span><br><span class="line"><span class="string">    (</span></span><br><span class="line"><span class="string">     uEmpNo in int, -- 员工编号</span></span><br><span class="line"><span class="string">     uSalary in int -- 将工资更新为多少</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">    as</span></span><br><span class="line"><span class="string">    begin</span></span><br><span class="line"><span class="string">        update TEST_EMP set salary = uSalary where emp_no = uEmpNo;</span></span><br><span class="line"><span class="string">        commit;</span></span><br><span class="line"><span class="string">    end sp_update_salary;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        logger.debug(self.post_data)</span><br><span class="line">        <span class="comment"># 存储过程名称</span></span><br><span class="line">        sp_name = <span class="string">'sp_update_salary'</span></span><br><span class="line">        params = [</span><br><span class="line">            self.post_data.get(<span class="string">'emp_no'</span>, <span class="number">0</span>),</span><br><span class="line">            self.post_data.get(<span class="string">'salary'</span>, <span class="number">1000</span>)</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 传入的参数必须是列表</span></span><br><span class="line">        self.db.callproc(sp_name, params)</span><br><span class="line">        <span class="keyword">return</span> self.success(params, msg=<span class="string">'存储过程执行成功'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProcedureReturnHandler</span><span class="params">(APIHandler)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    使用存储过程，带有返回值</span></span><br><span class="line"><span class="string">    存储过程</span></span><br><span class="line"><span class="string">    create or replace procedure sp_add_salary</span></span><br><span class="line"><span class="string">    (</span></span><br><span class="line"><span class="string">     uOldSalary in int, -- 小于该工资的需要增加</span></span><br><span class="line"><span class="string">     uSalary in int, -- 加多少工资</span></span><br><span class="line"><span class="string">     uCount out number -- 更新了多少个</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">    as</span></span><br><span class="line"><span class="string">    begin</span></span><br><span class="line"><span class="string">        select count(*) into uCount from TEST_EMP where salary &lt;= uOldSalary;</span></span><br><span class="line"><span class="string">        update TEST_EMP set salary = salary + uSalary where salary &lt;= uOldSalary;</span></span><br><span class="line"><span class="string">        commit;</span></span><br><span class="line"><span class="string">    end sp_update_salary;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        logger.debug(self.post_data)</span><br><span class="line">        <span class="comment"># 存储过程名称</span></span><br><span class="line">        sp_name = <span class="string">'sp_add_salary'</span></span><br><span class="line">        params = [</span><br><span class="line">            self.post_data.get(<span class="string">'old_salary'</span>, <span class="number">1000</span>),</span><br><span class="line">            self.post_data.get(<span class="string">'salary'</span>, <span class="number">1000</span>),</span><br><span class="line">            <span class="number">0</span> <span class="comment"># 虽然这个参数是返回值，但是也需要与存储过程中定义的类型相同</span></span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 传入的参数必须是列表，返回值为列表，是传入的三个参数</span></span><br><span class="line">        ret = self.db.callproc(sp_name, params)</span><br><span class="line">        <span class="comment"># ret 是传入的三个参数，第三个参数为 out</span></span><br><span class="line">        <span class="comment"># 这种类型的返回值通过这种方式获取</span></span><br><span class="line">        logger.info(<span class="string">'更新了多少数据项：%s'</span> % ret[<span class="number">2</span>])</span><br><span class="line">        <span class="keyword">return</span> self.success(params, msg=<span class="string">'存储过程执行成功'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProcedureReturnCursorHandler</span><span class="params">(APIHandler)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    使用存储过程，返回值使用游标</span></span><br><span class="line"><span class="string">    存储过程</span></span><br><span class="line"><span class="string">    create or replace procedure sp_query_salary</span></span><br><span class="line"><span class="string">    (</span></span><br><span class="line"><span class="string">     uSalary in int, -- 小于多少工资</span></span><br><span class="line"><span class="string">     rcursor out sys_refcursor -- 返回的游标</span></span><br><span class="line"><span class="string">    )</span></span><br><span class="line"><span class="string">    as</span></span><br><span class="line"><span class="string">    begin</span></span><br><span class="line"><span class="string">        open rcursor for select emp_no, name, salary from TEST_EMP where salary &lt;= uSalary;</span></span><br><span class="line"><span class="string">    end sp_query_salary;</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        logger.debug(self.post_data)</span><br><span class="line">        <span class="comment"># 存储过程名称</span></span><br><span class="line">        sp_name = <span class="string">'sp_query_salary'</span></span><br><span class="line">        <span class="comment"># 因为第二个参数返回的是游标，所以传入的参数也必须是游标</span></span><br><span class="line">        params = [</span><br><span class="line">            self.post_data.get(<span class="string">'salary'</span>, <span class="number">1000</span>),</span><br><span class="line">            self.db.cursor()</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 传入的参数必须是列表，返回值为列表，是传入的三个参数</span></span><br><span class="line">        ret = self.db.callproc(sp_name, params)</span><br><span class="line">        <span class="comment"># 第二个参数是返回的游标</span></span><br><span class="line">        rows = ret[<span class="number">1</span>]</span><br><span class="line">        data = [&#123;</span><br><span class="line">                    <span class="string">'emp_no'</span>: t[<span class="number">0</span>],</span><br><span class="line">                    <span class="string">'name'</span>: t[<span class="number">1</span>],</span><br><span class="line">                    <span class="string">'salary'</span>: t[<span class="number">2</span>]</span><br><span class="line">                &#125; <span class="keyword">for</span> t <span class="keyword">in</span> rows]</span><br><span class="line">        <span class="keyword">return</span> self.success(data, msg=<span class="string">'存储过程执行成功'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="PyCharm-类型注释"><a href="#PyCharm-类型注释" class="headerlink" title="PyCharm 类型注释"></a>PyCharm 类型注释</h2><p>因为 Python 是动态类型的，因此在 PyCharm 经常遇到对应的变量没有自动完成的提示，原因在于 PyCharm 不知道该变量是什么类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可以在参数上设置类型提示，但是只支持 Python 3.5 以上</span></span><br><span class="line"><span class="comment"># 这里注释 param1 为 int 类型，该函数返回 list 类型</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(param1: int, param2)</span> -&gt; list:</span> </span><br><span class="line">    <span class="comment"># 这里有个变量 db，在注释中设置类型</span></span><br><span class="line">    p = param2.db <span class="comment"># type: list</span></span><br><span class="line">    <span class="keyword">return</span> p</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 因为前面有注释返回类型为 list，PyCharm 就会知道 a 是 list 类型</span></span><br><span class="line">a = func(p1, p2)</span><br></pre></td></tr></table></figure>
+<p>PyCharm 也支持在文档字符串中设置类型注释</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(param1, param2)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :type app: int</span></span><br><span class="line"><span class="string">    :rtype: list</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    p = param1.db <span class="comment"># type: list</span></span><br></pre></td></tr></table></figure>
+<p>也可以参考<a href="https://www.jetbrains.com/help/pycharm/2016.3/type-hinting-in-pycharm.html" target="_blank" rel="noopener">这里</a></p>
+<p>类型注释并不会做类型检查，但是可以让 PyCharm 知道该变量是什么类型，并做智能的代码完成提示。</p>
+<h2 id="开发协作和-Git-的使用"><a href="#开发协作和-Git-的使用" class="headerlink" title="开发协作和 Git 的使用"></a>开发协作和 Git 的使用</h2><p>版本管理工具提供了这几项功能</p>
+<ul>
+<li>对当前的状态进行快照，并且可以还原到历史快照中</li>
+<li>可以比较快照间的差异</li>
+<li>可以对不同的快照进行合并</li>
+</ul>
+<p>目前最流行的版本管理工具是 Git，关于 Git 的使用可以查看这篇文章 <a href="http://www.restran.net/2016/02/23/git-and-gitlab-guide/#more">Git &amp; Gitlab 使用指南</a>。如果还在使用 SVN，建议可以尝试一下 Git。</p>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/15/swift-note-1/" rel="prev">Swift 学习笔记 1 - 基础部分</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/06/python-tutorial-lesson-2.1/" rel="next">Python 入门教程 Lesson 2.1 - Python 知识进阶</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-API-测试工具"><span class="nav-number">1.</span> <span class="nav-text">Web API 测试工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-Oracle-环境"><span class="nav-number">2.</span> <span class="nav-text">Python Oracle 环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Oracle-客户端"><span class="nav-number">2.1.</span> <span class="nav-text">Oracle 客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cx-Oracle"><span class="nav-number">2.2.</span> <span class="nav-text">cx_Oracle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-SQLAlchemy"><span class="nav-number">2.3.</span> <span class="nav-text">安装 SQLAlchemy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQLAlchemy"><span class="nav-number">3.</span> <span class="nav-text">SQLAlchemy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Records"><span class="nav-number">4.</span> <span class="nav-text">Records</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-和存储过程的使用方法"><span class="nav-number">5.</span> <span class="nav-text">SQL 和存储过程的使用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PyCharm-类型注释"><span class="nav-number">6.</span> <span class="nav-text">PyCharm 类型注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发协作和-Git-的使用"><span class="nav-number">7.</span> <span class="nav-text">开发协作和 Git 的使用</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2017/03/13/python-tutorial-lesson-3/';
+      var disqus_title = 'Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境';
+      var disqus_url = 'http://www.restran.net/2017/03/13/python-tutorial-lesson-3/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

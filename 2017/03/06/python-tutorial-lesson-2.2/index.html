@@ -1,0 +1,749 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="在浏览器的地址栏上输入 URL ，并按下回车后发生了什么？  在浏览器地址栏输入一个URL后回车，背后会进行哪些技术步骤？ 从输入 URL 到页面加载完成的过程中都发生了什么事情？ 前端经典面试题: 从输入 URL 到页面加载发生了什么？ 当···时发生了什么？  HTTP 协议 关于HTTP协议，一篇就够了 HTTP 协议入门 HTTP协议详解  HTTP 协议主要包括这几项内容  请求和响应">
+<meta name="keywords" content="python,教程,入门,web,http协议,web api,web框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 入门教程 Lesson 2.2 - Web 开发入门">
+<meta property="og:url" content="http://www.restran.net/2017/03/06/python-tutorial-lesson-2.2/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="在浏览器的地址栏上输入 URL ，并按下回车后发生了什么？  在浏览器地址栏输入一个URL后回车，背后会进行哪些技术步骤？ 从输入 URL 到页面加载完成的过程中都发生了什么事情？ 前端经典面试题: 从输入 URL 到页面加载发生了什么？ 当···时发生了什么？  HTTP 协议 关于HTTP协议，一篇就够了 HTTP 协议入门 HTTP协议详解  HTTP 协议主要包括这几项内容  请求和响应">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-26T06:48:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 入门教程 Lesson 2.2 - Web 开发入门">
+<meta name="twitter:description" content="在浏览器的地址栏上输入 URL ，并按下回车后发生了什么？  在浏览器地址栏输入一个URL后回车，背后会进行哪些技术步骤？ 从输入 URL 到页面加载完成的过程中都发生了什么事情？ 前端经典面试题: 从输入 URL 到页面加载发生了什么？ 当···时发生了什么？  HTTP 协议 关于HTTP协议，一篇就够了 HTTP 协议入门 HTTP协议详解  HTTP 协议主要包括这几项内容  请求和响应">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Python 入门教程 Lesson 2.2 - Web 开发入门 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Python 入门教程 Lesson 2.2 - Web 开发入门
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2017-03-06T00:00:00+08:00" content="2017-03-06">
+            2017-03-06
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 840字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2017/03/06/python-tutorial-lesson-2.2/"class="leancloud_visitors" data-flag-title="Python 入门教程 Lesson 2.2 - Web 开发入门">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2017/03/06/python-tutorial-lesson-2.2/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/06/python-tutorial-lesson-2.2/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>在浏览器的地址栏上输入 URL ，并按下回车后发生了什么？</p>
+<ul>
+<li><a href="https://www.zhihu.com/question/34873227" target="_blank" rel="noopener">在浏览器地址栏输入一个URL后回车，背后会进行哪些技术步骤？</a></li>
+<li><a href="http://fex.baidu.com/blog/2014/05/what-happen/" target="_blank" rel="noopener">从输入 URL 到页面加载完成的过程中都发生了什么事情？</a></li>
+<li><a href="https://gold.xitu.io/entry/57f10284da2f60004f5f2e5e" target="_blank" rel="noopener">前端经典面试题: 从输入 URL 到页面加载发生了什么？</a></li>
+<li><a href="https://github.com/skyline75489/what-happens-when-zh_CN" target="_blank" rel="noopener">当···时发生了什么？</a></li>
+</ul>
+<h2 id="HTTP-协议"><a href="#HTTP-协议" class="headerlink" title="HTTP 协议"></a>HTTP 协议</h2><ul>
+<li><a href="http://www.jianshu.com/p/80e25cb1d81a" target="_blank" rel="noopener">关于HTTP协议，一篇就够了</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="noopener">HTTP 协议入门</a></li>
+<li><a href="http://www.cnblogs.com/li0803/archive/2008/11/03/1324746.html" target="_blank" rel="noopener">HTTP协议详解</a></li>
+</ul>
+<p>HTTP 协议主要包括这几项内容</p>
+<ul>
+<li>请求和响应</li>
+<li>无状态</li>
+<li>URL</li>
+<li>端口</li>
+<li>方法</li>
+<li>状态码 </li>
+<li>Header</li>
+<li>Body</li>
+<li>Cookie</li>
+</ul>
+<h3 id="HTTP-方法"><a href="#HTTP-方法" class="headerlink" title="HTTP 方法"></a>HTTP 方法</h3><p>常见的有这几种方法</p>
+<ul>
+<li>GET 一般做获取的操作，Body为空</li>
+<li>POST 一般做提交的操作，数据放在Body中</li>
+<li>HEAD 等同于GET，但是只返回头部</li>
+<li>PUT 上传数据 （不常用）</li>
+<li>DELETE 删除数据 （不常用）</li>
+<li>OPTIONS 查看支持哪些方法</li>
+</ul>
+<h3 id="HTTP-状态码"><a href="#HTTP-状态码" class="headerlink" title="HTTP 状态码"></a>HTTP 状态码</h3><p>状态码是由3位数组成，第一个数字定义了响应的类别</p>
+<ul>
+<li>1xx：指示信息，表示请求已接收，继续处理</li>
+<li>2xx：成功，表示请求已被成功接收、理解、接受</li>
+<li>3xx：重定向，要完成请求必须进行更进一步的操作</li>
+<li>4xx：客户端错误，请求有语法错误或请求无法实现</li>
+<li>5xx：服务器端错误，服务器未能实现合法的请求</li>
+</ul>
+<p>可以自定义状态码，常见的有这几种</p>
+<ul>
+<li>200 成功</li>
+<li>404 请求的资源不存在</li>
+<li>301 永久重定向，让浏览器记住，下次就直接访问那个地址</li>
+<li>302 临时重定向</li>
+<li>401 没有权限，会弹出一个框让客户端登录</li>
+<li>403 禁止访问</li>
+<li>500 服务端错误</li>
+<li>502 服务端使用了代理但是代理请求的服务无法访问 </li>
+</ul>
+<h2 id="HTTP-Header"><a href="#HTTP-Header" class="headerlink" title="HTTP Header"></a>HTTP Header</h2><ul>
+<li>Content-Type， Body 内容的类型，常见的有 text/html, application/json</li>
+<li>Cookie， 客户端发给服务端的 Cookie 值</li>
+<li>Set-Cookie， 服务端设置的 Cookie 值</li>
+<li>Content-Encoding Body 的内容使用了什么编码，常见的有 gzip</li>
+</ul>
+<h2 id="Web-API-是什么？"><a href="#Web-API-是什么？" class="headerlink" title="Web API 是什么？"></a>Web API 是什么？</h2><ul>
+<li>API 是应用程序接口的意思</li>
+<li>Web API 是使用 Web 作为数据传输媒介的应用程序接口</li>
+</ul>
+<p>可以把 Web API 想象成一个函数，调用 Web API 就是在调用这个函数。只是这个函数部署在服务端，在调用的时候需要使用 HTTP 协议来传输函数的参数和返回值</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_api</span><span class="params">(params1, params2)</span>:</span></span><br><span class="line">    print(<span class="string">'do someting'</span>)</span><br><span class="line">    data = [<span class="string">'foo'</span>, <span class="string">'bar'</span>]</span><br><span class="line">    <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure>
+<h2 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h2><ul>
+<li>Web API 通过 HTTP 协议来传输参数和返回值</li>
+<li>传输的数据，需要使用约定的格式</li>
+</ul>
+<p>JSON （JavaScript Simple Object Notation），JSON 的数据类型只有四种：</p>
+<ul>
+<li>数字</li>
+<li>字符串</li>
+<li>列表</li>
+<li>字典</li>
+</ul>
+<p>这是一个 JSON 的例子，可以发现跟 Python 的数据类型和表示方式是一样的，因此 Python 原生就很适合处理 JSON 数据</p>
+<p>注意 JSON 的字符串是用双引号，不是用单引号</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="attr">"name"</span>: <span class="string">"jack"</span>,</span><br><span class="line">        <span class="attr">"age"</span>: <span class="number">28</span>,</span><br><span class="line">        <span class="attr">"tax"</span>: <span class="number">120.12</span>,</span><br><span class="line">        <span class="attr">"human"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"money"</span>: <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h2 id="Web-框架"><a href="#Web-框架" class="headerlink" title="Web 框架"></a>Web 框架</h2><p>做 Web 开发，需要一个 Web 框架，用框架的原因在于简化开发。</p>
+<ul>
+<li><a href="https://www.djangoproject.com/" target="_blank" rel="noopener">Django</a> 大而全的框架</li>
+<li><a href="http://www.tornadoweb.org/en/stable/" target="_blank" rel="noopener">Tornado</a> 异步的框架</li>
+<li><a href="http://flask.pocoo.org/" target="_blank" rel="noopener">Flask</a> 微框架</li>
+</ul>
+<p>这三个框架都有一个优点就是文档很详细</p>
+<ul>
+<li><a href="https://wizardforcel.gitbooks.io/django-chinese-docs-18/content/" target="_blank" rel="noopener">Django 中文文档</a></li>
+<li><a href="https://tornado-zh.readthedocs.io/zh/latest/" target="_blank" rel="noopener">Tornado 中文文档</a></li>
+<li><a href="http://docs.jinkan.org/docs/flask/" target="_blank" rel="noopener">Flask 中文文档</a></li>
+</ul>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/06/python-tutorial-lesson-2.1/" rel="prev">Python 入门教程 Lesson 2.1 - Python 知识进阶</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/01/python-tutorial-lesson-1/" rel="next">Python 入门教程 Lesson 1 - 初识 Python</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-协议"><span class="nav-number">1.</span> <span class="nav-text">HTTP 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-方法"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-状态码"><span class="nav-number">1.2.</span> <span class="nav-text">HTTP 状态码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-Header"><span class="nav-number">2.</span> <span class="nav-text">HTTP Header</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-API-是什么？"><span class="nav-number">3.</span> <span class="nav-text">Web API 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSON"><span class="nav-number">4.</span> <span class="nav-text">JSON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-框架"><span class="nav-number">5.</span> <span class="nav-text">Web 框架</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2017/03/06/python-tutorial-lesson-2.2/';
+      var disqus_title = 'Python 入门教程 Lesson 2.2 - Web 开发入门';
+      var disqus_url = 'http://www.restran.net/2017/03/06/python-tutorial-lesson-2.2/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

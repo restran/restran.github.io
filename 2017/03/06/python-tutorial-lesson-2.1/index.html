@@ -1,0 +1,733 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="以下只简单列举一些知识点，其他方面的知识，可以去阅读详细的教程，或者在遇到问题时再去翻阅 Python 代码的执行当我们运行一个 Python 文件，可以在命令行上输入  python run_demo.py run_demo.py 的文件内容 12345678910111213141516171819202122232425262728293031323334353637383940414243">
+<meta name="keywords" content="python,代码执行,原理,装饰器,decorator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 入门教程 Lesson 2.1 - Python 知识进阶">
+<meta property="og:url" content="http://www.restran.net/2017/03/06/python-tutorial-lesson-2.1/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="以下只简单列举一些知识点，其他方面的知识，可以去阅读详细的教程，或者在遇到问题时再去翻阅 Python 代码的执行当我们运行一个 Python 文件，可以在命令行上输入  python run_demo.py run_demo.py 的文件内容 12345678910111213141516171819202122232425262728293031323334353637383940414243">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-26T06:47:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 入门教程 Lesson 2.1 - Python 知识进阶">
+<meta name="twitter:description" content="以下只简单列举一些知识点，其他方面的知识，可以去阅读详细的教程，或者在遇到问题时再去翻阅 Python 代码的执行当我们运行一个 Python 文件，可以在命令行上输入  python run_demo.py run_demo.py 的文件内容 12345678910111213141516171819202122232425262728293031323334353637383940414243">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Python 入门教程 Lesson 2.1 - Python 知识进阶 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Python 入门教程 Lesson 2.1 - Python 知识进阶
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2017-03-06T00:00:00+08:00" content="2017-03-06">
+            2017-03-06
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 2,070字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/技术/" itemprop="url" rel="index">
+                  <span itemprop="name">技术</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2017/03/06/python-tutorial-lesson-2.1/"class="leancloud_visitors" data-flag-title="Python 入门教程 Lesson 2.1 - Python 知识进阶">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2017/03/06/python-tutorial-lesson-2.1/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/06/python-tutorial-lesson-2.1/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>以下只简单列举一些知识点，其他方面的知识，可以去阅读详细的教程，或者在遇到问题时再去翻阅</p>
+<h2 id="Python-代码的执行"><a href="#Python-代码的执行" class="headerlink" title="Python 代码的执行"></a>Python 代码的执行</h2><p>当我们运行一个 Python 文件，可以在命令行上输入 </p>
+<pre><code>python run_demo.py
+</code></pre><p>run_demo.py 的文件内容</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">演示Python代码的执行，请记住一句话 Python 的一切都是对象</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这句话是为了兼容 Python2，让 Python2 的字符串默认为 Unicode，并使用绝对导入</span></span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> unicode_literals, absolute_import</span><br><span class="line"></span><br><span class="line"><span class="comment"># Python 的代码是从上往下运行的</span></span><br><span class="line"><span class="comment"># 这里的 def func() 是创建一个函数</span></span><br><span class="line"><span class="comment"># 只有执行了这段代码，函数才会创建</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># Python 是以缩进来确定作用域的</span></span><br><span class="line">    <span class="comment"># 缩进相同，是属于同一个作用域的</span></span><br><span class="line">    <span class="comment"># 函数 func 的代码是从冒号开始</span></span><br><span class="line">    print(<span class="string">'hello func'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 到了相同缩进的外面，函数 func 的代码结束</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这段代码是开始创建MyClass这个类的对象</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># 这里是创建类的类成员变量，因此当执行这个模块的时候</span></span><br><span class="line">    <span class="comment"># 这里的代码需要直接执行，才能正确的创建这个类的对象</span></span><br><span class="line">    class_field = <span class="string">'test'</span></span><br><span class="line">    print(<span class="string">'MyClass object created'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'class func'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 因此我们这里 import time，实际上是做了两件事</span></span><br><span class="line"><span class="comment"># 1. 执行 time 这个模块里面的代码，并创建对应的函数、类等对象</span></span><br><span class="line"><span class="comment"># 2. 在当前模块创建一个新的变量 time，这个变量指向 time 这个模块</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里有个 print 语句，当该模块被别的模块 import 的时候就会打印</span></span><br><span class="line"><span class="comment"># 但只有在程序第一次 import 该模块的时候才会打印，</span></span><br><span class="line"><span class="comment"># 因为 python 模块被执行后，是生成一个模块对象，以后再 import 时，</span></span><br><span class="line"><span class="comment"># 就直接使用该对象，不再执行模块里面的代码来生成模块对象</span></span><br><span class="line"><span class="comment"># 可以运行 test2来验证</span></span><br><span class="line">print(<span class="string">'run_demo 模块被执行'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># python 中一切都是对象，每个对象都有一个内置的 __name__ 属性</span></span><br><span class="line">    print(main.__name__)</span><br><span class="line">    func()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 当前运行的 .py 文件是一个模块，模块也是对象，也会有 __name__</span></span><br><span class="line"><span class="comment"># 如果程序是从当前模块运行的，那么 __name__ 为 __main__</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 如果模块是被 import 进来的，则 __name__ 则为文件名</span></span><br><span class="line">    print(time.__name__)</span><br><span class="line">    <span class="comment"># 如果是运行该模块，则会执行 main() 函数</span></span><br><span class="line">    <span class="comment"># 如果是被别的模块 import 则不会执行 main() 函数</span></span><br><span class="line">    <span class="comment"># 因此 main() 函数可以用来做一些函数的测试等</span></span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>test1.py 文件内容</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> run_demo</span><br><span class="line"></span><br><span class="line">print(<span class="string">'test1 模块被执行'</span>)</span><br></pre></td></tr></table></figure>
+<p>test2.py 文件内容</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> run_demo</span><br><span class="line"><span class="keyword">import</span> test1</span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">当运行该模块的时候，会发现只输出一个 run_demo 模块被执行</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">'test2 模块被执行'</span>)</span><br></pre></td></tr></table></figure>
+<p>关于 Python 运行的一些原理，上面只做了简要介绍，详细可以查看<a href="http://www.restran.net/2015/10/22/how-python-code-run/#more">这篇文章</a></p>
+<h2 id="列表-字典解析"><a href="#列表-字典解析" class="headerlink" title="列表/字典解析"></a>列表/字典解析</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">products = [</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="string">'name'</span>: <span class="string">'news'</span>,</span><br><span class="line">        <span class="string">'id'</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">'year'</span>: <span class="string">'2010'</span>,</span><br><span class="line">        <span class="string">'status'</span>: <span class="string">'up'</span></span><br><span class="line">    &#125;, </span><br><span class="line">    &#123;</span><br><span class="line">    <span class="string">'name'</span>: <span class="string">'search'</span>,</span><br><span class="line">        <span class="string">'id'</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">'year'</span>: <span class="string">'2000'</span>,</span><br><span class="line">        <span class="string">'status'</span>: <span class="string">'up'</span></span><br><span class="line">    &#125;, </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'name'</span>: <span class="string">'wave'</span>,</span><br><span class="line">        <span class="string">'id'</span>: <span class="number">3</span>,</span><br><span class="line">        <span class="string">'year'</span>: <span class="string">'2009'</span>,</span><br><span class="line">        <span class="string">'status'</span>: <span class="string">'down'</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列表解析，通过遍历一个迭代器，生成一个新的列表</span></span><br><span class="line"><span class="comment"># 比 for 循环速度快，也更简洁</span></span><br><span class="line">new_products = [&#123;<span class="string">'name'</span>: t[<span class="string">'name'</span>]&#125; <span class="keyword">for</span> t <span class="keyword">in</span> products]</span><br><span class="line"><span class="comment"># 字典解析，通过遍历一个迭代器，生成一个新的字典</span></span><br><span class="line">new_product_dict = &#123;t[<span class="string">'name'</span>] : t <span class="keyword">for</span> t <span class="keyword">in</span> products&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="列表分片"><a href="#列表分片" class="headerlink" title="列表分片"></a>列表分片</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列表分片，索引从0开始</span></span><br><span class="line"><span class="comment"># 生成测试数据</span></span><br><span class="line">data = range(<span class="number">10</span>)</span><br><span class="line"><span class="comment"># 从第一个（含）开始的所有</span></span><br><span class="line">data = data[<span class="number">1</span>:]</span><br><span class="line"><span class="comment"># 到倒数第一个（不含）前的所有</span></span><br><span class="line">data = data[:<span class="number">-1</span>]</span><br><span class="line"><span class="comment"># 从第一个（含）到倒数第一个（不含）</span></span><br><span class="line">data = data[<span class="number">1</span>:<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="读写文件"><a href="#读写文件" class="headerlink" title="读写文件"></a>读写文件</h3><p>文件的读写模式有</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r</td>
+<td>只读</td>
+</tr>
+<tr>
+<td>r+</td>
+<td>可读可写，文件指针在文件开头</td>
+</tr>
+<tr>
+<td>rb</td>
+<td>以二进制模式读取</td>
+</tr>
+<tr>
+<td>rb+</td>
+<td>以二进制模式读取，文件指针在文件开头</td>
+</tr>
+<tr>
+<td>w</td>
+<td>只写，如果文件已存在则覆盖，不存在则新建</td>
+</tr>
+<tr>
+<td>w+</td>
+<td>等同 w 但是可读，文件指针在文件开头，打开的是新文件，里面没有内容</td>
+</tr>
+<tr>
+<td>wb</td>
+<td>等同 w 但是以二进制模式处理数据</td>
+</tr>
+<tr>
+<td>wb+</td>
+<td>等同 wb 但是可读，文件指针在文件开头</td>
+</tr>
+<tr>
+<td>a</td>
+<td>以追加内容的方式写入，如果文件不存在，则新建</td>
+</tr>
+<tr>
+<td>a+</td>
+<td>等同 a 但是可读</td>
+</tr>
+<tr>
+<td>ab</td>
+<td>等同 a 但是以二进制模式处理数据</td>
+</tr>
+<tr>
+<td>ab+</td>
+<td>等同 ab 但是可读，需要注意文件指针的位置</td>
+</tr>
+</tbody>
+</table>
+<p><br><br>也可以参考<a href="http://www.cnblogs.com/feeland/p/4477535.html" target="_blank" rel="noopener">这里</a></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 with 语句，自动处理文件关闭</span></span><br><span class="line"><span class="comment"># 文件可以像列表一样遍历，即便是读取超大文件，依然效率很高</span></span><br><span class="line"><span class="comment"># 一行一行的读数据</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="comment"># 只读模式，不能写文件</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        print(line)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 二进制模式读，适合于读一些二进制文件，如图片</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="comment"># 将文件的所有内容读取出来</span></span><br><span class="line">    data = f.read()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 写模式，文件旧内容将会删除，并存储为新的内容</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'test content'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加写模式，文件旧内容会保留，并增加新内容</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'a'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'test content'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> unicode_literals, absolute_import</span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">装饰器的例子</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器的本质，是把函数作为参数传给装饰器函数</span></span><br><span class="line"><span class="comment"># 装饰器实际上是闭包</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    打印函数运行日志的装饰器</span></span><br><span class="line"><span class="string">    :param func:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># wraps 这个装饰器会将 func 的 doc 和 __name__ 复制过来</span></span><br><span class="line">    <span class="comment"># 否则在 wrapper 中调用 func.__name__ 输出的就是 wrapper</span></span><br><span class="line"><span class="meta">    @wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'decorator log is running'</span>)</span><br><span class="line">        print(<span class="string">'before call %s'</span> % func.__name__)</span><br><span class="line">        ret = func(*args, **kwargs)</span><br><span class="line">        print(<span class="string">'after call %s'</span> % func.__name__)</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_with_message</span><span class="params">(message)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    打印函数运行日志的装饰器，可以再给装饰器传参数</span></span><br><span class="line"><span class="string">    :param message:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line"><span class="meta">        @wraps(func)</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">            print(<span class="string">'decorator log_with_message is running, %s'</span> % message)</span><br><span class="line">            ret = func(*args, **kwargs)</span><br><span class="line">            <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">time_elapsed</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    记录函数运行耗时的生成器</span></span><br><span class="line"><span class="string">    :param func:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'decorator time_elapsed is running'</span>)</span><br><span class="line">        timestamp = time.time() * <span class="number">1000</span></span><br><span class="line">        ret = func(*args, **kwargs)</span><br><span class="line">        now_ts = time.time() * <span class="number">1000</span></span><br><span class="line">        elapsed = now_ts - timestamp</span><br><span class="line">        print(<span class="string">'%s costs time: %.2fms'</span> % (func.__name__, elapsed))</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这段代码实际上是，将这个函数变成另外一个函数</span></span><br><span class="line"><span class="comment"># new_func = log(test_func1)</span></span><br><span class="line"><span class="comment"># 当我们调用 test_func1(foo=666) 时</span></span><br><span class="line"><span class="comment"># 实际上调用的是 new_func(666)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@log</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_func1</span><span class="params">(foo=<span class="number">123</span>)</span>:</span></span><br><span class="line">    print(<span class="string">'test_func1 is running'</span>)</span><br><span class="line">    print(foo)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器还可以再嵌套装饰器，这段代码实际上是</span></span><br><span class="line"><span class="comment"># new_func = time_elapsed(log(test_func1))</span></span><br><span class="line"><span class="comment"># 当我们调用 test_func2() 时</span></span><br><span class="line"><span class="comment"># 实际上调用的是 new_func()</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@time_elapsed</span></span><br><span class="line"><span class="meta">@log</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'test_func2 is running'</span>)</span><br><span class="line">    <span class="comment"># 随机休眠1～2秒</span></span><br><span class="line">    <span class="comment"># time.sleep 函数传的是以秒为单位的数</span></span><br><span class="line">    time.sleep(random.randrange(<span class="number">100</span>, <span class="number">200</span>) / <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器还可以再嵌套装饰器，这段代码实际上是</span></span><br><span class="line"><span class="comment"># new_func = log_with_message('my message')(test_func1)</span></span><br><span class="line"><span class="comment"># 当我们调用 test_func3() 时</span></span><br><span class="line"><span class="comment"># 实际上调用的是 new_func()</span></span><br><span class="line"><span class="meta">@log_with_message('my message')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_func3</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'test_func3 is running'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    test_func1(foo=<span class="number">666</span>)</span><br><span class="line">    print(<span class="string">'-------------'</span>)</span><br><span class="line">    test_func2()</span><br><span class="line">    print(<span class="string">'-------------'</span>)</span><br><span class="line">    test_func3()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    揭示装饰器本质的例子，可以看到这里的代码和main()中执行的结果是一样的</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    print(<span class="string">'---------------'</span>)</span><br><span class="line">    print(<span class="string">'揭示装饰器本质的例子'</span>)</span><br><span class="line">    <span class="comment"># 装饰器本质是变成执行这样的代码</span></span><br><span class="line">    <span class="comment"># 只是有个语法糖@，让其语法变得简单</span></span><br><span class="line">    new_func = log(test_func1)</span><br><span class="line">    new_func(foo=<span class="number">666</span>)</span><br><span class="line">    print(<span class="string">'-------------'</span>)</span><br><span class="line">    new_func = time_elapsed(log(test_func2))</span><br><span class="line">    new_func()</span><br><span class="line">    print(<span class="string">'-------------'</span>)</span><br><span class="line">    new_func = log_with_message(<span class="string">'my message'</span>)(test_func3)</span><br><span class="line">    new_func()</span><br><span class="line">    print(<span class="string">'-------------'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br><span class="line">    main2()</span><br></pre></td></tr></table></figure>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/13/python-tutorial-lesson-3/" rel="prev">Python 入门教程 Lesson 3 - Web 开发进阶和 Oracle 环境</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/06/python-tutorial-lesson-2.2/" rel="next">Python 入门教程 Lesson 2.2 - Web 开发入门</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-代码的执行"><span class="nav-number">1.</span> <span class="nav-text">Python 代码的执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表-字典解析"><span class="nav-number">2.</span> <span class="nav-text">列表/字典解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表分片"><span class="nav-number">3.</span> <span class="nav-text">列表分片</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读写文件"><span class="nav-number">3.1.</span> <span class="nav-text">读写文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰器"><span class="nav-number">4.</span> <span class="nav-text">装饰器</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2017/03/06/python-tutorial-lesson-2.1/';
+      var disqus_title = 'Python 入门教程 Lesson 2.1 - Python 知识进阶';
+      var disqus_url = 'http://www.restran.net/2017/03/06/python-tutorial-lesson-2.1/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

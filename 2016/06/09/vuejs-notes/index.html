@@ -1,0 +1,725 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="知识框架核心 VueJS  组件那一章需要仔细阅读，包括props给组件传参数，父子组件通信。  awesome-vue 周边的各种库和工具，很多需要的东西都在这里，需要重点看 视频教程  单页路由 VueRouter  中文教程：http://router.vuejs.org/zh-cn/index.html 需要关注一下，页面间怎么传参数，页面激活阶段的触发的事件方法 与服务器通信（AJAX）">
+<meta name="keywords" content="vuejs,知识框架,界面,教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue.js 1.0 学习笔记">
+<meta property="og:url" content="http://www.restran.net/2016/06/09/vuejs-notes/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="知识框架核心 VueJS  组件那一章需要仔细阅读，包括props给组件传参数，父子组件通信。  awesome-vue 周边的各种库和工具，很多需要的东西都在这里，需要重点看 视频教程  单页路由 VueRouter  中文教程：http://router.vuejs.org/zh-cn/index.html 需要关注一下，页面间怎么传参数，页面激活阶段的触发的事件方法 与服务器通信（AJAX）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-26T06:40:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue.js 1.0 学习笔记">
+<meta name="twitter:description" content="知识框架核心 VueJS  组件那一章需要仔细阅读，包括props给组件传参数，父子组件通信。  awesome-vue 周边的各种库和工具，很多需要的东西都在这里，需要重点看 视频教程  单页路由 VueRouter  中文教程：http://router.vuejs.org/zh-cn/index.html 需要关注一下，页面间怎么传参数，页面激活阶段的触发的事件方法 与服务器通信（AJAX）">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Vue.js 1.0 学习笔记 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Vue.js 1.0 学习笔记
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2016-06-09T00:00:00+08:00" content="2016-06-09">
+            2016-06-09
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 816字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/前端/" itemprop="url" rel="index">
+                  <span itemprop="name">前端</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2016/06/09/vuejs-notes/"class="leancloud_visitors" data-flag-title="Vue.js 1.0 学习笔记">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/06/09/vuejs-notes/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/09/vuejs-notes/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h2 id="知识框架"><a href="#知识框架" class="headerlink" title="知识框架"></a>知识框架</h2><h3 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h3><ul>
+<li><a href="http://cn.vuejs.org/" target="_blank" rel="noopener">VueJS</a></li>
+</ul>
+<p>组件那一章需要仔细阅读，包括props给组件传参数，父子组件通信。</p>
+<ul>
+<li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a> 周边的各种库和工具，很多需要的东西都在这里，需要重点看</li>
+<li><a href="https://laravist.com/series/vue-js-1-0-in-action-series" target="_blank" rel="noopener">视频教程</a></li>
+</ul>
+<h3 id="单页路由"><a href="#单页路由" class="headerlink" title="单页路由"></a>单页路由</h3><ul>
+<li><a href="https://github.com/vuejs/vue-router" target="_blank" rel="noopener">VueRouter</a></li>
+</ul>
+<p>中文教程：<a href="http://router.vuejs.org/zh-cn/index.html" target="_blank" rel="noopener">http://router.vuejs.org/zh-cn/index.html</a></p>
+<p>需要关注一下，页面间怎么传参数，页面激活阶段的触发的事件方法</p>
+<h3 id="与服务器通信（AJAX）"><a href="#与服务器通信（AJAX）" class="headerlink" title="与服务器通信（AJAX）"></a>与服务器通信（AJAX）</h3><ul>
+<li><a href="https://github.com/vuejs/vue-resource" target="_blank" rel="noopener">VueResource</a></li>
+</ul>
+<h3 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h3><h4 id="Vux"><a href="#Vux" class="headerlink" title="Vux"></a><a href="https://github.com/airyland/vux" target="_blank" rel="noopener">Vux</a></h4><p>演示地址：<a href="https://vux.li/#!/" target="_blank" rel="noopener">https://vux.li/#!/</a><br>中文文档：<a href="https://vuxjs.gitbooks.io/vux/content/" target="_blank" rel="noopener">https://vuxjs.gitbooks.io/vux/content/</a><br>演示代码：<a href="https://github.com/airyland/vux/tree/master/src/demos" target="_blank" rel="noopener">https://github.com/airyland/vux/tree/master/src/demos</a></p>
+<p>因为中文文档不全，有些内容需要直接去看demo的代码会更清楚</p>
+<h4 id="MintUI"><a href="#MintUI" class="headerlink" title="MintUI"></a><a href="https://github.com/ElemeFE/mint-ui" target="_blank" rel="noopener">MintUI</a></h4><p>演示地址：<a href="http://mint-ui.github.io/#!/en" target="_blank" rel="noopener">http://mint-ui.github.io/#!/en</a><br>中文文档：<a href="http://mint-ui.github.io/docs/#!/zh-cn" target="_blank" rel="noopener">http://mint-ui.github.io/docs/#!/zh-cn</a></p>
+<h3 id="组件化开发教程"><a href="#组件化开发教程" class="headerlink" title="组件化开发教程"></a>组件化开发教程</h3><ul>
+<li><a href="https://segmentfault.com/a/1190000005009052" target="_blank" rel="noopener">Vue构建单页应用最佳实战</a></li>
+<li><a href="https://gold.xitu.io/entry/55f77eb460b28e6a6f0f4f86" target="_blank" rel="noopener">Vue 组件化开发实践</a></li>
+</ul>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><ul>
+<li><a href="https://github.com/yatessss/zhihudaily-vue" target="_blank" rel="noopener">知乎日报Web版</a></li>
+<li><a href="https://github.com/axhello/vPlayer" target="_blank" rel="noopener">用vuejs写的播放器，API基于网易云</a></li>
+</ul>
+<h3 id="其他需掌握的知识点"><a href="#其他需掌握的知识点" class="headerlink" title="其他需掌握的知识点"></a>其他需掌握的知识点</h3><h4 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h4><p><a href="http://es6.ruanyifeng.com/" target="_blank" rel="noopener">ECMAScript 6入门</a></p>
+<p>关注一下如何定义和加载模块</p>
+<h4 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h4><ul>
+<li><a href="https://npm.taobao.org/" target="_blank" rel="noopener">淘宝的npm镜像</a>，因为npm被墙，需要改成淘宝的镜像</li>
+<li><a href="http://www.jianshu.com/p/e958a74a0fd7" target="_blank" rel="noopener">npm命令教程</a></li>
+</ul>
+<h2 id="一些使用经验"><a href="#一些使用经验" class="headerlink" title="一些使用经验"></a>一些使用经验</h2><h3 id="组件状态缓存-keep-alive"><a href="#组件状态缓存-keep-alive" class="headerlink" title="组件状态缓存 keep-alive"></a>组件状态缓存 keep-alive</h3><p>如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染。为此可以添加一个 keep-alive 指令参数：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">component</span> <span class="attr">:is</span>=<span class="string">"currentView"</span> <span class="attr">keep-alive</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 非活动组件将被缓存 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果在单页应用中，想要保持页面切换前的状态，可以这样做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-view keep-alive&gt;&lt;/router-view&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="动态组件载入-lazy-load"><a href="#动态组件载入-lazy-load" class="headerlink" title="动态组件载入 lazy load"></a>动态组件载入 lazy load</h3><p>如果想按需加载组件资源，而不是在入口页就一次性加载全部的组件，可以参考 vue-router 文档中<a href="http://router.vuejs.org/zh-cn/lazy.html" target="_blank" rel="noopener">动态组件载入</a>章节。</p>
+<p>Webpack 已经集成了代码分割功能。可以使用 AMD 风格的 require 来对你的代码标识代码分割点:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">'./MyComponent.vue'</span>], <span class="function"><span class="keyword">function</span> (<span class="params">MyComponent</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// code here runs after MyComponent.vue is asynchronously loaded.</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>和路由配合使用，如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">router.map(&#123;</span><br><span class="line">  <span class="string">'/async'</span>: &#123;</span><br><span class="line">    component: <span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">require</span>([<span class="string">'./MyComponent.vue'</span>], resolve)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>现在，只有当 /async 需要被渲染时，MyComponent.vue组件，会自动加载它的依赖组件，并且异步的加载进来。</p>
+<h3 id="Vue-util-extend"><a href="#Vue-util-extend" class="headerlink" title="Vue.util.extend"></a>Vue.util.extend</h3><p>有时想要使用 Vue 内置的方法来进行拷贝对象，就像<code>Angular.copy</code>，Vue 也提供了这样一个方法，但是存在问题，<a href="https://github.com/vuejs/vue/issues/1849" target="_blank" rel="noopener">相关 Issue</a>。</p>
+<pre><code>newItem = Vue.util.extend({}, item)
+</code></pre><p>只能做浅拷贝，如果是多层的对象，仍然会存在旧对象的数据绑定关系。修改新对象内的数据时，会导致旧对象的数据绑定也被修改。例如 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">item = &#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    name: '',</span><br><span class="line">    phone: ''</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// item.data.name 也会被修改</span><br><span class="line">newItem.data.name = 'newName';</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/vuejs/vue/issues/158" target="_blank" rel="noopener">官方推荐的方法</a>是</p>
+<pre><code>newItem ＝ JSON.parse(JSON.stringify(object))
+</code></pre><h3 id="vue-resource"><a href="#vue-resource" class="headerlink" title="vue-resource"></a>vue-resource</h3><p>当使用 JSON 与服务端进行交互时，在一些 Android 手机的微信中, 会出现没有将返回的数据转换成 JSON，而是仍然为字符串，这时需要手动转换</p>
+<pre><code class="js">Vue.http.post(
+  postUrl, postData
+).then(<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>{
+  <span class="keyword">var</span> data = response.data;
+  <span class="comment">// 需要手动转换为 JSON</span>
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> data == <span class="string">'string'</span>) {
+    <span class="keyword">try</span> {
+      data = <span class="built_in">JSON</span>.parse(data);
+    } <span class="keyword">catch</span> (e) {
+    }
+  }
+   <span class="comment">// do something</span>
+}, <span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>{
+  <span class="comment">// 请求失败</span>
+});
+</code></pre>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Vue/" rel="tag">#Vue</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/06/gilab-source-install-in-centos7/" rel="prev">CentOS 7 Minimal 安装 Gitlab 8.9</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/01/http-benchmarking-tool/" rel="next">HTTP 性能测试工具</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识框架"><span class="nav-number">1.</span> <span class="nav-text">知识框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#核心"><span class="nav-number">1.1.</span> <span class="nav-text">核心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单页路由"><span class="nav-number">1.2.</span> <span class="nav-text">单页路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与服务器通信（AJAX）"><span class="nav-number">1.3.</span> <span class="nav-text">与服务器通信（AJAX）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#界面"><span class="nav-number">1.4.</span> <span class="nav-text">界面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Vux"><span class="nav-number">1.4.1.</span> <span class="nav-text">Vux</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MintUI"><span class="nav-number">1.4.2.</span> <span class="nav-text">MintUI</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件化开发教程"><span class="nav-number">1.5.</span> <span class="nav-text">组件化开发教程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">1.6.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他需掌握的知识点"><span class="nav-number">1.7.</span> <span class="nav-text">其他需掌握的知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ES6"><span class="nav-number">1.7.1.</span> <span class="nav-text">ES6</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#npm"><span class="nav-number">1.7.2.</span> <span class="nav-text">npm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些使用经验"><span class="nav-number">2.</span> <span class="nav-text">一些使用经验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#组件状态缓存-keep-alive"><span class="nav-number">2.1.</span> <span class="nav-text">组件状态缓存 keep-alive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态组件载入-lazy-load"><span class="nav-number">2.2.</span> <span class="nav-text">动态组件载入 lazy load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue-util-extend"><span class="nav-number">2.3.</span> <span class="nav-text">Vue.util.extend</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vue-resource"><span class="nav-number">2.4.</span> <span class="nav-text">vue-resource</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2016/06/09/vuejs-notes/';
+      var disqus_title = 'Vue.js 1.0 学习笔记';
+      var disqus_url = 'http://www.restran.net/2016/06/09/vuejs-notes/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

@@ -1,0 +1,997 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="去年小组在从 SVN 和 TFS 迁移到 Git 的过程中整理了这份文档，面向的用户是对 Git 和 SVN 可能都不是很了解的人。看到自己写了这么多，于是就拿出来分享下，有些东西可能写得比较浅，有错误还请指正。 1. 关于 Git 你应该知道的东西Git 是一个分布式版本控制系统。分布式的意思是，每个人电脑上都是一份完整的代码库，包含了所有的代码提交历史。由于 Git 分布式的特点，在没有网络的">
+<meta name="keywords" content="Git,Gitlab,教程,教学,指南,入门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git &amp; Gitlab 使用指南">
+<meta property="og:url" content="http://www.restran.net/2016/02/23/git-and-gitlab-guide/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="去年小组在从 SVN 和 TFS 迁移到 Git 的过程中整理了这份文档，面向的用户是对 Git 和 SVN 可能都不是很了解的人。看到自己写了这么多，于是就拿出来分享下，有些东西可能写得比较浅，有错误还请指正。 1. 关于 Git 你应该知道的东西Git 是一个分布式版本控制系统。分布式的意思是，每个人电脑上都是一份完整的代码库，包含了所有的代码提交历史。由于 Git 分布式的特点，在没有网络的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-05-03T14:53:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git &amp; Gitlab 使用指南">
+<meta name="twitter:description" content="去年小组在从 SVN 和 TFS 迁移到 Git 的过程中整理了这份文档，面向的用户是对 Git 和 SVN 可能都不是很了解的人。看到自己写了这么多，于是就拿出来分享下，有些东西可能写得比较浅，有错误还请指正。 1. 关于 Git 你应该知道的东西Git 是一个分布式版本控制系统。分布式的意思是，每个人电脑上都是一份完整的代码库，包含了所有的代码提交历史。由于 Git 分布式的特点，在没有网络的">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Git &amp; Gitlab 使用指南 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Git &amp; Gitlab 使用指南
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2016-02-23T00:00:00+08:00" content="2016-02-23">
+            2016-02-23
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 5,254字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/工具/" itemprop="url" rel="index">
+                  <span itemprop="name">工具</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2016/02/23/git-and-gitlab-guide/"class="leancloud_visitors" data-flag-title="Git &amp; Gitlab 使用指南">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/02/23/git-and-gitlab-guide/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/02/23/git-and-gitlab-guide/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>去年小组在从 SVN 和 TFS 迁移到 Git 的过程中整理了这份文档，面向的用户是对 Git 和 SVN 可能都不是很了解的人。看到自己写了这么多，于是就拿出来分享下，有些东西可能写得比较浅，有错误还请指正。</p>
+<h2 id="1-关于-Git-你应该知道的东西"><a href="#1-关于-Git-你应该知道的东西" class="headerlink" title="1. 关于 Git 你应该知道的东西"></a>1. 关于 Git 你应该知道的东西</h2><p>Git 是一个分布式版本控制系统。分布式的意思是，每个人电脑上都是一份完整的代码库，包含了所有的代码提交历史。<br>由于 Git 分布式的特点，在没有网络的情况下，依然可以自由地将代码提交的本地的代码库中，等网络恢复后再推送到服务器，开发更加灵活和自由。</p>
+<p><strong>重要概念：</strong>本地一个代码库，对本地文件的所有操作，最后都是提交到这个代码库中。同时可以设置多个远程（remote，默认的remote通常用origin表示），当你要将代码更新到服务器上时（称作push），就通过设置的remote，更新到指定的服务器。</p>
+<blockquote>
+<p>关于多个remote：例如需要同时将代码同步到多个代码管理仓库，例如 Github 和自己公司中内网的 Gitlab。那么可以将默认remote 设置为公司自己的源码管理服务器，同时设置另外一个remote为 Github。这样即可以将代码提交到自己公司的 Gitlab，同时也可以提交到 Github。</p>
+</blockquote>
+<h3 id="1-1-一些术语"><a href="#1-1-一些术语" class="headerlink" title="1.1 一些术语"></a>1.1 一些术语</h3><ul>
+<li>Fetch（获取），从远程代码库更新数据到本地代码库。<code>注意</code>：Fetch 只是将代码更新到本地代码库，你需要检出（check out）或与当前工作分支合并（merge）才能在你的工作目录中看到代码的改变。</li>
+<li>Pull（拉取），从远程代码库更新数据到本地代码库，并与当前工作分支合并，等同于 Fetch + Merge。</li>
+<li>Push（推送），将本地代码库中已提交（commit）的数据推送到指定的 remote，没有 commit 的数据，不会push</li>
+<li>HEAD，指向你正在工作中的本地分支的指针</li>
+<li>Master 分支：主分支，所有提供给用户使用的正式版本，都在这个主分支上发布。<a href="http://www.ruanyifeng.com/blog/2012/07/git.html" target="_blank" rel="noopener">关于分支管理的扩展阅读</a></li>
+<li>Tags（标签）：用来记录重要的版本历史，例如里程碑版本</li>
+<li>Origin：默认的 remote的名称</li>
+<li>Git clone（克隆版本库）：从服务端将项目的版本库克隆下来</li>
+<li>Git init（在本地初始化版本库）：在本地创建版本库的时候使用</li>
+</ul>
+<h3 id="1-2-工作流程"><a href="#1-2-工作流程" class="headerlink" title="1.2 工作流程"></a>1.2 工作流程</h3><ol>
+<li>对代码进行修改</li>
+<li>完成了某项功能，提交（commit，只是提交到本地代码库），1-2可以反复进行，直到觉得可以推送到服务器上时，执行3</li>
+<li>拉取（pull，或者用获取 fetch 然后再手动合并 merge）</li>
+<li>如果存在冲突，解决冲突</li>
+<li>推送（push），将数据提交到服务器上的代码库</li>
+</ol>
+<h3 id="1-3-Gitlab-可以做什么"><a href="#1-3-Gitlab-可以做什么" class="headerlink" title="1.3 Gitlab 可以做什么"></a>1.3 Gitlab 可以做什么</h3><p>Gitlab 是 Git 服务端的集成管理平台，提供了：</p>
+<ol>
+<li>代码托管服务</li>
+<li>访问权限控制</li>
+<li>问题跟踪，bug的记录、跟踪和讨论</li>
+<li>Wiki，项目中一些相关的说明和文档</li>
+<li>代码审查，可以查看、评论代码</li>
+</ol>
+<p>目前官方没有中文版，有个人汉化版本，一些地方对中文的支持较不好（详见后续章节），如果有需要中文翻译的地方，可以自己修改对应的代码。</p>
+<p>怎么安装和维护 Gitlab，请看我另外的两篇博客 </p>
+<ul>
+<li><a href="http://www.restran.net/2015/04/09/gilab-centos-installation-note/">CentOS 6.5 Minimal 安装 Gitlab 7.5</a></li>
+<li><a href="http://www.restran.net/2016/07/06/gilab-source-install-in-centos7/">CentOS 7 Minimal 安装 Gitlab 8.9</a></li>
+</ul>
+<hr>
+<h2 id="2-安装与配置"><a href="#2-安装与配置" class="headerlink" title="2. 安装与配置"></a>2. 安装与配置</h2><p>需要安装以下工具：</p>
+<ul>
+<li>Git（Git 主程序） <a href="http://git-scm.com/" target="_blank" rel="noopener">http://git-scm.com/</a></li>
+</ul>
+<p>Git 图形界面操作工具</p>
+<ul>
+<li>SourceTree <a href="https://www.sourcetreeapp.com/" target="_blank" rel="noopener">https://www.sourcetreeapp.com/</a></li>
+<li>TortoiseGit <a href="https://code.google.com/p/tortoisegit/wiki/Download?tm=2" target="_blank" rel="noopener">https://code.google.com/p/tortoisegit/wiki/Download?tm=2</a></li>
+</ul>
+<p>TortoiseGit只有 Windows 版本，有32位和64位版本，请根据自己的电脑选择相应的版本，同时下载对应版本的中文语言包。</p>
+<h3 id="2-1-设置-TortoiseGit-中文语言"><a href="#2-1-设置-TortoiseGit-中文语言" class="headerlink" title="2.1 设置 TortoiseGit 中文语言"></a>2.1 设置 TortoiseGit 中文语言</h3><p>右键 -&gt; TortoiseGit -&gt; 设置</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_1_1.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_1_2.png"></p>
+<h3 id="2-2-设置用户名和邮箱"><a href="#2-2-设置用户名和邮箱" class="headerlink" title="2.2 设置用户名和邮箱"></a>2.2 设置用户名和邮箱</h3><p>点击 <code>Git</code> 选项，然后点击右侧的<code>全局</code>，最后输入用户名和邮箱即可。这里的用户名和邮箱，将作为以后提交数据到Git服务端的作者信息，请一定要设置。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_2_1.png"></p>
+<h3 id="2-3-设置保存密码"><a href="#2-3-设置保存密码" class="headerlink" title="2.3 设置保存密码"></a>2.3 设置保存密码</h3><p>默认情况下，Git 客户端每次与服务器交互，都需要输入密码。但是我们可以配置保存密码，只需要输入一次，就不再需要输入密码。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_3_1.png"></p>
+<p>选择<code>编辑全局.git/config</code>，在末尾添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[credential] </span><br><span class="line">    helper = store</span><br></pre></td></tr></table></figure>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_3_2.png"></p>
+<h3 id="2-4-配置-SSH-Key"><a href="#2-4-配置-SSH-Key" class="headerlink" title="2.4 配置 SSH Key"></a>2.4 配置 SSH Key</h3><p>Git 可以通过 HTTP 和 SSH 的方式连接，如果要使用SSH的方式连接，需要确保自己的 IP 有访问 Gitlab 服务器 22 端口的权限。</p>
+<p>通过 SSH 的方式，可以不用每次与服务器进行交互时都需要输入用户名和密码。如果是 IDE 中的 Git 插件，则有保存密码的功能。</p>
+<h3 id="2-5-生成-SSH-Key"><a href="#2-5-生成-SSH-Key" class="headerlink" title="2.5 生成 SSH Key"></a>2.5 生成 SSH Key</h3><h4 id="2-5-1-在-Git-Bash-命令行下生成"><a href="#2-5-1-在-Git-Bash-命令行下生成" class="headerlink" title="2.5.1 在 Git Bash 命令行下生成"></a>2.5.1 在 Git Bash 命令行下生成</h4><p>鼠标右键 -&gt; Git Bash</p>
+<pre><code>ssh-keygen -t rsa -C &quot;uasername@mail.com&quot;
+</code></pre><p>生成后的公钥会存放在</p>
+<pre><code>C:/Users/You_User_Name/.ssh/id_rsa.pub
+</code></pre><h4 id="2-5-2-在可视化工具下生成"><a href="#2-5-2-在可视化工具下生成" class="headerlink" title="2.5.2 在可视化工具下生成"></a>2.5.2 在可视化工具下生成</h4><blockquote>
+<p>注意：使用这种方法生成时，默认会用计算机名，作为生成的 SSH Key 的名称，如果计算机名包含中文，则会因编码问题而出错。这时候可以使用在 Git Bash 命令行下生成的方法。</p>
+</blockquote>
+<p>鼠标右键 -&gt; Git Gui</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_4_1.png"></p>
+<p>帮助 -&gt; Show SSH Key</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_4_2.png"></p>
+<p>点击 Generate Key，弹出一个对话框，提示输入 passphrase（密码短语），需要输入两次。意思就是以后提交数据到服务端，只要输入这个密码短语就可以了。这里可以为空，直接点OK，这样，以后就不需要输入任何密码。但建议还是要输入密码短语。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_4_3.png"></p>
+<p>复制 SSH Key 的公钥</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_4_4.png"></p>
+<h3 id="2-6-在-Gitlab-上配置-SSH-Key"><a href="#2-6-在-Gitlab-上配置-SSH-Key" class="headerlink" title="2.6 在 Gitlab 上配置 SSH Key"></a>2.6 在 Gitlab 上配置 SSH Key</h3><p>配置好 SSH Key 以后提交代码，可以不用输入密码。点击右上角的资料设置 -&gt; SSH 密钥 -&gt; 增加 SSH 密钥</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_4_5.png"></p>
+<p>粘贴刚刚复制的 SSH Key 公钥，标题为可选，不写会自动生成</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_4_6.png"></p>
+<h3 id="2-7-配置-Gitlab"><a href="#2-7-配置-Gitlab" class="headerlink" title="2.7 配置 Gitlab"></a>2.7 配置 Gitlab</h3><h4 id="2-7-1-上传个人头像"><a href="#2-7-1-上传个人头像" class="headerlink" title="2.7.1 上传个人头像"></a>2.7.1 上传个人头像</h4><p>请上传个人头像，主要是为了易于识别用户。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_5_1.png"></p>
+<h4 id="2-7-2-设置邮件通知"><a href="#2-7-2-设置邮件通知" class="headerlink" title="2.7.2 设置邮件通知"></a>2.7.2 设置邮件通知</h4><p>如果不想收到邮件通知，可以设置关闭。但是建议开启邮件通知。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/2_5_2.png"></p>
+<hr>
+<h2 id="3-Git-基本功能简介"><a href="#3-Git-基本功能简介" class="headerlink" title="3. Git 基本功能简介"></a>3. Git 基本功能简介</h2><h3 id="3-1-我是项目的创建者，我要创建项目"><a href="#3-1-我是项目的创建者，我要创建项目" class="headerlink" title="3.1 我是项目的创建者，我要创建项目"></a>3.1 我是项目的创建者，我要创建项目</h3><h4 id="3-1-1-在-Gitlab-上执行创建新项目"><a href="#3-1-1-在-Gitlab-上执行创建新项目" class="headerlink" title="3.1.1 在 Gitlab 上执行创建新项目"></a>3.1.1 在 Gitlab 上执行创建新项目</h4><ol>
+<li>取一个恰当的名字。</li>
+<li>选择正确的命名空间。所有人都可以在自身用户名下建立新项目，但是群组命名空间下的项目只能由具有相应权限的人建立。</li>
+<li>填写详细的项目描述</li>
+<li>选择可见等级</li>
+</ol>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_1.png"></p>
+<p>项目创建完成后，需要初始化，请保留该页面，在必要时复制项目的 SSH 地址</p>
+<blockquote>
+<p>Git 同时支持 SSH 和 HTTP 的方式访问，SSH 可以不用输入密码。</p>
+</blockquote>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_2.png"></p>
+<h4 id="3-1-2-初始化项目"><a href="#3-1-2-初始化项目" class="headerlink" title="3.1.2 初始化项目"></a>3.1.2 初始化项目</h4><p>以下这些操作，需要在项目的目录下进行。请注意如果你的项目文件夹路径包含中文，请使用 TortoiseGit 工具来操作，不要使用 Git Gui，否则会出现错误。</p>
+<h4 id="3-1-3-创建一份排除版本控制的文件类型清单"><a href="#3-1-3-创建一份排除版本控制的文件类型清单" class="headerlink" title="3.1.3 创建一份排除版本控制的文件类型清单"></a>3.1.3 创建一份排除版本控制的文件类型清单</h4><p>在项目中，实际上有很多文件是不需要版本控制的，例如编译过程中生成的中间文件 <code>.obj</code>，IDE 的配置文件（Intellj IDEA 的 <code>.idea</code> 文件夹），编译生成的文件（/out/ 和 /bin/ 文件夹），Python的.pyc文件，像这些类型的文件我们可以设置过滤，避免导致版本库很大。</p>
+<p>我们只要在项目的目录下，放一个 <code>.gitignore</code> 文件就可以了。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_3.png"></p>
+<p>这份 <code>.gitignore</code> 文件，排除了.idea/，out/，bin/ 文件夹，以及所有类型为 .pyc 的文件</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_4.png"></p>
+<p>Github 上面有一个 <a href="https://github.com/github/gitignore" target="_blank" rel="noopener">.gitignore 模板的项目</a></p>
+<p>如果后续开发中有新类型的文件要排除，可以在文件上</p>
+<pre><code>右键 -&gt; TortoisGit -&gt; 删除并添加到忽略列表
+</code></pre><h4 id="3-1-4-创建一份-README-md-文件"><a href="#3-1-4-创建一份-README-md-文件" class="headerlink" title="3.1.4 创建一份 README.md 文件"></a>3.1.4 创建一份 README.md 文件</h4><p>README.md 文件用来填写项目的描述和说明，会直接显示在 Gitlab 的项目文件页面，方便直接查看项目的描述信息。<br>.md 是 Markdown 格式的文件，关于 Markdown，可以查看<a href="https://www.zybuluo.com/mdeditor" target="_blank" rel="noopener">作业部落</a></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_5.png"></p>
+<h4 id="3-1-5-在自己的电脑上创建版本库"><a href="#3-1-5-在自己的电脑上创建版本库" class="headerlink" title="3.1.5 在自己的电脑上创建版本库"></a>3.1.5 在自己的电脑上创建版本库</h4><p>在项目目录下</p>
+<pre><code>右键 -&gt; Git init here
+</code></pre><p>这样就可以在当前文件夹创建一个 Git 版本控制的库，同时创建一个分支 master。</p>
+<blockquote>
+<p>该操作会在这个文件夹下自动创建一个 <code>.git</code> 的隐藏文件夹，所有关于版本控制的信息都放在这个文件夹下面的文件中。</p>
+</blockquote>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_6.png"></p>
+<h4 id="3-1-6-提交代码到本地版本库"><a href="#3-1-6-提交代码到本地版本库" class="headerlink" title="3.1.6 提交代码到本地版本库"></a>3.1.6 提交代码到本地版本库</h4><pre><code>右键 -&gt; Git 提交
+</code></pre><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_7.png"></p>
+<p>选择要提交的文件，并填写描述信息</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_8.png"></p>
+<h4 id="3-1-7-设置-remote"><a href="#3-1-7-设置-remote" class="headerlink" title="3.1.7 设置 remote"></a>3.1.7 设置 remote</h4><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_9.png"></p>
+<p>将项目的 SSH 地址复制过来，并将默认的 remote 名称设置为 origin</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_10.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_11.png"></p>
+<p>如果提示是否关闭获取标签，也选择 No</p>
+<h4 id="3-1-8-推送到服务器上的版本库（push-to-remote）"><a href="#3-1-8-推送到服务器上的版本库（push-to-remote）" class="headerlink" title="3.1.8 推送到服务器上的版本库（push to remote）"></a>3.1.8 推送到服务器上的版本库（push to remote）</h4><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_12.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_13.png"></p>
+<p>如果提示该服务器主机是未知的，请选择是，添加到已知主机列表</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_14.png"></p>
+<blockquote>
+<p>到这一步项目的代码库已创建完成，可以去 Gitlab 上查看项目</p>
+</blockquote>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_15.png"></p>
+<h4 id="3-1-9-创建开发分支"><a href="#3-1-9-创建开发分支" class="headerlink" title="3.1.9 创建开发分支"></a>3.1.9 创建开发分支</h4><p>默认情况下，master 分支在 Gitlab 中是保护分支。保护分支只允许 Master 级别以上的用户才能 push 和 delete。而普通的开发人员（Developer 级别）是无法提交代码到 master分支的。</p>
+<blockquote>
+<p>这么设计的原因是：我们通常将 master 分支作为稳定版本发布的分支，在这个分支上的代码都是最新可用版本。而日常的开发，通常在开发分支 develop 上进行。等到功能稳定后，再由项目的管理员合并到 master 分支上。</p>
+</blockquote>
+<p>请在 Gitlab 中操作</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_16.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_1_17.png"></p>
+<h3 id="3-2-我是开发人员，我要获取和提交代码"><a href="#3-2-我是开发人员，我要获取和提交代码" class="headerlink" title="3.2     我是开发人员，我要获取和提交代码"></a>3.2     我是开发人员，我要获取和提交代码</h3><h4 id="3-2-1-克隆项目"><a href="#3-2-1-克隆项目" class="headerlink" title="3.2.1 克隆项目"></a>3.2.1 克隆项目</h4><p>在一个空白的项目文件夹下，右键 -&gt; Git克隆。</p>
+<blockquote>
+<p>如果你已配好了SSH Key，请输入项目的SSH地址，这样就可以不用再输入密码。Git 支持 SSH 和 HTTP 的方式访问，这里也可以使用 HTTP 地址。</p>
+</blockquote>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_1.png"></p>
+<p>如果提示该服务器主机是未知的，请选择<code>是</code>，添加到已知主机列表</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_2.png"></p>
+<h4 id="3-2-2-检出开发分支"><a href="#3-2-2-检出开发分支" class="headerlink" title="3.2.2 检出开发分支"></a>3.2.2 检出开发分支</h4><p>Git 克隆默认会检出 master 分支，但是我们需要在开发分支中工作。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_3.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_4.png"></p>
+<p>检查当前所在的分支</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_5.png"></p>
+<blockquote>
+<p>注意：切换分支的时候，如果有未提交的内容，需要先提交，否则无法切换分支。如果不想提交可以用贮藏（stash）</p>
+</blockquote>
+<p>到这一步完成，你就可以在本地自由地做开发了</p>
+<h4 id="3-2-3-从服务器的代码库更新数据"><a href="#3-2-3-从服务器的代码库更新数据" class="headerlink" title="3.2.3 从服务器的代码库更新数据"></a>3.2.3 从服务器的代码库更新数据</h4><p>请注意，选择拉取功能，就不需要再执行合并。如果是获取，就需要再执行一次合并。两者的区别在于，拉取省略了合并的细节。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_6.png"></p>
+<h4 id="3-2-4-冲突与解决"><a href="#3-2-4-冲突与解决" class="headerlink" title="3.2.4 冲突与解决"></a>3.2.4 冲突与解决</h4><p>出现无法推送</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_7.png"></p>
+<p>试试拉取，但拉取的时候出现冲突，Merge conflict in test.html</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_8.png"></p>
+<p>这时候需要先解决冲突</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_9.png"></p>
+<blockquote>
+<p>解决方法有两种，一种是打开冲突的文件，手动删除冲突标记</p>
+</blockquote>
+<p>上面那部分的内容是本地代码库，HEAD 所指向分支的代码，下面那部分的内容是服务器端代码库的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">&lt;pre&gt;This is for test.&lt;/pre&gt;</span><br><span class="line">=======</span><br><span class="line">&lt;p&gt;&lt;a&gt;This is for test.&lt;/a&gt;&lt;/p&gt;</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; 5f065407ecf91415f109c882119291f0be37b07a</span><br></pre></td></tr></table></figure>
+<p>只需要决定最后的内容，然后删除冲突标记，例如，只剩下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span>This is for test.<span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_10.png"></p>
+<p>删除完冲突标记后，需要右键空白的地方，点击 Git Add all files now</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_11.png"></p>
+<blockquote>
+<p>另一种方法是使用 TorgoiseGit 的工具</p>
+</blockquote>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_12.png"></p>
+<p>双击冲突的文件</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_13.png"></p>
+<p>点击保存</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_14.png"></p>
+<blockquote>
+<p>不管使用哪种方法，最后都要执行的两步操作是<code>提交</code>和<code>推送</code></p>
+</blockquote>
+<p>提交</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_15.png"></p>
+<p>推送</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_16.png"></p>
+<blockquote>
+<p>当成功推送到服务器的代码库后，冲突才算真正解决</p>
+</blockquote>
+<h4 id="3-2-5-提交和推送代码到服务器的版本库"><a href="#3-2-5-提交和推送代码到服务器的版本库" class="headerlink" title="3.2.5 提交和推送代码到服务器的版本库"></a>3.2.5 提交和推送代码到服务器的版本库</h4><p>请查看 3.2.3 和 3.2.5，注意选择正确的分支。</p>
+<p>请注意：只有项目的 master 权限或者 owner 权限的人才能将代码推送到保护分支中，master 分支默认是保护分支。<br>假如自己没有推送到保护分支的权限时，你可以将代码提交到，如 develop 分支中（或者自己建立的分支中），等 develop 分支的代码稳定后，然后在 Gitlab 的项目地址中，发起一个 merge request 请求，系统会发送邮件通知对应的人执行合并操作。这样就可以将代码合并到保护分支中（如 master 分支）</p>
+<p>发起合并请求</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_17.png"></p>
+<p>选择需要合并的分支，点击“比较分支”（需要先比较分支，可以查看到这两个分支的差异）</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_18.png"></p>
+<p>描述分支合并请求，然后指派给项目的管理员，项目管理员会收到合并请求的邮件</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_2_19.png"></p>
+<h3 id="3-3-分支与标签"><a href="#3-3-分支与标签" class="headerlink" title="3.3     分支与标签"></a>3.3     分支与标签</h3><h4 id="3-3-1-创建分支与标签"><a href="#3-3-1-创建分支与标签" class="headerlink" title="3.3.1 创建分支与标签"></a>3.3.1 创建分支与标签</h4><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_3_1.png"></p>
+<p>分支可以基于任意提交（commit）、已有分支、已有标签中创建。</p>
+<blockquote>
+<p>当你要做实验，或者开发新功能，修正bug时，都可以通过创建分支来安全的处理。这样就不会影响正常的开发，当完成的时候，再合并回去。</p>
+</blockquote>
+<p>创建完分支后，记得切换到正确的分支中去工作。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_3_2.png"></p>
+<p>标签是只读的，通常只用来记录特定的历史时刻，如里程碑版本等，这是为了方便以后检出特定版本的代码。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_3_3.png"></p>
+<h4 id="3-3-2-推送分支或标签到服务器的版本库"><a href="#3-3-2-推送分支或标签到服务器的版本库" class="headerlink" title="3.3.2 推送分支或标签到服务器的版本库"></a>3.3.2 推送分支或标签到服务器的版本库</h4><p>使用推送命令，可以将本地版本库中的分支推送到服务器的版本库中。如果要推送标签，请勾选<code>包含标签</code>。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_3_4.png"></p>
+<h4 id="3-3-3-分支合并"><a href="#3-3-3-分支合并" class="headerlink" title="3.3.3 分支合并"></a>3.3.3 分支合并</h4><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_3_5.png"></p>
+<p>选择要合并到当前工作分支中的分支，例如当前所在的分支是 master，选择 develop，则会将 develop 中的代码合并到 master 中。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/3_3_6.png"></p>
+<blockquote>
+<p>合并分支有可能会出现冲突，解决冲突的方法请参见 3.3.4</p>
+</blockquote>
+<hr>
+<h2 id="4-Gitlab-基本功能"><a href="#4-Gitlab-基本功能" class="headerlink" title="4 Gitlab 基本功能"></a>4 Gitlab 基本功能</h2><h3 id="4-1-为项目写-WiKi"><a href="#4-1-为项目写-WiKi" class="headerlink" title="4.1 为项目写 WiKi"></a>4.1 为项目写 WiKi</h3><p>WiKi 可以放项目的相关说明文档，包括部署手册，使用手册等等。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/4_1_1.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/4_1_2.png"></p>
+<p>Gitlab 的 Wiki 使用了 Markdown 格式（是一种轻量级标记语言，可以使用易读易写的纯文本格式编写出排版漂亮的文档）<br>简易入门请看<a href="https://www.zybuluo.com/mdeditor" target="_blank" rel="noopener">作业部落</a></p>
+<h3 id="4-2-查看项目的标签信息"><a href="#4-2-查看项目的标签信息" class="headerlink" title="4.2 查看项目的标签信息"></a>4.2 查看项目的标签信息</h3><p>在仪表盘中，点击项目</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/4_2_1.png"></p>
+<h2 id="5-高级功能"><a href="#5-高级功能" class="headerlink" title="5 高级功能"></a>5 高级功能</h2><h3 id="5-1-从SVN迁移到Git"><a href="#5-1-从SVN迁移到Git" class="headerlink" title="5.1 从SVN迁移到Git"></a>5.1 从SVN迁移到Git</h3><p>Git 最为重要的特性之一是名为 <code>git svn</code> 的 Subversion 双向桥接工具。该工具把 Git 变成了 Subversion服务的客户端，从而可以将 SVN 的代码库迁移到 Git，同时保留提交日志。</p>
+<p>使用 TortoiseGit 的 Git 克隆，选择从 SVN 版本库</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_1_1.png"></p>
+<p>将代码克隆下来后，再设置下 Git 代码库的 remote，然后推送过去就可以了。</p>
+<h3 id="5-2-从-TFS-迁移到-Git"><a href="#5-2-从-TFS-迁移到-Git" class="headerlink" title="5.2 从 TFS 迁移到 Git"></a>5.2 从 TFS 迁移到 Git</h3><p>需要使用工具 git-tfs，下载地址在这里</p>
+<p><a href="https://github.com/git-tfs/git-tfs/releases" target="_blank" rel="noopener">https://github.com/git-tfs/git-tfs/releases</a></p>
+<p>请注意 v0.20.0 版本不支持 TFS 服务器是 2008 版本，如果是 TFS 2008，请选择 v0.19.2。</p>
+<p>需要将 git-tfs 文件目录添加到环境变量。</p>
+<p>还需要再安装 TFS Team Explorer。如果服务器是TFS 2008版本，必须确保自己的电脑上只能安装 TFS Team Explorer 2008，如果安装了 TFS Team Explorer 2013，则仍然会提示不支持 TFS 2008，无法正确使用 git-tfs。可以切换到虚拟机中，只安装 TFS 2008 中。</p>
+<p>在 Git Bash 中输入如下命令</p>
+<pre><code>git-tfs clone http://192.168.8.25:8080 $/test_project
+</code></pre><p>test_project 为项目在 TFS 上的名称，<a href="http://192.168.8.25:8080" target="_blank" rel="noopener">http://192.168.8.25:8080</a> 为 TFS 的服务器地址。</p>
+<h3 id="5-3-比较版本差异"><a href="#5-3-比较版本差异" class="headerlink" title="5.3 比较版本差异"></a>5.3 比较版本差异</h3><p>右键，Tortoise Git -&gt; 显示日志</p>
+<p>按 Ctrl 鼠标左键选择两个版本，右键选择比较差异</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_3_1.png"></p>
+<p>右键选择要比较差异的文件，选择比较差异</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_3_2.png"></p>
+<p>TortoiseGit 可以比较 Word 文件的差异</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_3_3.png"></p>
+<p>文本文件的差异比较是这样的</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_3_4.png"></p>
+<h3 id="5-4-删除分支"><a href="#5-4-删除分支" class="headerlink" title="5.4 删除分支"></a>5.4 删除分支</h3><p>当我们将分支合并到主分支，或者放弃该分支的时候，可以对分支进行删除操作。</p>
+<p>在 TortoiseGit 上进行分支删除操作非常简单，首先打开 “CheckOut/Switch” 对话框，通过 “Switch to Branch” 更多按钮打开分支列表,或者通过菜单 “Browser References” 打开分支列表（默认该菜单是隐藏的）。选择相应的分支，单击右键，选择删除。</p>
+<p>注意：</p>
+<ol>
+<li>删除分支，既可以删除本地分支，也可以删除远程分支。</li>
+<li>如果删除远程分支，推送后，服务器上对应的分支会被删除。当其他开发者更新数据后，其对应的本地分支并不会删除。</li>
+<li>在删除远程分支的时候，本地分支并不会删除，这也说明了本地分支与远程分支并无从属关系。</li>
+</ol>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_4_1.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_4_2.png"></p>
+<h3 id="5-5-重置代码到以前的版本"><a href="#5-5-重置代码到以前的版本" class="headerlink" title="5.5 重置代码到以前的版本"></a>5.5 重置代码到以前的版本</h3><p>当我们发现当前的代码有问题，想回退到之前的版本时，可以使用重置版本。在项目目录下，</p>
+<pre><code>右键 -&gt; TorgoiseGit -&gt; 显示日志
+</code></pre><p>进入日志信息窗口，选择指定的版本</p>
+<pre><code>右键 -&gt; 重置到这个版本
+</code></pre><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_5_1.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_5_2.png"></p>
+<h4 id="5-5-1-重置类型，soft-mixed-hard-的区别"><a href="#5-5-1-重置类型，soft-mixed-hard-的区别" class="headerlink" title="5.5.1 重置类型，soft, mixed, hard 的区别"></a>5.5.1 重置类型，soft, mixed, hard 的区别</h4><p><strong>soft 不改动工作区和索引</strong></p>
+<p>假设有一些 commits</p>
+<pre><code>A - B - C (master)
+</code></pre><p>HEAD 指向 C， 并且暂存区（stage，或称为 index）matches C.</p>
+<p>当使用 <code>git reset --soft B</code> 时，master 和 HEAD 指向 B，但是依然保留了 C 添加跟踪的文件，此时会将这些文件放入暂存区中，显示为已缓存。同时工作区中修改的文件，显示为未缓存。</p>
+<p><strong>mixed 保持工作区不变，重置索引</strong></p>
+<p>当使用 <code>git reset --mixed B</code> 时，master 和 HEAD 指向 B，这时候 C 添加跟踪的文件仍然会在，但是会显示为未缓存（不是版本控制），而当前工作目录中的修改内容，仍然会在，显示未缓存的状态</p>
+<p>（如果不知道怎么选，默认使用 mixed）</p>
+<p><strong>hard 重置索引和工作区（丢弃所有本地变更）</strong></p>
+<p>当使用 <code>git reset --hard B</code> 时，C 添加跟踪的文件，以及当前工作目录中的修改内容，都会丢失。</p>
+<hr>
+<h2 id="6-Eclipse-中使用-EGit"><a href="#6-Eclipse-中使用-EGit" class="headerlink" title="6 Eclipse 中使用 EGit"></a>6 Eclipse 中使用 EGit</h2><h3 id="6-1-检出项目"><a href="#6-1-检出项目" class="headerlink" title="6.1 检出项目"></a>6.1 检出项目</h3><p>File/Import</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_1.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_2.png">    </p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_3.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_4.png">    </p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_5.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_6.png">    </p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_7.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_8.png">    </p>
+<h3 id="6-2-更新和推送数据"><a href="#6-2-更新和推送数据" class="headerlink" title="6.2 更新和推送数据"></a>6.2 更新和推送数据</h3><h4 id="6-2-1-获取数据（fetch）"><a href="#6-2-1-获取数据（fetch）" class="headerlink" title="6.2.1 获取数据（fetch）"></a>6.2.1 获取数据（fetch）</h4><pre><code>项目右键 -&gt; Team -&gt; Remote -&gt; Fetch From
+</code></pre><p>Gerrit 是基于 Git 的代码审核软件</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_9.png"></p>
+<p>选择远程代码库</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_10.png"></p>
+<p>自定义选择要获取的远程分支，该图是远程仓库中的所有</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_11.png"></p>
+<p>fetch 只是把服务端的代码更新，放到本地的代码库中，还需要与本地分支合并，才能真正将代码更新到工作目录中。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_12.png"></p>
+<p>分支的合并也是在这里操作，注意上图中，当前是 master，然后要把 origin/master 合并到 master 中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">squash：不创建新的 commit</span><br><span class="line">pull = fetch + merge</span><br></pre></td></tr></table></figure>
+<h4 id="6-2-2-推送（push）"><a href="#6-2-2-推送（push）" class="headerlink" title="6.2.2 推送（push）"></a>6.2.2 推送（push）</h4><p>如果要删除分支，也可以在这里操作，Add delete ref specification</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_13.png"></p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_14.png"></p>
+<h4 id="6-2-3-Fetch-from-Upstream-Push-to-Upstream"><a href="#6-2-3-Fetch-from-Upstream-Push-to-Upstream" class="headerlink" title="6.2.3 Fetch from Upstream, Push to Upstream"></a>6.2.3 Fetch from Upstream, Push to Upstream</h4><p>Git 可以同时设置多个远程分支，这里的 Upstream 可以简单的理解成是默认的远程分支，因为代码的版本历史，就像溪流不断向前，因此把代码源称为 Upstream（因为本地的代码 clone 自这里）。</p>
+<h3 id="6-3-解决冲突"><a href="#6-3-解决冲突" class="headerlink" title="6.3 解决冲突"></a>6.3 解决冲突</h3><pre><code>选择 Team -&gt; Merge Tool
+</code></pre><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_15.png"></p>
+<ul>
+<li>第一项是将GIT自动合并过的文件和服务器端文件进行对比</li>
+<li>第二项是用本地最新版本的文件和服务器端文件进行对比，建议用此项</li>
+</ul>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_16.png"></p>
+<p>修改左边的本地数据，修改好后 <code>Ctrl+S</code> 保存文件就可以了。这时候再次查看文件，冲突标记已经自动去掉。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;  HEAD</span><br><span class="line"></span><br><span class="line">=======</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; remote</span><br></pre></td></tr></table></figure>
+<p>然后右键点击此冲突文件</p>
+<pre><code>选择 Team -&gt; Add to index 
+</code></pre><p>再次将文件加入索引控制，此时文件已经不是冲突状态，并且可以进行提交并 push 到服务器端。一定要重新 commit，并 push 到服务端，才算真正解决冲突。</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_17.png"></p>
+<h3 id="6-4-分支和标签"><a href="#6-4-分支和标签" class="headerlink" title="6.4 分支和标签"></a>6.4 分支和标签</h3><p>创建分支</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_18.png"></p>
+<p>创建标签</p>
+<p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_19.png"></p>
+<h3 id="6-5-reset-到某个版本"><a href="#6-5-reset-到某个版本" class="headerlink" title="6.5 reset 到某个版本"></a>6.5 reset 到某个版本</h3><p><img data-original="/uploads/post_img/2016/02/git_and_gitlab_guide/5_6_20.png"></p>
+</span>
+      
+    </div>
+
+    
+      
+<div class="reward-wrapper container">
+  <div class="reward-comment">予人赞赏，手留余香</div>
+  <a class="reward-btn" data-track="点击赞赏" href="#reward-qr">赞赏支持</a>
+  <div id="reward-qr" style="display: none;" class="clearfix">
+    <div class="reward-thanks">感谢您的支持</div>
+    
+    <div class="wechat">
+      <a href="/uploads/wechat_pay.png" class="fancybox">
+        <img src="/uploads/wechat_pay.png" alt="restran WeChat Pay" class="skip" title="微信打赏">
+      </a>
+    </div>
+    
+
+    
+    <div class="alipay">
+      <a href="/uploads/alipay.png" class="fancybox">
+        <img src="/uploads/alipay.png" alt="restran Alipay" class="skip" title="支付宝打赏">
+      </a>
+    </div>
+    
+  </div>
+<div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag">#Git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/29/web-develop-share/" rel="prev">Web 开发技术分享</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/22/git-recovery/" rel="next">Git 代码版本还原方法</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-关于-Git-你应该知道的东西"><span class="nav-text">1. 关于 Git 你应该知道的东西</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-一些术语"><span class="nav-text">1.1 一些术语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-工作流程"><span class="nav-text">1.2 工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Gitlab-可以做什么"><span class="nav-text">1.3 Gitlab 可以做什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-安装与配置"><span class="nav-text">2. 安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-设置-TortoiseGit-中文语言"><span class="nav-text">2.1 设置 TortoiseGit 中文语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-设置用户名和邮箱"><span class="nav-text">2.2 设置用户名和邮箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-设置保存密码"><span class="nav-text">2.3 设置保存密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-配置-SSH-Key"><span class="nav-text">2.4 配置 SSH Key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-生成-SSH-Key"><span class="nav-text">2.5 生成 SSH Key</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-1-在-Git-Bash-命令行下生成"><span class="nav-text">2.5.1 在 Git Bash 命令行下生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-2-在可视化工具下生成"><span class="nav-text">2.5.2 在可视化工具下生成</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-在-Gitlab-上配置-SSH-Key"><span class="nav-text">2.6 在 Gitlab 上配置 SSH Key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-配置-Gitlab"><span class="nav-text">2.7 配置 Gitlab</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-7-1-上传个人头像"><span class="nav-text">2.7.1 上传个人头像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-7-2-设置邮件通知"><span class="nav-text">2.7.2 设置邮件通知</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Git-基本功能简介"><span class="nav-text">3. Git 基本功能简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-我是项目的创建者，我要创建项目"><span class="nav-text">3.1 我是项目的创建者，我要创建项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-在-Gitlab-上执行创建新项目"><span class="nav-text">3.1.1 在 Gitlab 上执行创建新项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-初始化项目"><span class="nav-text">3.1.2 初始化项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3-创建一份排除版本控制的文件类型清单"><span class="nav-text">3.1.3 创建一份排除版本控制的文件类型清单</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-4-创建一份-README-md-文件"><span class="nav-text">3.1.4 创建一份 README.md 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-5-在自己的电脑上创建版本库"><span class="nav-text">3.1.5 在自己的电脑上创建版本库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-6-提交代码到本地版本库"><span class="nav-text">3.1.6 提交代码到本地版本库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-7-设置-remote"><span class="nav-text">3.1.7 设置 remote</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-8-推送到服务器上的版本库（push-to-remote）"><span class="nav-text">3.1.8 推送到服务器上的版本库（push to remote）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-9-创建开发分支"><span class="nav-text">3.1.9 创建开发分支</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-我是开发人员，我要获取和提交代码"><span class="nav-text">3.2     我是开发人员，我要获取和提交代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-克隆项目"><span class="nav-text">3.2.1 克隆项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-检出开发分支"><span class="nav-text">3.2.2 检出开发分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-从服务器的代码库更新数据"><span class="nav-text">3.2.3 从服务器的代码库更新数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-4-冲突与解决"><span class="nav-text">3.2.4 冲突与解决</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-5-提交和推送代码到服务器的版本库"><span class="nav-text">3.2.5 提交和推送代码到服务器的版本库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-分支与标签"><span class="nav-text">3.3     分支与标签</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-创建分支与标签"><span class="nav-text">3.3.1 创建分支与标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-推送分支或标签到服务器的版本库"><span class="nav-text">3.3.2 推送分支或标签到服务器的版本库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-3-分支合并"><span class="nav-text">3.3.3 分支合并</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Gitlab-基本功能"><span class="nav-text">4 Gitlab 基本功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-为项目写-WiKi"><span class="nav-text">4.1 为项目写 WiKi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-查看项目的标签信息"><span class="nav-text">4.2 查看项目的标签信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-高级功能"><span class="nav-text">5 高级功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-从SVN迁移到Git"><span class="nav-text">5.1 从SVN迁移到Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-从-TFS-迁移到-Git"><span class="nav-text">5.2 从 TFS 迁移到 Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-比较版本差异"><span class="nav-text">5.3 比较版本差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-删除分支"><span class="nav-text">5.4 删除分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-重置代码到以前的版本"><span class="nav-text">5.5 重置代码到以前的版本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-1-重置类型，soft-mixed-hard-的区别"><span class="nav-text">5.5.1 重置类型，soft, mixed, hard 的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Eclipse-中使用-EGit"><span class="nav-text">6 Eclipse 中使用 EGit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-检出项目"><span class="nav-text">6.1 检出项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-更新和推送数据"><span class="nav-text">6.2 更新和推送数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-1-获取数据（fetch）"><span class="nav-text">6.2.1 获取数据（fetch）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-2-推送（push）"><span class="nav-text">6.2.2 推送（push）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-3-Fetch-from-Upstream-Push-to-Upstream"><span class="nav-text">6.2.3 Fetch from Upstream, Push to Upstream</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-解决冲突"><span class="nav-text">6.3 解决冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-分支和标签"><span class="nav-text">6.4 分支和标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-reset-到某个版本"><span class="nav-text">6.5 reset 到某个版本</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2016/02/23/git-and-gitlab-guide/';
+      var disqus_title = 'Git &amp; Gitlab 使用指南';
+      var disqus_url = 'http://www.restran.net/2016/02/23/git-and-gitlab-guide/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

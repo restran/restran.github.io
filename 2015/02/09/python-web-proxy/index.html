@@ -1,0 +1,703 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="因为一个奇怪的需求，使用 Python 和 Tornado 框架实现了一个 Web 站点的反向代理。实现的功能是这样：  假设这个反向代理网站的地址是 http://www.example.com 访问 http://www.example.com/.site.backend_site0/ 访问的是 backend_site0，这个网站可以是部署在内网的某个站点（外网当然也是可以）。 访问 htt">
+<meta name="keywords" content="python,web,proxy,tornado,开源,代理,http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 Tornado 实现的 Web 站点反向代理">
+<meta property="og:url" content="http://www.restran.net/2015/02/09/python-web-proxy/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="因为一个奇怪的需求，使用 Python 和 Tornado 框架实现了一个 Web 站点的反向代理。实现的功能是这样：  假设这个反向代理网站的地址是 http://www.example.com 访问 http://www.example.com/.site.backend_site0/ 访问的是 backend_site0，这个网站可以是部署在内网的某个站点（外网当然也是可以）。 访问 htt">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-26T02:23:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于 Tornado 实现的 Web 站点反向代理">
+<meta name="twitter:description" content="因为一个奇怪的需求，使用 Python 和 Tornado 框架实现了一个 Web 站点的反向代理。实现的功能是这样：  假设这个反向代理网站的地址是 http://www.example.com 访问 http://www.example.com/.site.backend_site0/ 访问的是 backend_site0，这个网站可以是部署在内网的某个站点（外网当然也是可以）。 访问 htt">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> 基于 Tornado 实现的 Web 站点反向代理 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              基于 Tornado 实现的 Web 站点反向代理
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2015-02-09T00:00:00+08:00" content="2015-02-09">
+            2015-02-09
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 1,118字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/Python/" itemprop="url" rel="index">
+                  <span itemprop="name">Python</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2015/02/09/python-web-proxy/"class="leancloud_visitors" data-flag-title="基于 Tornado 实现的 Web 站点反向代理">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/02/09/python-web-proxy/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/02/09/python-web-proxy/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>因为一个奇怪的需求，使用 Python 和 Tornado 框架实现了一个 Web 站点的反向代理。实现的功能是这样：</p>
+<ol>
+<li>假设这个反向代理网站的地址是 <a href="http://www.example.com" target="_blank" rel="noopener">http://www.example.com</a></li>
+<li>访问 <a href="http://www.example.com/.site.backend_site0/" target="_blank" rel="noopener">http://www.example.com/.site.backend_site0/</a> 访问的是 backend_site0，这个网站可以是部署在内网的某个站点（外网当然也是可以）。</li>
+<li>访问 <a href="http://www.example.com/.site.backend_site1/" target="_blank" rel="noopener">http://www.example.com/.site.backend_site1/</a> 访问另外一个站点 backend_site1</li>
+</ol>
+<p>怎么通过一个公共的站点反向代理访问后端的多个站点，当时的讨论帖在<a href="http://www.v2ex.com/t/146552#reply24" target="_blank" rel="noopener">这里</a>，我采用的是：</p>
+<ol>
+<li>在url中添加前缀 <code>.site.</code>，第一次访问的时候使用 <a href="http://www.example.com/.site.backend_site/" target="_blank" rel="noopener">http://www.example.com/.site.backend_site/</a></li>
+<li>服务端识别出请求的后端站点 <code>backend_site</code> 后，会设置 Cookie，<code>.site = backend_site</code>，后续的访问会根据Cookie来识别出来。</li>
+<li>当访问另外一个网站 <a href="http://www.example.com/.site.backend_site1/" target="_blank" rel="noopener">http://www.example.com/.site.backend_site1/</a> 这时候，服务端会清除旧的 Cookie，并设置新的 Cookie，<code>.site = backend_site1</code>，这样就切换到新的站点 <code>backend_site1</code></li>
+<li>启用页面内容替换，保证页面内的内网IP地址转换成反向代理的地址。例如后端站点 backend_site0 的地址是 <a href="http://10.1.2.3/" target="_blank" rel="noopener">http://10.1.2.3/</a> 页面内有链接 <a href="http://10.1.2.3/img/a.png" target="_blank" rel="noopener">http://10.1.2.3/img/a.png</a> 将其替换成  /.site.backend_site0/img/a.png</li>
+</ol>
+<p>项目的代码开源在 Github 上，有需要的可以自取。<br><a href="https://github.com/restran/web_proxy" target="_blank" rel="noopener">https://github.com/restran/web_proxy</a></p>
+<h2 id="环境需求"><a href="#环境需求" class="headerlink" title="环境需求"></a>环境需求</h2><p>Python 2.7<br>Tornado 4.0</p>
+<h2 id="所代理的后端网站注意事项"><a href="#所代理的后端网站注意事项" class="headerlink" title="所代理的后端网站注意事项"></a>所代理的后端网站注意事项</h2><ol>
+<li><p>url 的前缀不应出现 /.site.<br> 由于反向代理采用url前缀来区分后端网站，如 /.site.example/，表示后端站点example。<br> 例如以下为禁用的url：<br> /.site./<br> /.site.example/<br> /.site.example/user/login/</p>
+</li>
+<li><p>cookies 中不应出现以 .site 命名的 cookie 值，这个 cookie 是用来标识当前访问的后端站点</p>
+</li>
+</ol>
+<h2 id="CentOS-7-0-部署"><a href="#CentOS-7-0-部署" class="headerlink" title="CentOS 7.0 部署"></a>CentOS 7.0 部署</h2><p>Tornado 的部署可以参照<a href="http://mirrors.segmentfault.com/itt2zh/ch8.html" target="_blank" rel="noopener">这里</a>的教程。通过启动多个 Tornado 实例，来避免调用到同步函数块，导致阻塞住，无法响应其他用户的请求。使用 supervisor 来启动 Tornado Server，并使用 Nginx 作为 Web 服务器，反向代理后端的这些 Tornado 实例。</p>
+<h3 id="修改配置文件-settings-py"><a href="#修改配置文件-settings-py" class="headerlink" title="修改配置文件 settings.py"></a>修改配置文件 settings.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 转发到后端需要代理的网站的地址列表</span></span><br><span class="line">forward_list = &#123;</span><br><span class="line">    <span class="string">"baidu"</span>: BackendSite(<span class="string">'baidu'</span>, <span class="string">'http://www.baidu.com'</span>, <span class="string">'www.baidu.com'</span>, []),</span><br><span class="line">    <span class="string">"douban"</span>: BackendSite(<span class="string">'douban'</span>, <span class="string">'http://www.douban.com'</span>, <span class="string">'www.douban.com'</span>, [</span><br><span class="line">        <span class="comment"># 使用正则表达式替换页面内容，参数分别是</span></span><br><span class="line">        <span class="comment"># 需要替换的URI的正则表达式，源字符串的正则表达式，替换后的字符串 </span></span><br><span class="line">        SubsFilterRules(<span class="string">'.'</span>, <span class="string">r'http://www\.douban\.com'</span>, <span class="string">'/.site.douban'</span>),</span><br><span class="line">        SubsFilterRules(<span class="string">'.'</span>, <span class="string">r'http://img3\.douban\.com'</span>, <span class="string">'/.site.img3.douban'</span>),</span><br><span class="line">        SubsFilterRules(<span class="string">'.'</span>, <span class="string">r'http://img5\.douban\.com'</span>, <span class="string">'/.site.img5.douban'</span>),</span><br><span class="line">    ]),</span><br><span class="line">    <span class="string">"img3.douban"</span>: BackendSite(<span class="string">'douban'</span>, <span class="string">'http://img3.douban.com'</span>, <span class="string">'img3.douban.com'</span>, []),</span><br><span class="line">    <span class="string">"img5.douban"</span>: BackendSite(<span class="string">'douban'</span>, <span class="string">'http://img5.douban.com'</span>, <span class="string">'img5.douban.com'</span>, []),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用-supervisor-启动-Tornado-Server"><a href="#使用-supervisor-启动-Tornado-Server" class="headerlink" title="使用 supervisor 启动 Tornado Server"></a>使用 supervisor 启动 Tornado Server</h3><p>设置配置文件</p>
+<pre><code>vim /etc/supervisord.conf
+</code></pre><p>输入如下信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[program:tornado_server_9001]</span><br><span class="line"><span class="built_in">command</span>=python /home/python/web_proxy/proxy.py --port=9001</span><br><span class="line">directory=/home/python/web_proxy</span><br><span class="line">autorestart=<span class="literal">true</span></span><br><span class="line">redirect_stderr=<span class="literal">true</span></span><br><span class="line">stdout_logfile = /var/<span class="built_in">log</span>/supervisord/web_proxy.log</span><br><span class="line"></span><br><span class="line">[program:tornado_server_9002]</span><br><span class="line"><span class="built_in">command</span>=python /home/python/web_proxy/proxy.py --port=9002</span><br><span class="line">directory=/home/python/web_proxy</span><br><span class="line">autorestart=<span class="literal">true</span></span><br><span class="line">redirect_stderr=<span class="literal">true</span></span><br><span class="line">stdout_logfile = /var/<span class="built_in">log</span>/supervisord/web_proxy.log</span><br><span class="line"></span><br><span class="line">[program:tornado_server_9003]</span><br><span class="line"><span class="built_in">command</span>=python /home/python/web_proxy/proxy.py --port=9003</span><br><span class="line">directory=/home/python/web_proxy</span><br><span class="line">autorestart=<span class="literal">true</span></span><br><span class="line">redirect_stderr=<span class="literal">true</span></span><br><span class="line">stdout_logfile = /var/<span class="built_in">log</span>/supervisord/web_proxy.log</span><br></pre></td></tr></table></figure>
+<p>重新加载配置文件</p>
+<pre><code>supervisorctl reload
+</code></pre><p>重新启动所有程序</p>
+<pre><code>sudo supervisorctl restart all
+</code></pre><h3 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h3><p>添加 nginx 配置文件</p>
+<pre><code>vim /etc/nginx/conf.d/web_proxy.conf
+</code></pre><p>输入如下配置信息</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">upstream</span> tornadoes &#123;</span><br><span class="line">    <span class="attribute">server</span> <span class="number">127.0.0.1:9001</span>;</span><br><span class="line">    <span class="attribute">server</span> <span class="number">127.0.0.1:9002</span>;</span><br><span class="line">    <span class="attribute">server</span> <span class="number">127.0.0.1:9003</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">9000</span>;</span><br><span class="line">    <span class="attribute">server_name</span> your_server_name; <span class="comment"># 例如输入服务器IP</span></span><br><span class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="comment"># 设置允许压缩的页面最小字节数，页面字节数从header头得content-length中进行获取。默认值是0，不管页面多大都压缩。建议设置成大于1k的字节数，小于1k可能会越压越大。</span></span><br><span class="line">    <span class="attribute">gzip_min_length</span> <span class="number">1000</span>;</span><br><span class="line">    <span class="attribute">gzip_buffers</span> <span class="number">4</span> <span class="number">16k</span>;</span><br><span class="line">    <span class="attribute">gzip_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">    <span class="comment"># 1~9，默认为1，数值越大，压缩率越高，CPU占用越多，时间越久</span></span><br><span class="line">    <span class="attribute">gzip_comp_level</span> <span class="number">3</span>;</span><br><span class="line">    <span class="attribute">gzip_vary</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="comment"># 禁用对 IE 6 使用 gzip 压缩</span></span><br><span class="line">    <span class="attribute">gzip_disable</span> <span class="string">"MSIE [1-6]\."</span>;</span><br><span class="line">    <span class="attribute">gzip_types</span> text/plain text/html text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript application/json;</span><br><span class="line"></span><br><span class="line">    <span class="comment">## Individual nginx logs</span></span><br><span class="line">    <span class="attribute">access_log</span>  /var/log/nginx/web_proxy_access.log;</span><br><span class="line">    <span class="attribute">error_log</span>   /var/log/nginx/web_proxy_error.log;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass_header</span> Server;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$http_host</span>;</span><br><span class="line">        <span class="attribute">proxy_redirect</span> <span class="literal">off</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Scheme <span class="variable">$scheme</span>;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://tornadoes;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重启 nginx</p>
+<pre><code>service nginx restart
+</code></pre><h2 id="todo"><a href="#todo" class="headerlink" title="todo"></a>todo</h2><p>URL 访问控制，访问列表</p>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+            <a href="/tags/Web/" rel="tag">#Web</a>
+          
+            <a href="/tags/Proxy/" rel="tag">#Proxy</a>
+          
+            <a href="/tags/Tornado/" rel="tag">#Tornado</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/12/python-postfix-email/" rel="prev">Python 使用 Postfix 发送邮件</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/28/csharp-chinese-calendar/" rel="next">C# 中带有中国农历的日期选择控件</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境需求"><span class="nav-number">1.</span> <span class="nav-text">环境需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#所代理的后端网站注意事项"><span class="nav-number">2.</span> <span class="nav-text">所代理的后端网站注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-7-0-部署"><span class="nav-number">3.</span> <span class="nav-text">CentOS 7.0 部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改配置文件-settings-py"><span class="nav-number">3.1.</span> <span class="nav-text">修改配置文件 settings.py</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-supervisor-启动-Tornado-Server"><span class="nav-number">3.2.</span> <span class="nav-text">使用 supervisor 启动 Tornado Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-nginx"><span class="nav-number">3.3.</span> <span class="nav-text">配置 nginx</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#todo"><span class="nav-number">4.</span> <span class="nav-text">todo</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2015/02/09/python-web-proxy/';
+      var disqus_title = '基于 Tornado 实现的 Web 站点反向代理';
+      var disqus_url = 'http://www.restran.net/2015/02/09/python-web-proxy/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

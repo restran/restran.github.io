@@ -1,0 +1,905 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="这篇文章是用来记录我使用 Linux 操作系统时常用的一些命令、一些笔记、以及遇到的一些问题的解决方法。Linux 在这里指代 CentOS 和 Ubuntu，因为我目前只使用这两个发行版。  不保证以下操作方法是最佳实践，也不保证内容完整，我将会不定期更新。 文件操作相关查找指定的文件名12345678# 全盘查找find / -name your_file_name    # 当前目录下查找f">
+<meta name="keywords" content="linux,使用帮助,文件管理,命令,进程管理,centos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 踩坑记">
+<meta property="og:url" content="http://www.restran.net/2015/10/19/linux-practice-notes/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="这篇文章是用来记录我使用 Linux 操作系统时常用的一些命令、一些笔记、以及遇到的一些问题的解决方法。Linux 在这里指代 CentOS 和 Ubuntu，因为我目前只使用这两个发行版。  不保证以下操作方法是最佳实践，也不保证内容完整，我将会不定期更新。 文件操作相关查找指定的文件名12345678# 全盘查找find / -name your_file_name    # 当前目录下查找f">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-30T12:17:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 踩坑记">
+<meta name="twitter:description" content="这篇文章是用来记录我使用 Linux 操作系统时常用的一些命令、一些笔记、以及遇到的一些问题的解决方法。Linux 在这里指代 CentOS 和 Ubuntu，因为我目前只使用这两个发行版。  不保证以下操作方法是最佳实践，也不保证内容完整，我将会不定期更新。 文件操作相关查找指定的文件名12345678# 全盘查找find / -name your_file_name    # 当前目录下查找f">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Linux 踩坑记 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Linux 踩坑记
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2015-10-19T00:00:00+08:00" content="2015-10-19">
+            2015-10-19
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 3,774字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/Linux/" itemprop="url" rel="index">
+                  <span itemprop="name">Linux</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2015/10/19/linux-practice-notes/"class="leancloud_visitors" data-flag-title="Linux 踩坑记">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/10/19/linux-practice-notes/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/10/19/linux-practice-notes/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>这篇文章是用来记录我使用 Linux 操作系统时常用的一些命令、一些笔记、以及遇到的一些问题的解决方法。Linux 在这里指代 CentOS 和 Ubuntu，因为我目前只使用这两个发行版。 </p>
+<p>不保证以下操作方法是最佳实践，也不保证内容完整，我将会不定期更新。</p>
+<h2 id="文件操作相关"><a href="#文件操作相关" class="headerlink" title="文件操作相关"></a>文件操作相关</h2><h3 id="查找指定的文件名"><a href="#查找指定的文件名" class="headerlink" title="查找指定的文件名"></a>查找指定的文件名</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 全盘查找</span><br><span class="line">find / -name your_file_name</span><br><span class="line">    </span><br><span class="line"># 当前目录下查找</span><br><span class="line">find . -name your_file_name</span><br><span class="line"></span><br><span class="line"># 按模式匹配查找</span><br><span class="line">find / -name &quot;*.log&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="查看隐藏文件"><a href="#查看隐藏文件" class="headerlink" title="查看隐藏文件"></a>查看隐藏文件</h3><p>以<code>.</code>开头的文件或文件夹是隐藏文件，默认不显示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 显示所有文件（包含隐藏文件）</span><br><span class="line">ls -a</span><br><span class="line"># 列表方式查看，可以查看文件权限</span><br><span class="line">ls -l</span><br><span class="line">ls -al</span><br><span class="line"># 只显示隐藏文件</span><br><span class="line">l.</span><br><span class="line"># 或者</span><br><span class="line">ls -d .*</span><br></pre></td></tr></table></figure>
+<p>必须有文件的<code>执行</code>权限，用 ls 命令的时候才能看见文件。如果是 Ubuntu，按 Ctrl+H 就可以显示隐藏文件，再按一次则隐藏。</p>
+<h3 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h3><pre><code>mv file_path new_file_path
+# 例如
+mv file_a /home/file_a
+</code></pre><h3 id="复制文件"><a href="#复制文件" class="headerlink" title="复制文件"></a>复制文件</h3><pre><code>cp file_a file_b
+</code></pre><h3 id="输出文件内容"><a href="#输出文件内容" class="headerlink" title="输出文件内容"></a>输出文件内容</h3><pre><code>cat /path/to/file/name
+</code></pre><h3 id="zip-unzip"><a href="#zip-unzip" class="headerlink" title="zip unzip"></a>zip unzip</h3><p>把 mydata.zi p解压到 mydatabak 目录里面</p>
+<pre><code>unzip mydata.zip -d mydatabak
+</code></pre><h3 id="批量删除-DS-Store-文件"><a href="#批量删除-DS-Store-文件" class="headerlink" title="批量删除 .DS_Store 文件"></a>批量删除 .DS_Store 文件</h3><p>删除指定目录下所有的 .DS_Store 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo find /home/path -name &quot;.DS_Store&quot; -type f -delete</span><br></pre></td></tr></table></figure>
+<h3 id="修改文件的拥有者和权限"><a href="#修改文件的拥有者和权限" class="headerlink" title="修改文件的拥有者和权限"></a>修改文件的拥有者和权限</h3><p>修改文件的拥有者</p>
+<pre><code>chown [用户名] [文件名] 
+</code></pre><p>如果是修改所属的用户组使用 <code>chgrp</code></p>
+<p>修改文件夹的拥有者</p>
+<pre><code>chown -R [用户名] [文件夹] 
+chown -R user /tmp/folder
+</code></pre><h3 id="查看硬盘及内存空间"><a href="#查看硬盘及内存空间" class="headerlink" title="查看硬盘及内存空间"></a>查看硬盘及内存空间</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看内存及swap大小</span></span><br><span class="line">free -m</span><br><span class="line"><span class="comment"># 查看当前文件夹下所有文件大小（包括子文件夹）</span></span><br><span class="line">du -sh</span><br><span class="line"><span class="comment"># 查看指定文件夹下所有文件大小（包括子文件夹）</span></span><br><span class="line">du -h ftp</span><br><span class="line"><span class="comment"># 查看指定文件夹大小</span></span><br><span class="line">du -hs ftp</span><br><span class="line"><span class="comment"># 查看磁盘剩余空间</span></span><br><span class="line">df -hl</span><br><span class="line"><span class="comment"># 查看每个根路径的分区大小</span></span><br><span class="line">df -h</span><br><span class="line"><span class="comment"># 返回该目录的大小</span></span><br><span class="line">du -sh [目录名]</span><br><span class="line"><span class="comment"># 返回该文件夹总M数</span></span><br><span class="line">du -sm [文件夹]</span><br></pre></td></tr></table></figure>
+<h3 id="修改默认编辑器"><a href="#修改默认编辑器" class="headerlink" title="修改默认编辑器"></a>修改默认编辑器</h3><p>Ubuntu 默认使用 nano，如果不习惯可以使用这个命令修改</p>
+<pre><code>select-editor
+</code></pre><h2 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h2><p>Linux查看当前系统登录用户、登录日志、登录错误日志<br>查看当前系统的登录用户</p>
+<pre><code>w
+who
+</code></pre><p>查看成功登录历史记录</p>
+<pre><code>last
+</code></pre><p>查看尝试登录失败的历史记录</p>
+<pre><code>lastb
+</code></pre><p>显示每个用户最近一次登录成功的信息</p>
+<pre><code>lastlog
+</code></pre><p>Ubuntu 切换到 root</p>
+<pre><code>sudo su
+</code></pre><p>Ubuntu 修改 root 密码</p>
+<pre><code>sudo passwd root
+</code></pre><p>修改完毕以后，执行 su root 命令时，输入新的 root 密码即可</p>
+<p>在 root 下，可以切换到其他用户</p>
+<pre><code>su - usernmae
+</code></pre><h3 id="用户创建和删除"><a href="#用户创建和删除" class="headerlink" title="用户创建和删除"></a>用户创建和删除</h3><p>创建用户（useradd/adduser）：</p>
+<pre><code>useradd [所要创建的用户名] -p [加密后的密码]
+# 会自动创建目录，会提示设置密码
+adduser [所要创建的用户名] 
+</code></pre><p>删除用户</p>
+<pre><code>userdel [-r] [要删除的用户的名称]
+</code></pre><p>修改用户密码</p>
+<pre><code>passwd [用户名]
+</code></pre><p>创建用户，但是不创建 home 目录</p>
+<pre><code>sudo useradd -M username
+</code></pre><h3 id="用户组管理"><a href="#用户组管理" class="headerlink" title="用户组管理"></a>用户组管理</h3><p>添加用户到组里面</p>
+<pre><code>usermod -a -G apache username
+</code></pre><p>创建用户组</p>
+<pre><code>groupadd developers
+</code></pre><h3 id="Ubuntu-Home-目录加密问题"><a href="#Ubuntu-Home-目录加密问题" class="headerlink" title="Ubuntu Home 目录加密问题"></a>Ubuntu Home 目录加密问题</h3><p>如果在安装 Ubuntu 的时候，选择加密 home 目录，在重启的时候，可能会遇到需要解密 home 目录的问题，这时在 home 目录下的用户名文件夹中，只能看到两个文件。提示要运行 <code>ecryptfs-mount-private</code> 来解密文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Access-Your-Private-Data.desktop  README.txt</span><br></pre></td></tr></table></figure>
+<p>使用方法如下</p>
+<pre><code>ecryptfs-mount-private /home/.ecryptfs/your_username/.Private
+</code></pre><p>执行的时候需要输入用户密码，然后文件就会解密了</p>
+<h2 id="日志相关"><a href="#日志相关" class="headerlink" title="日志相关"></a>日志相关</h2><p>实时显示日志文件，如果日志文件有更新，会自动滚动到文件最后，并实时显示</p>
+<pre><code># 默认查看最新的10行
+tail -f /var/log/nginx/access.log
+# 查看20行
+tail -n 20 -f /var/log/nginx/access.log
+</code></pre><p>清除登录痕迹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 清除登录系统失败的记录</span><br><span class="line">echo &quot;&quot; &gt; /var/log/btmp</span><br><span class="line"># 清除登录系统成功的记录</span><br><span class="line">echo &quot;&quot; &gt;/var/log/wtmp</span><br><span class="line"># 清除历史执行命令</span><br><span class="line">history -c</span><br></pre></td></tr></table></figure>
+<h2 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h2><p>nslookup 指定 DNS 服务器</p>
+<pre><code>nslookup example.com 8.8.8.8
+</code></pre><p>查看端口占用情况</p>
+<pre><code>netstat -ntlp
+</code></pre><p>网卡配置</p>
+<pre><code># 查看网卡信息
+ifconfig 
+
+# 查看网卡配置
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+</code></pre><h2 id="进程相关"><a href="#进程相关" class="headerlink" title="进程相关"></a>进程相关</h2><p>查询指定端口的进程id，如 8108</p>
+<p>grep 是搜索，<code>|</code> 是管道，下面命令的意思是将 netstat -ap 的结果作为下一个命令的输入</p>
+<pre><code>sudo netstat -ap | grep 8108
+</code></pre><p>或者 </p>
+<pre><code>sudo ps -aux | grep 8108
+</code></pre><p>杀死指定进程</p>
+<pre><code>sudo kill xxx
+</code></pre><p>查看指定用户名启动的进程</p>
+<pre><code>ps -u username
+</code></pre><p>指定用户来运行某个程序，当前必须要是 root</p>
+<pre><code>sudo -u username ./run.sh
+</code></pre><p>查看当前进程信息，显示完整的命令</p>
+<pre><code>ps -ef
+</code></pre><p>使用 ax 和 aux 可以查看详细信息</p>
+<pre><code>ps ax | grep uwsgi
+ps aux | grep uwsgi
+</code></pre><h3 id="强制杀死进程"><a href="#强制杀死进程" class="headerlink" title="强制杀死进程"></a>强制杀死进程</h3><p>pid_num 是进程号</p>
+<pre><code>kill -s 9 pid_num
+pkill -9 pid_num
+</code></pre><h3 id="强制杀死所有-uwsgi-进程"><a href="#强制杀死所有-uwsgi-进程" class="headerlink" title="强制杀死所有 uwsgi 进程"></a>强制杀死所有 uwsgi 进程</h3><p><a href="http://serverfault.com/questions/565903/how-to-stop-uwsgi-when-no-pidfile-in-config" target="_blank" rel="noopener">参考这里</a></p>
+<pre><code>sudo pkill -f uwsgi -9
+</code></pre><h3 id="查看进程-pid-对应的程序文件路径"><a href="#查看进程-pid-对应的程序文件路径" class="headerlink" title="查看进程 pid 对应的程序文件路径"></a>查看进程 pid 对应的程序文件路径</h3><p><a href="http://os.51cto.com/art/201003/186841.htm" target="_blank" rel="noopener">http://os.51cto.com/art/201003/186841.htm</a></p>
+<p>进入/proc目录</p>
+<pre><code>cd /proc
+</code></pre><p>ps查看所有符合./cmd的进程，找出其对应的进程号</p>
+<p>用 ll 命令： ll 进程号</p>
+<p>如下显示一个示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@Cluster1 proc]# ll 22401  </span><br><span class="line">total 0  </span><br><span class="line">-r--r--r-- 1 jack jack 0 Dec 11 11:10 cmdline  </span><br><span class="line">-r--r--r-- 1 jack jack 0 Dec 11 11:10 cpu  </span><br><span class="line">lrwxrwxrwx 1 jack jack 0 Dec 11 11:10 cwd -&gt; /home/jack/sbs/bin  </span><br><span class="line">-r-------- 1 jack jack 0 Dec 11 11:10 environ  </span><br><span class="line">lrwxrwxrwx 1 jack jack 0 Dec 11 11:10 exe -&gt; /home/jack/sbs/bin/cbs (deleted)  </span><br><span class="line">dr-x------ 2 jack jack 0 Dec 11 11:10 fd  </span><br><span class="line">-r-------- 1 jack jack 0 Dec 11 11:10 maps  </span><br><span class="line">-rw------- 1 jack jack 0 Dec 11 11:10 mem  </span><br><span class="line">-r--r--r-- 1 jack jack 0 Dec 11 11:10 mounts  </span><br><span class="line">lrwxrwxrwx 1 jack jack 0 Dec 11 11:10 root -&gt; /  </span><br><span class="line">-r--r--r-- 1 jack jack 0 Dec 11 11:10 stat  </span><br><span class="line">-r--r--r-- 1 jack jack 0 Dec 11 11:10 statm  </span><br><span class="line">-r--r--r-- 1 jack jack 0 Dec 11 11:10 status</span><br></pre></td></tr></table></figure>
+<p>/proc文件系统下的进程号目录下面的文件镜像了进程的当前运行信息，从中可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cwd符号链接的就是进程22401的运行目录；</span><br><span class="line">exe符号连接就是执行程序的绝对路径；</span><br><span class="line">cmdline就是程序运行时输入的命令行命令；本例为：./cbs</span><br><span class="line">cpu记录了进程可能运行在其上的cpu；显示虚拟的cpu信息</span><br><span class="line">environ记录了进程运行时的环境变量</span><br><span class="line">fd目录下是进程打开或使用的文件的符号连接</span><br></pre></td></tr></table></figure>
+<p>通过cwd直接进入进程运行目录，通过查看相关信息就可以定位此目录对应那个端口号，以及定位是那个应用才使用此服务程序。这样就获得了Linux进程文件路径了。</p>
+<h2 id="查看CPU和内存占用"><a href="#查看CPU和内存占用" class="headerlink" title="查看CPU和内存占用"></a>查看CPU和内存占用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># CPU占用最多的前10个进程： </span><br><span class="line">ps auxw|head -1;ps auxw|sort -rn -k3|head -10 </span><br><span class="line"># 内存消耗最多的前10个进程 </span><br><span class="line">ps auxw|head -1;ps auxw|sort -rn -k4|head -10 </span><br><span class="line"># 虚拟内存使用最多的前10个进程 </span><br><span class="line">ps auxw|head -1;ps auxw|sort -rn -k5|head -10</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 按内存占用对进程排序</span><br><span class="line">ps auxw --sort=rss</span><br><span class="line"># 按CPU占用对进程排序</span><br><span class="line">ps auxw --sort=%cpu</span><br></pre></td></tr></table></figure>
+<h2 id="supervisord-使用问题"><a href="#supervisord-使用问题" class="headerlink" title="supervisord 使用问题"></a>supervisord 使用问题</h2><p>运行 supervisord 命令出现 unix:///tmp/supervisor.sock no such file</p>
+<p>可以选择 结束 supervisord 进程，然后重启；重启后会自动重启 supervisord 管理的进程</p>
+<pre><code># 查看所有运行的进程
+ps -A
+</code></pre><p>找到 supervisord 进程，并杀死</p>
+<pre><code>kill pid
+</code></pre><p>重启 </p>
+<pre><code>supervisord
+</code></pre><h3 id="开机自动启动-Supervisord"><a href="#开机自动启动-Supervisord" class="headerlink" title="开机自动启动 Supervisord"></a>开机自动启动 Supervisord</h3><pre><code>vim /etc/rc.local
+
+# 添加以下内容
+/usr/bin/supervisord -c /etc/supervisord.conf
+
+# 将文件设置为可执行，/etc/rc.local 实际上链接到 /etc/rc.d/rc.local
+chmod +x /etc/rc.d/rc.local
+</code></pre><h2 id="SSH-相关"><a href="#SSH-相关" class="headerlink" title="SSH 相关"></a>SSH 相关</h2><p>生成 SSH 密钥</p>
+<pre><code>ssh-keygen -t rsa -C &quot;your_email@example.com&quot;
+</code></pre><p>在服务器上用 SSH 登录另外一台服务</p>
+<pre><code># -p 后面跟的是端口
+ssh 192.168.1.102 -l root -p 22
+</code></pre><h2 id="关机与重启命令"><a href="#关机与重启命令" class="headerlink" title="关机与重启命令"></a>关机与重启命令</h2><p>重启命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、reboot</span><br><span class="line">2、shutdown -r now 立刻重启(root用户使用)</span><br><span class="line">3、shutdown -r 10 过10分钟自动重启(root用户使用) </span><br><span class="line">4、shutdown -r 20:35 在时间为20:35时候重启(root用户使用)</span><br><span class="line">如果是通过shutdown命令设置重启的话，可以用shutdown -c命令取消重启</span><br></pre></td></tr></table></figure>
+<p>关机命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、halt   立刻关机</span><br><span class="line">2、poweroff  立刻关机</span><br><span class="line">3、shutdown -h now 立刻关机(root用户使用)</span><br><span class="line">4、shutdown -h 10 10分钟后自动关机</span><br><span class="line">如果是通过shutdown命令设置关机的话，可以用shutdown -c命令取消重启</span><br></pre></td></tr></table></figure>
+<h2 id="Curl"><a href="#Curl" class="headerlink" title="Curl"></a>Curl</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 强制指定本地端口</span><br><span class="line">curl --local-port 51 http://web.example.com</span><br><span class="line"></span><br><span class="line"># 查看连接的详细信息</span><br><span class="line"># --trace-time 跟踪/详细输出时，添加时间戳</span><br><span class="line">curl -Sv --trace-time http://web.example.com</span><br></pre></td></tr></table></figure>
+<h2 id="服务相关"><a href="#服务相关" class="headerlink" title="服务相关"></a>服务相关</h2><p>Ubuntu 设置开机启动的服务</p>
+<pre><code>sudo systemctl enable nginx
+</code></pre><h2 id="最小化安装完-CentOS-7-之后出现的问题"><a href="#最小化安装完-CentOS-7-之后出现的问题" class="headerlink" title="最小化安装完 CentOS 7 之后出现的问题"></a>最小化安装完 CentOS 7 之后出现的问题</h2><h3 id="使用-yum-install-xx-出现错误-cannot-find-a-valid-base-url-for-repo"><a href="#使用-yum-install-xx-出现错误-cannot-find-a-valid-base-url-for-repo" class="headerlink" title="使用 yum install xx 出现错误 cannot find a valid base url for repo"></a>使用 <code>yum install xx</code> 出现错误 cannot find a valid base url for repo</h3><pre><code>cd /etc/sysconfig/network-scripts 
+dmesg | grep eth0
+</code></pre><p>在输出结果的最后一行，发现 <code>eth0</code> 重命名为 <code>eno16777736</code>，修改这个eth文件</p>
+<pre><code>vi /etc/sysconfig/network-scripts/ifcfg-eno16777736
+</code></pre><p>最后一行，设置 <code>onboot=yes</code>，</p>
+<p>配置 DNS</p>
+<pre><code>vi /etc/resolve.conf
+</code></pre><p>添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nameserver 114.114.114.114</span><br><span class="line">nameserver 8.8.8.8</span><br></pre></td></tr></table></figure>
+<p>然后重启网络服务</p>
+<pre><code>sudo service network restart
+</code></pre><h3 id="没有ifconfig命令的解决办法"><a href="#没有ifconfig命令的解决办法" class="headerlink" title="没有ifconfig命令的解决办法"></a>没有ifconfig命令的解决办法</h3><p>如果没有安装桌面环境，那么 minimal 版本没有 ifconfig 命令，找出哪个包提供了ifconfig命令</p>
+<pre><code>yum provides ifconfig
+</code></pre><p>输出中可以看到 net-tools 包提供了 ifconfig 命令</p>
+<pre><code>yum install net-tools
+</code></pre><h3 id="安装第三方源（EPEL和RPMForge）"><a href="#安装第三方源（EPEL和RPMForge）" class="headerlink" title="安装第三方源（EPEL和RPMForge）"></a>安装第三方源（EPEL和RPMForge）</h3><p>CentOS官方文档声称严重推荐EPEL，不推荐RPMForge，因为RPMForge已经不再被维护了。</p>
+<p>EPEL官方网站<br><a href="http://fedoraproject.org/wiki/EPEL" target="_blank" rel="noopener">http://fedoraproject.org/wiki/EPEL</a></p>
+<p><strong>方法1：</strong></p>
+<p>EL7下载地址<br><a href="http://download.fedoraproject.org/pub/epel/7/x86_64/repoview/epel-release.html" target="_blank" rel="noopener">http://download.fedoraproject.org/pub/epel/7/x86_64/repoview/epel-release.html</a></p>
+<pre><code>rpm -ivh epel-release-7-5.noarch.rpm
+</code></pre><p>EPEL的repo文件已经在目录/etc/yum.repos.d/下</p>
+<p><strong>方法2：</strong></p>
+<pre><code>sudo yum install epel-release
+</code></pre><h2 id="防火墙设置及-SELinux-问题"><a href="#防火墙设置及-SELinux-问题" class="headerlink" title="防火墙设置及 SELinux 问题"></a>防火墙设置及 SELinux 问题</h2><h3 id="设置防火墙开放端口（iptables）"><a href="#设置防火墙开放端口（iptables）" class="headerlink" title="设置防火墙开放端口（iptables）"></a>设置防火墙开放端口（iptables）</h3><pre><code>/sbin/iptables -I INPUT -p tcp --dport 8008 -j ACCEPT 
+</code></pre><p>linux 配置好iptables后，重启失效的解决方案</p>
+<p>With RHEL 7 / CentOS 7, firewalld was introduced to manage iptables. IMHO, firewalld is more suited for workstations than for server environments.</p>
+<p>It is possible to go back to a more classic iptables setup. First, stop and mask the firewalld service:</p>
+<pre><code>systemctl stop firewalld
+systemctl mask firewalld
+</code></pre><p>Then, install the iptables-services package:</p>
+<pre><code>yum install iptables-services
+</code></pre><p>Enable the service at boot-time:</p>
+<pre><code>systemctl enable iptables
+</code></pre><p>或者</p>
+<pre><code>chkconfig iptables on 
+</code></pre><p>Managing the service</p>
+<pre><code>systemctl [stop|start|restart] iptables
+</code></pre><p>Saving your firewall rules can be done as follows:</p>
+<pre><code>service iptables save
+</code></pre><p>or</p>
+<pre><code>/usr/libexec/iptables/iptables.init save
+</code></pre><h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><h2 id="安装最新版的-Nginx"><a href="#安装最新版的-Nginx" class="headerlink" title="安装最新版的 Nginx"></a>安装最新版的 Nginx</h2><p>可以参考<a href="http://www.lnmp.cn/installing-php7-mysql57-nginx18-under-centos7.html" target="_blank" rel="noopener">这里</a></p>
+<pre><code>rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+</code></pre><p>通过 yum 安装</p>
+<pre><code>yum install nginx
+</code></pre><h3 id="Nginx-permission-denied-问题"><a href="#Nginx-permission-denied-问题" class="headerlink" title="Nginx permission denied 问题"></a>Nginx permission denied 问题</h3><p>因为忘记了 selinux 的问题，导致 trouble shooting 耽误了不少时间。<br>由于[SELinux的问题][2]，会导致nginx nginx permission denied 的问题，需要将 selinux 关闭。</p>
+<p>查看SELinux状态：</p>
+<pre><code># 如果SELinux status参数为enabled即为开启状态
+/usr/sbin/sestatus -v 
+</code></pre><p>也可以用 getenforce 这个命令检查</p>
+<p>关闭SELinux</p>
+<pre><code># 只是临时关闭（不用重启机器），重启后问题仍然出现
+# 设置SELinux 成为permissive模式
+setenforce 0 
+# setenforce 1 # 设置SELinux 成为enforcing模式
+</code></pre><p>永久关闭，需要通过修改配置文件，但是需要重启机器： </p>
+<pre><code>vim /etc/selinux/config
+</code></pre><p>将SELINUX=enforcing 改为 SELINUX=disabled，重启机器即可</p>
+<pre><code>shutdown -r now
+</code></pre><h2 id="Nginx-权限问题"><a href="#Nginx-权限问题" class="headerlink" title="Nginx 权限问题"></a>Nginx 权限问题</h2><p>静态文件没有权限，Nginx 报错 403 forbidden (13: Permission denied)</p>
+<p>需要修改相应文件夹的权限，或者把nginx的启动用户由默认的nginx，改成网站拥有者的用户</p>
+<h3 id="上传文件问题"><a href="#上传文件问题" class="headerlink" title="上传文件问题"></a>上传文件问题</h3><p>上传文件时，比较大的文件，文件数据会暂时存储在 <code>/var/lib/nginx/tmp/</code> 中，必须保证 nginx 的启动用户有该文件夹的权限。（如果不是以 nginx 用户启动的话）</p>
+<h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><h3 id="安装-MySQL-5-7"><a href="#安装-MySQL-5-7" class="headerlink" title="安装 MySQL 5.7"></a>安装 MySQL 5.7</h3><pre><code>rpm -Uvh http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+# 安装
+yum install mysql-community-server mysql-community-devel
+#启动
+systemctl start mysqld
+
+# MySQL 5.7 会给 root 分配临时密码，可以通过该方法查看
+grep &apos;temporary password&apos; /var/log/mysqld.log
+</code></pre><h3 id="MySQL-操作"><a href="#MySQL-操作" class="headerlink" title="MySQL 操作"></a>MySQL 操作</h3><p>mysql命令用户连接数据库。</p>
+<pre><code>mysql -h 主机地址 -u 用户名 －p 用户密码 -P port -D database
+# 连接本机的数据库
+mysql -u root -p
+</code></pre><p>修改数据库的表编码</p>
+<pre><code>ALTER TABLE test_table CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+# For each database:
+ALTER DATABASE database_name CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+# For each table:
+ALTER TABLE table_name CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+# For each column:
+ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8 COLLATE utf8_general_ci;
+</code></pre><p>修改密码</p>
+<pre><code># MySQL 5.7 版本对密码的安全性要求很严格，必须至少包含1个大写字母、1个小写字母、1个数字和1个特殊字符，长度不得小于8个字符。
+ALTER USER &apos;root&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;p@ssw0rd&apos;;
+</code></pre><h2 id="配置-SNMP-服务"><a href="#配置-SNMP-服务" class="headerlink" title="配置 SNMP 服务"></a>配置 SNMP 服务</h2><p>Solarwinds 可以使用 SNMP 协议监控服务器的状态。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 安装</span><br><span class="line">yum install net-snmp</span><br><span class="line"># 可选安装 net-snmp 的工具，可以使用 snmpwalk 命令</span><br><span class="line">yum install net-snmp-utils</span><br><span class="line"> </span><br><span class="line"># 设置开机启动</span><br><span class="line">chkconfig snmpd on</span><br><span class="line"></span><br><span class="line"># 启动</span><br><span class="line">service snmpd start</span><br><span class="line"> </span><br><span class="line"># 查看当前版本</span><br><span class="line">snmpd -v</span><br></pre></td></tr></table></figure>
+<p><a href="http://blog.csdn.net/jacky0922/article/details/6952152" target="_blank" rel="noopener">snmap 配置</a></p>
+<p>为了让 Solarwinds 监控服务器的状态，需要配置这几个东西</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 打开配置文件</span><br><span class="line">vim /etc/snmp/snmpd.conf</span><br></pre></td></tr></table></figure>
+<p>修改 community</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">####</span><br><span class="line"># First, map the community name &quot;public&quot; into a &quot;security name&quot;</span><br><span class="line"></span><br><span class="line">#       sec.name  source          community</span><br><span class="line"># com2sec notConfigUser  default       public</span><br><span class="line"># 修改最后的 public 为指定的名称</span><br><span class="line">com2sec notConfigUser  default       public</span><br></pre></td></tr></table></figure>
+<p>配置可以查看主机CPU和内存等设备的数据，添加一行数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Third, create a view for us to let the group have rights to:</span><br><span class="line"></span><br><span class="line"># Make at least  snmpwalk -v 1 localhost -c public system fast again.</span><br><span class="line">#       name           incl/excl     subtree         mask(optional)</span><br><span class="line"># 添加这条数据，表示可以查看.1节点下的所有设备信息</span><br><span class="line">view    systemview    included   .1</span><br><span class="line"></span><br><span class="line">view    systemview    included   .1.3.6.1.2.1.1</span><br><span class="line">view    systemview    included   .1.3.6.1.2.1.25.1.1</span><br></pre></td></tr></table></figure>
+<p>修改disk checks配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># disk PATH [MIN=100000]</span><br><span class="line"># Check the / partition and make sure it contains at least 10 megs.</span><br><span class="line"></span><br><span class="line"># &quot;#&quot; 号去掉，取消注释。</span><br><span class="line">disk / 10000</span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="修改-hostname"><a href="#修改-hostname" class="headerlink" title="修改 hostname"></a>修改 hostname</h3><pre><code>hostname your_hostname
+</code></pre><h2 id="yum-update-之后出现的问题"><a href="#yum-update-之后出现的问题" class="headerlink" title="yum update 之后出现的问题"></a>yum update 之后出现的问题</h2><h3 id="django-celery"><a href="#django-celery" class="headerlink" title="django-celery"></a>django-celery</h3><p>使用 Supervisord 来管理 django-celery 的 beat 和 worker 进程，使用了 MySQL 数据库。但是在执行 yum update 之后，在 beat 的日志中出现异常，导致所有的 task 都无法正确执行。应该是由于 yum update 更新了 MySQL，才会出现该问题，而且 beat 进程仍然在运行，只是不停的出现该异常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OperationalError: (2006, &apos;MySQL server has gone away&apos;)</span><br></pre></td></tr></table></figure>
+<p>重新启动进程后解决</p>
+<pre><code>supervisorctl restart all
+</code></pre><h3 id="gitlab-ci-runner"><a href="#gitlab-ci-runner" class="headerlink" title="gitlab-ci-runner"></a>gitlab-ci-runner</h3><p>如果 gitlab-ci-runner 有更新或者 docker 有更新，会出现无法连接到 gitlab 进行 clone 代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access &apos;http://gitlab-ci-token:xxxxxx@your_gitlab/webport/fomalhaut.git/&apos;: Failed to connect to your_gitlab port 80: Operation timed out</span><br></pre></td></tr></table></figure>
+<p>需要重启 docker</p>
+<pre><code>service docker restart
+</code></pre><p>或者重启 gitlab-ci-runnner</p>
+<pre><code>gitlab-ci-runner restart
+</code></pre></span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/错误解决/" rel="tag">#错误解决</a>
+          
+            <a href="/tags/Linux/" rel="tag">#Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/22/how-python-code-run/" rel="prev">谈谈 Python 程序的运行原理</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/04/supervisord-tutorial/" rel="next">Python 进程管理工具 Supervisor 使用教程</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作相关"><span class="nav-number">1.</span> <span class="nav-text">文件操作相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找指定的文件名"><span class="nav-number">1.1.</span> <span class="nav-text">查找指定的文件名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看隐藏文件"><span class="nav-number">1.2.</span> <span class="nav-text">查看隐藏文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动文件"><span class="nav-number">1.3.</span> <span class="nav-text">移动文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制文件"><span class="nav-number">1.4.</span> <span class="nav-text">复制文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出文件内容"><span class="nav-number">1.5.</span> <span class="nav-text">输出文件内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip-unzip"><span class="nav-number">1.6.</span> <span class="nav-text">zip unzip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批量删除-DS-Store-文件"><span class="nav-number">1.7.</span> <span class="nav-text">批量删除 .DS_Store 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改文件的拥有者和权限"><span class="nav-number">1.8.</span> <span class="nav-text">修改文件的拥有者和权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看硬盘及内存空间"><span class="nav-number">1.9.</span> <span class="nav-text">查看硬盘及内存空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改默认编辑器"><span class="nav-number">1.10.</span> <span class="nav-text">修改默认编辑器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户相关"><span class="nav-number">2.</span> <span class="nav-text">用户相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户创建和删除"><span class="nav-number">2.1.</span> <span class="nav-text">用户创建和删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户组管理"><span class="nav-number">2.2.</span> <span class="nav-text">用户组管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-Home-目录加密问题"><span class="nav-number">2.3.</span> <span class="nav-text">Ubuntu Home 目录加密问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志相关"><span class="nav-number">3.</span> <span class="nav-text">日志相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络相关"><span class="nav-number">4.</span> <span class="nav-text">网络相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程相关"><span class="nav-number">5.</span> <span class="nav-text">进程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#强制杀死进程"><span class="nav-number">5.1.</span> <span class="nav-text">强制杀死进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#强制杀死所有-uwsgi-进程"><span class="nav-number">5.2.</span> <span class="nav-text">强制杀死所有 uwsgi 进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看进程-pid-对应的程序文件路径"><span class="nav-number">5.3.</span> <span class="nav-text">查看进程 pid 对应的程序文件路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看CPU和内存占用"><span class="nav-number">6.</span> <span class="nav-text">查看CPU和内存占用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#supervisord-使用问题"><span class="nav-number">7.</span> <span class="nav-text">supervisord 使用问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开机自动启动-Supervisord"><span class="nav-number">7.1.</span> <span class="nav-text">开机自动启动 Supervisord</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH-相关"><span class="nav-number">8.</span> <span class="nav-text">SSH 相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关机与重启命令"><span class="nav-number">9.</span> <span class="nav-text">关机与重启命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Curl"><span class="nav-number">10.</span> <span class="nav-text">Curl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务相关"><span class="nav-number">11.</span> <span class="nav-text">服务相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小化安装完-CentOS-7-之后出现的问题"><span class="nav-number">12.</span> <span class="nav-text">最小化安装完 CentOS 7 之后出现的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-yum-install-xx-出现错误-cannot-find-a-valid-base-url-for-repo"><span class="nav-number">12.1.</span> <span class="nav-text">使用 yum install xx 出现错误 cannot find a valid base url for repo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#没有ifconfig命令的解决办法"><span class="nav-number">12.2.</span> <span class="nav-text">没有ifconfig命令的解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装第三方源（EPEL和RPMForge）"><span class="nav-number">12.3.</span> <span class="nav-text">安装第三方源（EPEL和RPMForge）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防火墙设置及-SELinux-问题"><span class="nav-number">13.</span> <span class="nav-text">防火墙设置及 SELinux 问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置防火墙开放端口（iptables）"><span class="nav-number">13.1.</span> <span class="nav-text">设置防火墙开放端口（iptables）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nginx"><span class="nav-number">14.</span> <span class="nav-text">Nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装最新版的-Nginx"><span class="nav-number">15.</span> <span class="nav-text">安装最新版的 Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx-permission-denied-问题"><span class="nav-number">15.1.</span> <span class="nav-text">Nginx permission denied 问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nginx-权限问题"><span class="nav-number">16.</span> <span class="nav-text">Nginx 权限问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上传文件问题"><span class="nav-number">16.1.</span> <span class="nav-text">上传文件问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL"><span class="nav-number">17.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-MySQL-5-7"><span class="nav-number">17.1.</span> <span class="nav-text">安装 MySQL 5.7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-操作"><span class="nav-number">17.2.</span> <span class="nav-text">MySQL 操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置-SNMP-服务"><span class="nav-number">18.</span> <span class="nav-text">配置 SNMP 服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">19.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-hostname"><span class="nav-number">19.1.</span> <span class="nav-text">修改 hostname</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yum-update-之后出现的问题"><span class="nav-number">20.</span> <span class="nav-text">yum update 之后出现的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#django-celery"><span class="nav-number">20.1.</span> <span class="nav-text">django-celery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab-ci-runner"><span class="nav-number">20.2.</span> <span class="nav-text">gitlab-ci-runner</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2015/10/19/linux-practice-notes/';
+      var disqus_title = 'Linux 踩坑记';
+      var disqus_url = 'http://www.restran.net/2015/10/19/linux-practice-notes/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

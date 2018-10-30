@@ -1,0 +1,751 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="在小组内做了 Web 开发技术的一些分享，内容主要集中在前端，整理如下 1. 最近几年前端技术爆发式发展  前端变化有多快？两年前，大家都用 Grunt 构建，去年用 Gulp + Browserify 构建，今年用 Webpack 构建，明年可能会使用纯ES6的构建工具。每变一次，前面的那些工具就全没用，都白学。要知道，这些工具每一个都是软件系统，单单Grunt就有4千个插件，然而全没用了。">
+<meta name="keywords" content="Web,前端,新技术,Vuejs,预处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web 开发技术分享">
+<meta property="og:url" content="http://www.restran.net/2016/02/29/web-develop-share/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="在小组内做了 Web 开发技术的一些分享，内容主要集中在前端，整理如下 1. 最近几年前端技术爆发式发展  前端变化有多快？两年前，大家都用 Grunt 构建，去年用 Gulp + Browserify 构建，今年用 Webpack 构建，明年可能会使用纯ES6的构建工具。每变一次，前面的那些工具就全没用，都白学。要知道，这些工具每一个都是软件系统，单单Grunt就有4千个插件，然而全没用了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.restran.net/uploads/post_img/2016/02/web_develop_share_1.jpg">
+<meta property="og:updated_time" content="2017-04-26T02:16:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Web 开发技术分享">
+<meta name="twitter:description" content="在小组内做了 Web 开发技术的一些分享，内容主要集中在前端，整理如下 1. 最近几年前端技术爆发式发展  前端变化有多快？两年前，大家都用 Grunt 构建，去年用 Gulp + Browserify 构建，今年用 Webpack 构建，明年可能会使用纯ES6的构建工具。每变一次，前面的那些工具就全没用，都白学。要知道，这些工具每一个都是软件系统，单单Grunt就有4千个插件，然而全没用了。">
+<meta name="twitter:image" content="http://www.restran.net/uploads/post_img/2016/02/web_develop_share_1.jpg">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Web 开发技术分享 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Web 开发技术分享
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2016-02-29T00:00:00+08:00" content="2016-02-29">
+            2016-02-29
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 2,010字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/前端/" itemprop="url" rel="index">
+                  <span itemprop="name">前端</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2016/02/29/web-develop-share/"class="leancloud_visitors" data-flag-title="Web 开发技术分享">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/02/29/web-develop-share/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/02/29/web-develop-share/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>在小组内做了 Web 开发技术的一些分享，内容主要集中在前端，整理如下</p>
+<h2 id="1-最近几年前端技术爆发式发展"><a href="#1-最近几年前端技术爆发式发展" class="headerlink" title="1. 最近几年前端技术爆发式发展"></a>1. 最近几年前端技术爆发式发展</h2><p><img src="/uploads/post_img/2016/02/web_develop_share_1.jpg" alt="前端菜名"></p>
+<blockquote>
+<p>前端变化有多快？两年前，大家都用 Grunt 构建，去年用 Gulp + Browserify 构建，今年用 Webpack 构建，明年可能会使用纯ES6的构建工具。每变一次，前面的那些工具就全没用，都白学。要知道，这些工具每一个都是软件系统，单单Grunt就有4千个插件，然而全没用了。</p>
+</blockquote>
+<h3 id="1-1-有些技术我还没用就要过时了"><a href="#1-1-有些技术我还没用就要过时了" class="headerlink" title="1.1 有些技术我还没用就要过时了"></a>1.1 有些技术我还没用就要过时了</h3><ol>
+<li>CSS 预处理器 LESS 作者不维护了, Bootstrap 也从 LESS 转向 SASS</li>
+<li>模块加载工具 require.js， sea.js 即将过时，新兴的 Browserify 和 webpack 成为新时代模块化管理的潮流</li>
+<li>npm scripts 出来，构建工具 Grunt 和 Gulp 都将过时</li>
+</ol>
+<p><a href="https://github.com/boxizen/boxizen.github.io/issues/9" target="_blank" rel="noopener">https://github.com/boxizen/boxizen.github.io/issues/9</a></p>
+<h3 id="1-2-新的技术不断出现"><a href="#1-2-新的技术不断出现" class="headerlink" title="1.2 新的技术不断出现"></a>1.2 新的技术不断出现</h3><ol>
+<li>NodeJS 这两年火得一塌糊涂</li>
+<li><a href="http://www.infoq.com/cn/articles/subversion-front-end-ui-development-framework-react" target="_blank" rel="noopener">颠覆式前端UI开发框架：React</a></li>
+<li>AnglarJS1-&gt; AngularJS2</li>
+<li><a href="https://www.meteor.com/" target="_blank" rel="noopener">Meteor</a></li>
+</ol>
+<p><a href="https://segmentfault.com/a/1190000000361440" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000361440</a></p>
+<p>Meteor是什么？</p>
+<blockquote>
+<p>Meteor是新一代的开发即时web应用的开源框架，它能帮助你在最少的时间内完成开发。它的理念和AngularJS、BackboneJS等框架大不相同。当我们在backbone 和 angular 上工作时，客户端（Angular或Backbone）和REST后端通讯。我们可以用任何技术写 REST 后端，例如 Java、NodeJS、PHP。</p>
+</blockquote>
+<blockquote>
+<p>Meteor使用DDP（分布式数据协议）在客户端和服务器间传送数据。客户端JavaScript开发者需要解决的首要问题是：向后端的数据库发起查询，发送数据到客户端，当数据库变动时，推送变动到客户端。DDP是解决这一问题的标准做法。</p>
+</blockquote>
+<blockquote>
+<p>Meteor应用的后端基于Node和MongoDB。前端和后端的应用同时使用Meteor的API。未来开发者可以选择 MongoDB 之外的其他数据库。</p>
+</blockquote>
+<h2 id="2-预处理"><a href="#2-预处理" class="headerlink" title="2. 预处理"></a>2. 预处理</h2><h3 id="2-1-CSS-预处理"><a href="#2-1-CSS-预处理" class="headerlink" title="2.1 CSS 预处理"></a>2.1 CSS 预处理</h3><p>一般来说，CSS 预处理器基于 CSS 扩展了一套属于自己的 DSL，来解决我们书写 CSS 时难以解决的问题：</p>
+<ol>
+<li>语法不够强大，比如无法嵌套书写导致模块化开发中需要书写很多重复的选择器；</li>
+<li>没有变量和合理的样式复用机制，使得逻辑上相关的属性值必须以字面量的形式重复输出，导致难以维护。</li>
+</ol>
+<p><strong>SASS</strong> 2007年诞生，最早也是最成熟的CSS预处理器，拥有ruby社区的支持和compass这一最强大的css框架，目前受LESS影响，已经进化到了全面兼容CSS的SCSS。</p>
+<p><strong>LESS</strong> 2009年出现，受SASS的影响较大，但又使用CSS的语法，让大部分开发者和设计师更容易上手，在ruby社区之外支持者远超过SASS，其缺点是比起SASS来，可编程功能不够，不过优点是简单和兼容CSS，反过来也影响了SASS演变到了SCSS的时代。著名的Twitter Bootstrap 已经从 LESS 迁移到 SASS。</p>
+<p><strong>Stylus</strong> 2010年产生，来自Node.js社区，主要用来给Node项目进行CSS预处理支持。</p>
+<p><a href="http://efe.baidu.com/blog/revisiting-css-preprocessors/" target="_blank" rel="noopener">再谈 CSS 预处理器</a></p>
+<h3 id="2-2-Javascript-预处理"><a href="#2-2-Javascript-预处理" class="headerlink" title="2.2 Javascript 预处理"></a>2.2 Javascript 预处理</h3><h4 id="2-2-1-CoffeScript"><a href="#2-2-1-CoffeScript" class="headerlink" title="2.2.1 CoffeScript"></a>2.2.1 CoffeScript</h4><p><a href="http://coffeescript.org/" target="_blank" rel="noopener">http://coffeescript.org/</a></p>
+<figure class="highlight coffee"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># Assignment:</span><br><span class="line">number   = 42</span><br><span class="line">opposite = true</span><br><span class="line"></span><br><span class="line"># Conditions:</span><br><span class="line">number = -42 if opposite</span><br><span class="line"></span><br><span class="line"># Functions:</span><br><span class="line">square = (x) -&gt; x * x</span><br><span class="line"></span><br><span class="line"># Arrays:</span><br><span class="line">list = [1, 2, 3, 4, 5]</span><br><span class="line"></span><br><span class="line"># Objects:</span><br><span class="line">math =</span><br><span class="line">  root:   Math.sqrt</span><br><span class="line">  square: square</span><br><span class="line">  cube:   (x) -&gt; x * square x</span><br><span class="line"></span><br><span class="line"># Splats:</span><br><span class="line">race = (winner, runners...) -&gt;</span><br><span class="line">  print winner, runners</span><br><span class="line"></span><br><span class="line"># Existence:</span><br><span class="line">alert &quot;I knew it!&quot; if elvis?</span><br><span class="line"></span><br><span class="line"># Array comprehensions:</span><br><span class="line">cubes = (math.cube num for num in list)</span><br></pre></td></tr></table></figure>
+<p>以上 CoffeeScript 代码编译后的 JavaScript 代码为</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cubes, list, math, num, number, opposite, race, square,</span><br><span class="line">  slice = [].slice;</span><br><span class="line"></span><br><span class="line">number = <span class="number">42</span>;</span><br><span class="line"></span><br><span class="line">opposite = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (opposite) &#123;</span><br><span class="line">  number = <span class="number">-42</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">square = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * x;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line">math = &#123;</span><br><span class="line">  root: <span class="built_in">Math</span>.sqrt,</span><br><span class="line">  square: square,</span><br><span class="line">  cube: <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x * square(x);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">race = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> runners, winner;</span><br><span class="line">  winner = <span class="built_in">arguments</span>[<span class="number">0</span>], runners = <span class="number">2</span> &lt;= <span class="built_in">arguments</span>.length ? slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>) : [];</span><br><span class="line">  <span class="keyword">return</span> print(winner, runners);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> elvis !== <span class="string">"undefined"</span> &amp;&amp; elvis !== <span class="literal">null</span>) &#123;</span><br><span class="line">  alert(<span class="string">"I knew it!"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">cubes = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i, len, results;</span><br><span class="line">  results = [];</span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>, len = list.length; i &lt; len; i++) &#123;</span><br><span class="line">    num = list[i];</span><br><span class="line">    results.push(math.cube(num));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-2-TypeScript"><a href="#2-2-2-TypeScript" class="headerlink" title="2.2.2 TypeScript"></a>2.2.2 TypeScript</h4><p>TypeScript是由微软开发的一个能够在Node.js上运行的开源语言和编译器。这个语言是在ECMAScript6基础上演化并吸收了生成Javascript类别和接口的一些特性。Typescript 的编译器使用TypeScript语言编写，并且能够在任何兼容Javascript的程序内运行，同时它也是作为node.js的一个工具包发布的。所以该语言最终生成的仍然是Javascript脚本。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Student &#123;</span><br><span class="line">    fullname : <span class="built_in">string</span>;</span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params"><span class="keyword">public</span> firstname, <span class="keyword">public</span> middleinitial, <span class="keyword">public</span> lastname</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.fullname = firstname + <span class="string">" "</span> + middleinitial + <span class="string">" "</span> + lastname;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> Person &#123;</span><br><span class="line">    firstname: <span class="built_in">string</span>;</span><br><span class="line">    lastname: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">greeter</span>(<span class="params">person : Person</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Hello, "</span> + person.firstname + <span class="string">" "</span> + person.lastname;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> user = <span class="keyword">new</span> Student(<span class="string">"Jane"</span>, <span class="string">"M."</span>, <span class="string">"User"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">document</span>.body.innerHTML = greeter(user);</span><br></pre></td></tr></table></figure>
+<h2 id="3-SPA"><a href="#3-SPA" class="headerlink" title="3. SPA"></a>3. SPA</h2><p>单页应用（Single Page Application, SPA）</p>
+<p>单页应用的例子 <a href="https://www.teambition.com/" target="_blank" rel="noopener">teambition</a></p>
+<blockquote>
+<p>网页切换速度非常流畅，数据按需加载，没有重复刷新网页。在移动端的网页中，单页应用是优化体验的一个绝好方法。</p>
+</blockquote>
+<p>单页应用的相关文章</p>
+<p><a href="https://github.com/xufei/blog/issues/5" target="_blank" rel="noopener">https://github.com/xufei/blog/issues/5</a></p>
+<blockquote>
+<p>在 WebView 中内嵌的应用，请尽量采用 SPA 模式来开发。</p>
+</blockquote>
+<p>怎么开发单页应用</p>
+<ol>
+<li>Angularjs, angular-router（Angularjs 体积庞大）</li>
+<li>Vuejs, vue-router (轻量级，速度快，推荐移动端采用这种方案)</li>
+<li>React</li>
+</ol>
+<h2 id="4-构建工具"><a href="#4-构建工具" class="headerlink" title="4. 构建工具"></a>4. 构建工具</h2><ol>
+<li><a href="http://fex-team.github.io/fis3/index.html" target="_blank" rel="noopener">FIS3</a> 是面向前端的工程构建工具。解决前端工程中性能优化、资源加载（异步、同步、按需、预加载、依赖管理、合并、内嵌）、模块化开发、自动化工具、开发规范、代码部署等问题。</li>
+<li>Grunt</li>
+<li>Gulp</li>
+<li>npm scripts 目前 npm scripts 将要替代 Grunt 和 Gulp </li>
+</ol>
+<p><a href="https://segmentfault.com/a/1190000002491282" target="_blank" rel="noopener">https://segmentfault.com/a/1190000002491282</a></p>
+<h2 id="5-MVVM-框架-Vuejs"><a href="#5-MVVM-框架-Vuejs" class="headerlink" title="5. MVVM 框架 (Vuejs)"></a>5. MVVM 框架 (Vuejs)</h2><p>数据驱动的组件，为现代化的 Web 界面而生。跟 Angularjs 相似，入门简单，推荐在移动网页上采用。</p>
+<h2 id="6-组件化"><a href="#6-组件化" class="headerlink" title="6. 组件化"></a>6. 组件化</h2><blockquote>
+<p>未来的趋势，需要大量的前置学习，Webpack</p>
+</blockquote>
+<ol>
+<li>AngularJS 2</li>
+<li>Vuejs</li>
+<li>React</li>
+</ol>
+<blockquote>
+<p> Think in component not template.</p>
+</blockquote>
+<p>组件系统是 Vue.js 另一个重要概念，因为它提供了一种抽象，让我们可以用独立可复用的小组件来构建大型应用。如果我们考虑到这点，几乎任意类型的应用的界面都可以抽象为一个组件树：</p>
+<p>所谓组件，即封装起来的具有独立功能的UI部件。React推荐以组件的方式去重新思考UI构成，将UI上每一个功能相对独立的模块定义成组件，然后将小的组件通过组合或者嵌套的方式构成大的组件，最终完成整体UI的构建。例如，Facebook的instagram.com整站都采用了React来开发，整个页面就是一个大的组件，其中包含了嵌套的大量其它组件，大家有兴趣可以看下它背后的代码。</p>
+<p>如果说MVC的思想让你做到视图-数据-控制器的分离，那么组件化的思考方式则是带来了UI功能模块之间的分离。我们通过一个典型的Blog评论界面来看MVC和组件化开发思路的区别。</p>
+<p>对于MVC开发模式来说，开发者将三者定义成不同的类，实现了表现，数据，控制的分离。开发者更多的是从技术的角度来对UI进行拆分，实现松耦合。</p>
+<h2 id="7-前后端分离"><a href="#7-前后端分离" class="headerlink" title="7. 前后端分离"></a>7. 前后端分离</h2><h3 id="7-1-REST-API"><a href="#7-1-REST-API" class="headerlink" title="7.1 REST API"></a>7.1 REST API</h3><ol>
+<li><a href="https://github.com/Dreampie/http-api-design-ZH_CN" target="_blank" rel="noopener">Heroku 平台 API 指引</a></li>
+<li><a href="https://github.com/darcyliu/google-styleguide/blob/master/JSONStyleGuide.md" target="_blank" rel="noopener">JSON风格指南</a></li>
+</ol>
+<h2 id="8-JSON-Web-Token（JWT）"><a href="#8-JSON-Web-Token（JWT）" class="headerlink" title="8. JSON Web Token（JWT）"></a>8. JSON Web Token（JWT）</h2><p><a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a></p>
+<p>JSON Web Token（JWT）是一个非常轻巧的规范。这个规范允许我们使用JWT在用户和服务器之间传递安全可靠的信息。</p>
+<p><a href="http://blog.leapoahead.com/2015/09/06/understanding-jwt/" target="_blank" rel="noopener">JSON Web Token - 在Web应用间安全地传递信息</a></p>
+<p><a href="http://blog.leapoahead.com/2015/09/07/user-authentication-with-jwt/" target="_blank" rel="noopener">http://blog.leapoahead.com/2015/09/07/user-authentication-with-jwt/</a></p>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Web/" rel="tag">#Web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/24/packet-capture-in-app-debug/" rel="prev">App 开发中的抓包工具</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/23/git-and-gitlab-guide/" rel="next">Git &amp; Gitlab 使用指南</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-最近几年前端技术爆发式发展"><span class="nav-number">1.</span> <span class="nav-text">1. 最近几年前端技术爆发式发展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-有些技术我还没用就要过时了"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 有些技术我还没用就要过时了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-新的技术不断出现"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 新的技术不断出现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-预处理"><span class="nav-number">2.</span> <span class="nav-text">2. 预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-CSS-预处理"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 CSS 预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Javascript-预处理"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Javascript 预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-CoffeScript"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 CoffeScript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-TypeScript"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 TypeScript</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-SPA"><span class="nav-number">3.</span> <span class="nav-text">3. SPA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-构建工具"><span class="nav-number">4.</span> <span class="nav-text">4. 构建工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-MVVM-框架-Vuejs"><span class="nav-number">5.</span> <span class="nav-text">5. MVVM 框架 (Vuejs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-组件化"><span class="nav-number">6.</span> <span class="nav-text">6. 组件化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-前后端分离"><span class="nav-number">7.</span> <span class="nav-text">7. 前后端分离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-REST-API"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 REST API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-JSON-Web-Token（JWT）"><span class="nav-number">8.</span> <span class="nav-text">8. JSON Web Token（JWT）</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2016/02/29/web-develop-share/';
+      var disqus_title = 'Web 开发技术分享';
+      var disqus_url = 'http://www.restran.net/2016/02/29/web-develop-share/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

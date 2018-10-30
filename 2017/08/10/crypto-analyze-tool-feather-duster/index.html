@@ -1,0 +1,690 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="FeatherDuster 是一个 Python开发的用于分析密文和破解加密的框架，它试图让识别和利用弱密码系统尽可能的简单。不支持 Windows，而且需要 Python 2.x 环境。 安装无法通过 pip 安装，需要先从 Github 上下载代码安装 安装依赖 apt-get install python-crypto, libncurses-dev, libgmp3-dev 进入 feat">
+<meta name="keywords" content="Python,CTF,密码学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="密码学分析和破解工具 FeatherDuster 使用说明">
+<meta property="og:url" content="http://www.restran.net/2017/08/10/crypto-analyze-tool-feather-duster/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="FeatherDuster 是一个 Python开发的用于分析密文和破解加密的框架，它试图让识别和利用弱密码系统尽可能的简单。不支持 Windows，而且需要 Python 2.x 环境。 安装无法通过 pip 安装，需要先从 Github 上下载代码安装 安装依赖 apt-get install python-crypto, libncurses-dev, libgmp3-dev 进入 feat">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-10T00:45:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="密码学分析和破解工具 FeatherDuster 使用说明">
+<meta name="twitter:description" content="FeatherDuster 是一个 Python开发的用于分析密文和破解加密的框架，它试图让识别和利用弱密码系统尽可能的简单。不支持 Windows，而且需要 Python 2.x 环境。 安装无法通过 pip 安装，需要先从 Github 上下载代码安装 安装依赖 apt-get install python-crypto, libncurses-dev, libgmp3-dev 进入 feat">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> 密码学分析和破解工具 FeatherDuster 使用说明 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              密码学分析和破解工具 FeatherDuster 使用说明
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2017-08-10T00:00:00+08:00" content="2017-08-10">
+            2017-08-10
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 904字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/CTF/" itemprop="url" rel="index">
+                  <span itemprop="name">CTF</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2017/08/10/crypto-analyze-tool-feather-duster/"class="leancloud_visitors" data-flag-title="密码学分析和破解工具 FeatherDuster 使用说明">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2017/08/10/crypto-analyze-tool-feather-duster/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/08/10/crypto-analyze-tool-feather-duster/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><a href="https://github.com/nccgroup/featherduster" target="_blank" rel="noopener">FeatherDuster</a> 是一个 Python开发的用于分析密文和破解加密的框架，它试图让识别和利用弱密码系统尽可能的简单。不支持 Windows，而且需要 Python 2.x 环境。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>无法通过 pip 安装，需要先从 Github 上下载代码安装</p>
+<p>安装依赖</p>
+<pre><code>apt-get install python-crypto, libncurses-dev, libgmp3-dev
+</code></pre><p>进入 featherduster 目录后，直接安装</p>
+<pre><code>python setup.py install
+</code></pre><h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>在命令行中输入 featherduster，就可以进入交互模式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">FeatherDuster&gt; </span><br><span class="line">Help:</span><br><span class="line">        analyze - Analyze/decode samples</span><br><span class="line">        autopwn - Analyze samples and run all attacks</span><br><span class="line">        console - Opens an interactive prompt</span><br><span class="line">         export - Export current results to file</span><br><span class="line">         import - Import samples for analysis</span><br><span class="line">        modules - Show all available modules</span><br><span class="line">        options - Show the current option values</span><br><span class="line">        results - Show the results from the last module run</span><br><span class="line">            run - Run the currently selected module</span><br><span class="line">        samples - Show samples</span><br><span class="line">         search - Search module names and descriptions by keyword</span><br><span class="line">            set - Set an option (i.e., &quot;set num_answers=3&quot;</span><br><span class="line">          unset - Revert an option to its default value</span><br><span class="line">            use - Select the module to use</span><br></pre></td></tr></table></figure>
+<p>在分析之前，需要先导入样本（也就是待分析和破解的密文），如果只有一个样本文件，可以直接 <code>featherduster sample.txt</code> 然后进入到交互模式，如果是较多的样本，则需要用 import 指令导入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 从文件中载入一个样本，输入后根据提示输入文件名</span><br><span class="line">import singlefile</span><br><span class="line"># 从文件中载入多个样本，每行一个样本，输入后根据提示输入文件名</span><br><span class="line">import multifile</span><br><span class="line"># 清除所有的样本</span><br><span class="line">import clear</span><br><span class="line"># 查看导入的样本</span><br><span class="line">samples</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/ctfs/write-ups-2017/tree/master/alexctf-2017/cryptography/cr2-many-time-secrets-100" target="_blank" rel="noopener">alexctf-2017</a> 有一题是用到了 Many Time Pad 流密码，可以使用 FeatherDuster 快速破解。</p>
+<p>分析样本</p>
+<pre><code>analyze
+</code></pre><p>对 alexctf-2017 的这道题目，使用 analyze 后会给出很多的建议模块，根据题干，可以知道是使用 many_time_pad 进行破解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[+] Suggested modules:</span><br><span class="line">   alpha_shift          - A brute force attack against an alphabetic shift cipher. </span><br><span class="line">   base_n_solver        - A solver for silly base-N encoding obfuscation.          </span><br><span class="line">   single_byte_xor      - A brute force attack against single-byte XOR encrypted ciphertext.</span><br><span class="line">   multi_byte_xor       - A brute force attack against multi-byte XOR encrypted ciphertext.</span><br><span class="line">   many_time_pad        - A statistical attack against keystream reuse in various stream ciphers, and the one-time pad.</span><br><span class="line">   vigenere             - A module to break vigenere ciphers using index of coincidence for key length detection and frequency analysis.</span><br></pre></td></tr></table></figure>
+<p>根据分析的结果，载入指定的模块，进行破解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># use 命令可以载入指定模块，用 tab 键可以自动补全，这里是载入 many_time_pad</span><br><span class="line">use many_time_pad</span><br><span class="line"># 如果不记得模块的名称，可以使用 search 指令按名称或描述搜索</span><br><span class="line">search your_keyword</span><br></pre></td></tr></table></figure>
+<p>使用上述指定的模块进行破解</p>
+<pre><code>run
+</code></pre><p>查看结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 查看结果</span><br><span class="line">results </span><br><span class="line"># 导出结果到文件，输入后根据提示输入文件名</span><br><span class="line">export</span><br></pre></td></tr></table></figure>
+<p>破解后的结果是这样的，但是这道题目的 flag 其实是 Many Time Pad 加密的 key，因此还需要手动处理一下。现在已经知道了密文对应的明文，只需要选择一行对密文和明文异或一下就能得到 key。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">FeatherDuster&gt; results </span><br><span class="line">Last results (long values may be truncated):</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">0: &apos;Edvc Fri1nr, Tnie tome I u&apos;                                </span><br><span class="line">1: &apos;oercstoo0 &#123;y mosbakc and u&apos;                                </span><br><span class="line">2: &apos;rds1One  i&#123;e pgd6eneryptio&apos;                                </span><br><span class="line">3: &apos;o!drhemex _ hegrr tnat it &apos;                                </span><br><span class="line">4: &apos;hr7ehe o:lo eneroptoon met&apos;                                </span><br><span class="line">5: &apos;ins1thattie marhsmarically&apos;                                </span><br><span class="line">6: &apos;!qe~ven  o6be hob ctacked &apos;                                </span><br><span class="line">7: &apos;dwrc if  hs ke\x7f \x7fs mept se&apos;                          </span><br><span class="line">8: &apos;btet, Le  [e khoa i` you a&apos;                                </span><br><span class="line">9: &apos;fsrt wit&lt; &#123;e ti cse&amp;this e&apos;                                </span><br><span class="line">10: &apos;obehptio: echeke6alqays.&apos;</span><br></pre></td></tr></table></figure>
+<p>使用异或还原出 Many Time Pad  的 key </p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># XORs two string</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">str_xor</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">b''</span>.join([chr(ord(x) ^ ord(y)) <span class="keyword">for</span> (x, y) <span class="keyword">in</span> zip(a, b)])</span><br><span class="line"></span><br><span class="line">key = str_xor(target_cipher.decode(<span class="string">'hex'</span>), target_plaintext)</span><br></pre></td></tr></table></figure>
+<p>如果没有什么思路，可以用暴力破解的方式。这个命令会自动分析样本，并用所有的攻击方式暴力破解。</p>
+<pre><code>autopwn 
+</code></pre></span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+            <a href="/tags/CTF/" rel="tag">#CTF</a>
+          
+            <a href="/tags/密码学/" rel="tag">#密码学</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/10/memory-forensics-tool-volatility/" rel="prev">内存取证工具 volatility 使用说明</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/09/frontend-develop-and-http-optimization-history/" rel="next">HTTP 协议与前端开发的性能优化史</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">2.</span> <span class="nav-text">使用方法</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2017/08/10/crypto-analyze-tool-feather-duster/';
+      var disqus_title = '密码学分析和破解工具 FeatherDuster 使用说明';
+      var disqus_url = 'http://www.restran.net/2017/08/10/crypto-analyze-tool-feather-duster/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

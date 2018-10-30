@@ -1,0 +1,682 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="最近在做一个监控程序，需要用邮件发送告警。以前是使用注册的免费邮来发送，但是这样不免有很多限制，而且有时还会当作恶意登录，帐号异常等，还不让登录邮箱了。利用Postfix提供邮件SMTP服务，可以很自由的发送邮件，任意定义发送者的邮箱地址。感觉都可以用来恶作剧，用别人的邮箱来发邮件呢。 安装 Postfix 如果是 Ubuntu，请使用 sudo apt-get install postfix 如">
+<meta name="keywords" content="python,email,posifx,发邮件,代码,教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 使用 Postfix 发送邮件">
+<meta property="og:url" content="http://www.restran.net/2015/02/12/python-postfix-email/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="最近在做一个监控程序，需要用邮件发送告警。以前是使用注册的免费邮来发送，但是这样不免有很多限制，而且有时还会当作恶意登录，帐号异常等，还不让登录邮箱了。利用Postfix提供邮件SMTP服务，可以很自由的发送邮件，任意定义发送者的邮箱地址。感觉都可以用来恶作剧，用别人的邮箱来发邮件呢。 安装 Postfix 如果是 Ubuntu，请使用 sudo apt-get install postfix 如">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oxygen.qiniudn.com/img2014103024.png">
+<meta property="og:image" content="http://oxygen.qiniudn.com/img2014103025.png">
+<meta property="og:updated_time" content="2017-04-26T06:49:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 使用 Postfix 发送邮件">
+<meta name="twitter:description" content="最近在做一个监控程序，需要用邮件发送告警。以前是使用注册的免费邮来发送，但是这样不免有很多限制，而且有时还会当作恶意登录，帐号异常等，还不让登录邮箱了。利用Postfix提供邮件SMTP服务，可以很自由的发送邮件，任意定义发送者的邮箱地址。感觉都可以用来恶作剧，用别人的邮箱来发邮件呢。 安装 Postfix 如果是 Ubuntu，请使用 sudo apt-get install postfix 如">
+<meta name="twitter:image" content="http://oxygen.qiniudn.com/img2014103024.png">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> Python 使用 Postfix 发送邮件 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              Python 使用 Postfix 发送邮件
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2015-02-12T00:00:00+08:00" content="2015-02-12">
+            2015-02-12
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 1,128字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/Python/" itemprop="url" rel="index">
+                  <span itemprop="name">Python</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2015/02/12/python-postfix-email/"class="leancloud_visitors" data-flag-title="Python 使用 Postfix 发送邮件">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/02/12/python-postfix-email/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/02/12/python-postfix-email/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>最近在做一个监控程序，需要用邮件发送告警。以前是使用注册的免费邮来发送，但是这样不免有很多限制，而且有时还会当作恶意登录，帐号异常等，还不让登录邮箱了。利用<a href="http://www.postfix.org/" target="_blank" rel="noopener">Postfix</a>提供邮件SMTP服务，可以很自由的发送邮件，任意定义发送者的邮箱地址。感觉都可以用来恶作剧，用别人的邮箱来发邮件呢。</p>
+<p><strong>安装 Postfix</strong></p>
+<p>如果是 Ubuntu，请使用</p>
+<pre><code>sudo apt-get install postfix
+</code></pre><p>如果是 Centos，请使用</p>
+<pre><code>yum install postfix
+</code></pre><p>接下来需要进行一些配置</p>
+<p><img src="http://oxygen.qiniudn.com/img2014103024.png" alt="选择Internet Site"><br>这里选择Internet Site</p>
+<p><img src="http://oxygen.qiniudn.com/img2014103025.png" alt="设置FQDN"><br>然后让设置FQDN，但是使用默认的机器名即可，这里不是很确定。</p>
+<p><strong>使用Python发送邮件</strong></p>
+<p>使用<a href="http://www.masnun.com/2010/01/01/sending-mail-via-postfix-a-perfect-python-example.html" target="_blank" rel="noopener">这里</a>给出的完美例子</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"><span class="keyword">from</span> email.mime.multipart <span class="keyword">import</span> MIMEMultipart</span><br><span class="line"><span class="keyword">from</span> email.mime.base <span class="keyword">import</span> MIMEBase</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> COMMASPACE, formatdate</span><br><span class="line"><span class="keyword">from</span> email <span class="keyword">import</span> Encoders</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_mail</span><span class="params">(mail_to, mail_from, subject, text, files, server=<span class="string">"localhost"</span>)</span>:</span></span><br><span class="line">    <span class="keyword">assert</span> type(mail_to) == list</span><br><span class="line">    <span class="keyword">assert</span> type(files) == list</span><br><span class="line"></span><br><span class="line">    msg = MIMEMultipart()</span><br><span class="line">    msg[<span class="string">'From'</span>] = mail_from</span><br><span class="line">    msg[<span class="string">'To'</span>] = COMMASPACE.join(mail_to)</span><br><span class="line">    msg[<span class="string">'Date'</span>] = formatdate(localtime=<span class="keyword">True</span>)</span><br><span class="line">    msg[<span class="string">'Subject'</span>] = subject</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 如果 text 是html，则需要设置 _subtype='html'</span></span><br><span class="line">    <span class="comment"># 默认情况下 _subtype='plain'，即纯文本</span></span><br><span class="line">    <span class="comment"># msg.attach(MIMEText(text, _subtype='html', _charset='utf-8'))</span></span><br><span class="line">    msg.attach(MIMEText(text, _charset=<span class="string">'utf-8'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> f <span class="keyword">in</span> files:</span><br><span class="line">        part = MIMEBase(<span class="string">'application'</span>, <span class="string">"octet-stream"</span>)</span><br><span class="line">        part.set_payload(open(f, <span class="string">"rb"</span>).read())</span><br><span class="line">        Encoders.encode_base64(part)</span><br><span class="line">        part.add_header(<span class="string">'Content-Disposition'</span>, <span class="string">'attachment; filename="%s"'</span></span><br><span class="line">                        % os.path.basename(f))</span><br><span class="line">        msg.attach(part)</span><br><span class="line"></span><br><span class="line">    smtp = smtplib.SMTP(server)</span><br><span class="line">    smtp.sendmail(mail_from, mail_to, msg.as_string())</span><br><span class="line">    smtp.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># Example:</span></span><br><span class="line">    <span class="comment"># 这里可以任意定制发送者的邮箱地址</span></span><br><span class="line">    send_mail([<span class="string">'your_name &lt;your_name@gmail.com&gt;'</span>], <span class="string">'MonitorBase &lt;notify@monitor.base&gt;'</span>, <span class="string">'Hello Python!'</span>, <span class="string">'Say hello to Python! :)'</span>, [])</span><br></pre></td></tr></table></figure>
+<p>最后把使用SMTP登录邮箱发送邮件的方法也附上</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"><span class="keyword">import</span> time, traceback, sys, os</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_mail</span><span class="params">(mail_from, password, mail_to, subject, content)</span>:</span></span><br><span class="line"></span><br><span class="line">    handle = smtplib.SMTP(<span class="string">'smtp.163.com'</span>, <span class="number">25</span>)</span><br><span class="line">    handle.login(mail_from, password)</span><br><span class="line">    time_str = time.strftime(<span class="string">'%Y-%m-%d %X'</span>, time.localtime(time.time()))</span><br><span class="line">    msg = <span class="string">'&lt;html&gt;&lt;body&gt;'</span> + content + <span class="string">"&lt;br&gt;&lt;br&gt;&lt;span style='color:#999;font-size:"</span>\</span><br><span class="line">                        + <span class="string">"10px;font-family:Verdana;'&gt;"</span> \</span><br><span class="line">                        + time_str + <span class="string">" by "</span> + mail_from + <span class="string">"&lt;/span&gt;"</span>+<span class="string">'&lt;/body&gt;&lt;/html&gt;'</span></span><br><span class="line">    send_msg = MIMEText(msg, <span class="string">'html'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line">    send_msg[<span class="string">'Subject'</span>] = subject</span><br><span class="line">    handle.sendmail(mail_from, mail_to, send_msg.as_string())</span><br><span class="line">    handle.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    send_mail(<span class="string">'your_name@163.com'</span>, <span class="string">'your_password'</span>, <span class="string">'Hello Python!'</span>, <span class="string">'Say hello to Python! :)'</span>)</span><br></pre></td></tr></table></figure>
+<p>如果要发送附件</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># created by restran on 2016/07/02</span></span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> unicode_literals, absolute_import, print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"><span class="keyword">from</span> email.mime.multipart <span class="keyword">import</span> MIMEMultipart</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> COMMASPACE, formatdate</span><br><span class="line"><span class="keyword">from</span> future.utils <span class="keyword">import</span> PY2, PY3</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmailHandler</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, mail_from, password, smtp_server, smtp_port=<span class="number">25</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :param mail_from: 发件人</span></span><br><span class="line"><span class="string">        :param password: 发件人密码</span></span><br><span class="line"><span class="string">        :param smtp_server: SMTP服务器地址</span></span><br><span class="line"><span class="string">        :param smtp_port: SMTP服务器端口，SSL 方式是 465</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        </span><br><span class="line">        self.mail_from = mail_from</span><br><span class="line">        self.password = password</span><br><span class="line">        self.smtp_server = smtp_server</span><br><span class="line">        self.smtp_port = smtp_port</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_mail_ssl</span><span class="params">(self, mail_to_list, subject, content, file_name_list)</span>:</span></span><br><span class="line">        self.do_send_mail(<span class="keyword">True</span>, mail_to_list, subject, content, file_name_list)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_mail</span><span class="params">(self, mail_to_list, subject, content, file_name_list)</span>:</span></span><br><span class="line">        self.do_send_mail(<span class="keyword">False</span>, mail_to_list, subject, content, file_name_list)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">do_send_mail</span><span class="params">(self, is_ssl, mail_to_list, subject, content, file_name_list)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        发送邮件</span></span><br><span class="line"><span class="string">        :param is_ssl: 使用SSL的方式发生</span></span><br><span class="line"><span class="string">        :param mail_to_list: 收件人列表</span></span><br><span class="line"><span class="string">        :param subject: 邮件主题</span></span><br><span class="line"><span class="string">        :param content: 邮件正文</span></span><br><span class="line"><span class="string">        :param file_name_list: 附近的文件路径列表</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span> is_ssl:</span><br><span class="line">            smtp = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            smtp = smtplib.SMTP(self.smtp_server, self.smtp_port)</span><br><span class="line"></span><br><span class="line">        smtp.ehlo(name=<span class="string">'foxmail'</span>)</span><br><span class="line">        <span class="comment"># 调用login时，如果没有调用过 echlo 会自动调用该方法，但是默认使用的name为计算机名</span></span><br><span class="line">        <span class="comment"># 如果计算机名有中文，就会返回503方法未实现的异常</span></span><br><span class="line">        smtp.login(self.mail_from, self.password)</span><br><span class="line"></span><br><span class="line">        msg = MIMEMultipart()</span><br><span class="line">        msg[<span class="string">'From'</span>] = self.mail_from</span><br><span class="line">        msg[<span class="string">'To'</span>] = COMMASPACE.join(mail_to_list)</span><br><span class="line">        msg[<span class="string">'Date'</span>] = formatdate(localtime=<span class="keyword">True</span>)</span><br><span class="line">        msg[<span class="string">'Subject'</span>] = subject</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 如果 content 是 html，则需要设置 _subtype='html'</span></span><br><span class="line">        <span class="comment"># 默认情况下 _subtype='plain'，即纯文本</span></span><br><span class="line">        msg.attach(MIMEText(content, _charset=<span class="string">'utf-8'</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> fn <span class="keyword">in</span> file_name_list:</span><br><span class="line">            part = MIMEText(open(fn, <span class="string">'rb'</span>).read(), <span class="string">'base64'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line">            part[<span class="string">"Content-Type"</span>] = <span class="string">'application/octet-stream'</span></span><br><span class="line">            basename = os.path.basename(fn)</span><br><span class="line">            <span class="keyword">if</span> PY2:</span><br><span class="line">                basename = basename.encode(<span class="string">'gb2312'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 文件名使用 gb2312 编码，否则会没有附件</span></span><br><span class="line">            part.add_header(<span class="string">'Content-Disposition'</span>, <span class="string">'attachment'</span>, filename=(<span class="string">'gb2312'</span>, <span class="string">''</span>, basename))</span><br><span class="line">            msg.attach(part)</span><br><span class="line"></span><br><span class="line">        smtp.sendmail(self.mail_from, mail_to_list, msg.as_string())</span><br><span class="line">        smtp.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    handler = EmailHandler(<span class="string">'mail_from@example.com'</span>, <span class="string">'password'</span>, <span class="string">'smtp.example.com'</span>, <span class="number">465</span>)</span><br><span class="line">    mail_to_list = [<span class="string">'example@test.com'</span>]</span><br><span class="line">    subject = <span class="string">'Python 发送邮件测试'</span></span><br><span class="line">    content = <span class="string">'这是用 Python 自动发送的邮件，请勿回复'</span></span><br><span class="line">    <span class="comment"># 附件存放在当前文件夹</span></span><br><span class="line">    file_name_list = [<span class="string">'test.rar'</span>]</span><br><span class="line">    handler.send_mail_ssl(mail_to_list, subject, content, file_name_list)</span><br><span class="line">    print(<span class="string">'邮件发送成功'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag">#Python</a>
+          
+            <a href="/tags/Email/" rel="tag">#Email</a>
+          
+            <a href="/tags/Postfix/" rel="tag">#Postfix</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/17/redis-practice/" rel="prev">一次使用 Redis 优化查询性能的实践</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/09/python-web-proxy/" rel="next">基于 Tornado 实现的 Web 站点反向代理</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2015/02/12/python-postfix-email/';
+      var disqus_title = 'Python 使用 Postfix 发送邮件';
+      var disqus_url = 'http://www.restran.net/2015/02/12/python-postfix-email/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>

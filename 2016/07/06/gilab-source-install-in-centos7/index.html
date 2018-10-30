@@ -1,0 +1,1102 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.5.1"/>
+
+
+
+
+  <meta name="author" content="restran" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="淡水网志" type="application/atom+xml" />
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.1" />
+
+
+<meta name="description" content="之前整理过一份 CentOS 6.5 Minimal 系统环境下，用源代码的方式安装 Gitlab 7.5 的文档，后面因为要将 Gitlab 升级到 8.9 的版本，操作系统也升级到了 CentOS 7，因此重新整理了一份。 Software stackGitLab is a Ruby on Rails application that runs on the following softwar">
+<meta name="keywords" content="gitlab,centos,centos7,git,源码安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS 7 Minimal 安装 Gitlab 8.9">
+<meta property="og:url" content="http://www.restran.net/2016/07/06/gilab-source-install-in-centos7/index.html">
+<meta property="og:site_name" content="淡水网志">
+<meta property="og:description" content="之前整理过一份 CentOS 6.5 Minimal 系统环境下，用源代码的方式安装 Gitlab 7.5 的文档，后面因为要将 Gitlab 升级到 8.9 的版本，操作系统也升级到了 CentOS 7，因此重新整理了一份。 Software stackGitLab is a Ruby on Rails application that runs on the following softwar">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-04-26T06:41:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS 7 Minimal 安装 Gitlab 8.9">
+<meta name="twitter:description" content="之前整理过一份 CentOS 6.5 Minimal 系统环境下，用源代码的方式安装 Gitlab 7.5 的文档，后面因为要将 Gitlab 升级到 8.9 的版本，操作系统也升级到了 CentOS 7，因此重新整理了一份。 Software stackGitLab is a Ruby on Rails application that runs on the following softwar">
+
+<script src="/vendors/pace/pace.min.js"></script>
+<link href="/vendors/pace/themes/red/pace-theme-minimal.css" rel="stylesheet" />
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: ''
+  };
+</script>
+
+
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-38277310-2', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a060ea3ffa16e451223f396f226de9c7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <title> CentOS 7 Minimal 安装 Gitlab 8.9 | 淡水网志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  
+    
+  
+
+  <div class="container one-column page-post-detail">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner "><h1 class="site-meta">
+  <!-- <span class="logo-line-before"><i></i></span> -->
+  <a href="/" class="brand" rel="start">
+      <span class="logo" style="background-image:url(/uploads/avatar.jpg)">
+      </span>
+      <span class="site-title">淡水网志</span>
+  </a>
+  <!-- <span class="logo-line-after"><i></i></span> -->
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon icon-next-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            <i class="menu-item-icon icon-next-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            <i class="menu-item-icon icon-next-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            <i class="menu-item-icon icon-next-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-portfolio">
+          <a href="/portfolio" rel="section">
+            <i class="menu-item-icon icon-next-portfolio"></i> <br />
+            作品集
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            <i class="menu-item-icon icon-next-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      
+  
+
+
+      <div class="main-inner">
+
+        <div id="content" class="content ">
+          
+
+  <div id="posts" class="posts-expand">
+   
+    
+  
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+              CentOS 7 Minimal 安装 Gitlab 8.9
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+         <!--  发表于 -->
+          <time itemprop="dateCreated" datetime="2016-07-06T00:00:00+08:00" content="2016-07-06">
+            2016-07-06
+          </time>
+        </span>
+
+        <span class="post-content-count">&nbsp; | &nbsp; 4,665字</span>
+
+        
+          <span class="post-category" >
+            &nbsp; | &nbsp; 分类于
+            
+              <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                <a href="/categories/Git/" itemprop="url" rel="index">
+                  <span itemprop="name">Git</span>
+                </a>
+              </span>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          &nbsp; | &nbsp;
+          <span id="/2016/07/06/gilab-source-install-in-centos7/"class="leancloud_visitors" data-flag-title="CentOS 7 Minimal 安装 Gitlab 8.9">
+                   &nbsp;阅读
+                  </span>
+        
+        
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2016/07/06/gilab-source-install-in-centos7/#comments" itemprop="discussionUrl">
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/07/06/gilab-source-install-in-centos7/" itemprop="commentsCount"></span>
+            </a>
+          </span>
+          
+        
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>之前整理过一份 CentOS 6.5 Minimal 系统环境下，用源代码的方式安装 Gitlab 7.5 的<a href="https://www.restran.net/2015/04/09/gilab-centos-installation-note/">文档</a>，后面因为要将 Gitlab 升级到 8.9 的版本，操作系统也升级到了 CentOS 7，因此重新整理了一份。</p>
+<h2 id="Software-stack"><a href="#Software-stack" class="headerlink" title="Software stack"></a>Software stack</h2><p>GitLab is a Ruby on Rails application that runs on the following software:<br>Ubuntu/Debian/CentOS/RHEL<br>Ruby (MRI) 2.1<br>Git 2.7.4+<br>Redis 2.8+<br>MySQL or PostgreSQL</p>
+<p><strong>全部命令都是在 root 用户下执行</strong></p>
+<hr>
+<h2 id="1-Installing-the-operating-system-CentOS-7-Minimal"><a href="#1-Installing-the-operating-system-CentOS-7-Minimal" class="headerlink" title="1. Installing the operating system (CentOS 7 Minimal)"></a>1. Installing the operating system (CentOS 7 Minimal)</h2><p>先配置好网卡和DNS，保证网络没问题。</p>
+<h2 id="Updating-and-adding-basic-software-and-services"><a href="#Updating-and-adding-basic-software-and-services" class="headerlink" title="Updating and adding basic software and services"></a>Updating and adding basic software and services</h2><p>先安装 wget</p>
+<pre><code>yum install wget
+</code></pre><h3 id="安装EPEL源"><a href="#安装EPEL源" class="headerlink" title="安装EPEL源"></a>安装EPEL源</h3><p><a href="http://www.cyberciti.biz/faq/installing-rhel-epel-repo-on-centos-redhat-7-x/" target="_blank" rel="noopener">可以参考</a></p>
+<p>输入命令</p>
+<pre><code>yum install epel-release
+
+# wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6 https://www.fedoraproject.org/static/0608B895.txt
+# rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+</code></pre><h3 id="Add-Remi’s-RPM-repository"><a href="#Add-Remi’s-RPM-repository" class="headerlink" title="Add Remi’s RPM repository"></a>Add Remi’s RPM repository</h3><p>Remi’s RPM Repository is unofficial repository for Centos/RHEL that provides latest versions of some software. We take advantage of Remi’s RPM repository to obtain up-to-date version of Redis.<br>Download the GPG key for Remi’s repository and install it on your system:</p>
+<pre><code>wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-remi http://rpms.famillecollet.com/RPM-GPG-KEY-remi
+rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-remi
+</code></pre><p>Verify that the key got installed successfully:</p>
+<pre><code>rpm -qa gpg*
+# 查看输出是否包含
+# gpg-pubkey-00f97f56-467e318a
+</code></pre><p>Now install the remi-release-7 package, which will enable remi-safe repository on your system:</p>
+<pre><code>rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+</code></pre><p>Verify that the EPEL and PUIAS Computational repositories are enabled as shown below:</p>
+<pre><code>yum repolist
+</code></pre><p>如果出现错误 Error: Cannot retrieve metalink for repository: epel. Please verify its path and try again</p>
+<pre><code>vim /etc/yum.repos.d/epel.repo，把基础的恢复，镜像的地址注释掉
+
+#baseurl
+mirrorlist
+</code></pre><p>改成</p>
+<pre><code>baseurl
+# mirrorlist
+
+repo id                 repo name                                                status
+PUIAS_6_computational   PUIAS computational Base 6 - x86_64                      2,018
+base                    CentOS-6 - Base                                          4,802
+epel                    Extra Packages for Enterprise Linux 6 - x86_64           7,879
+extras                  CentOS-6 - Extras                                           12
+updates                 CentOS-6 - Updates                                         814
+repolist: 15,525
+</code></pre><p>If you can’t see them listed, use the folowing command (from <code>yum-utils</code> package) to enable them:</p>
+<pre><code>先安装yum-utils，才能使用yum-config-manager，否则会出现commond not found
+
+yum -y install yum-utils
+yum-config-manager --enable epel --enable PUIAS_6_computational
+</code></pre><p>最后，更新源缓存</p>
+<pre><code>yum clean all &amp;&amp; yum makecache
+</code></pre><h3 id="Install-the-required-tools-for-GitLab"><a href="#Install-the-required-tools-for-GitLab" class="headerlink" title="Install the required tools for GitLab"></a>Install the required tools for GitLab</h3><pre><code>yum -y update
+yum -y groupinstall &apos;Development Tools&apos;
+yum -y install readline readline-devel ncurses-devel gdbm-devel glibc-devel tcl-devel openssl-devel curl-devel expat-devel db4-devel byacc sqlite-devel libyaml libyaml-devel libffi libffi-devel libxml2 libxml2-devel libxslt libxslt-devel libicu libicu-devel system-config-firewall-tui redis sudo wget crontabs logwatch logrotate perl-Time-HiRes git cmake libcom_err-devel.i686 libcom_err-devel.x86_64 ntp nodejs python-docutils
+</code></pre><p>gitlab 8.0 之后的版本需要依赖 nodejs，不然安装 gitlab-shell 的时候会出现没有javascript runtime</p>
+<h3 id="安装vim"><a href="#安装vim" class="headerlink" title="安装vim"></a>安装vim</h3><pre><code>yum -y install vim-enhanced
+update-alternatives --set editor /usr/bin/vim.basic
+</code></pre><h3 id="设置NTP时间同步"><a href="#设置NTP时间同步" class="headerlink" title="设置NTP时间同步"></a>设置NTP时间同步</h3><p>修正时区</p>
+<pre><code> # 删除当前默认时区
+rm -rf /etc/localtime    
+# 复制替换默认时区为上海
+ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
+</code></pre><p>SSH执行以上命令，将时区修改为中国上海的时区，当然，也可以设置中国香港或北京的时间。</p>
+<p>手动修正时间</p>
+<pre><code>date -s &apos;09:16:00 2013-01-21&apos; 
+</code></pre><p>使用“date”命令，修改时间和日期为2013年1月21日，时间是上午9点16分0秒。</p>
+<p>时间自动同步和校正</p>
+<pre><code>yum install -y ntp        # 安装时间同步服务（组件）
+ntpdate us.pool.ntp.org   # 设置同步服务器
+date                      # 查看当前时间
+</code></pre><p>部分系统已经安装了NTP服务，系统会根据当前记录的时区（第一步操作）自动连接ntp服务器校正时间。</p>
+<h3 id="Install-mail-server"><a href="#Install-mail-server" class="headerlink" title="Install mail server"></a>Install mail server</h3><p>In order to receive mail notifications, make sure to install a<br>mail server. The recommended one is postfix and you can install it with:</p>
+<pre><code>yum -y install postfix
+</code></pre><p>To use and configure sendmail instead of postfix see <a href="e-mail/configure_email.md">Advanced Email Configurations</a>.</p>
+<h3 id="配置默认编辑器"><a href="#配置默认编辑器" class="headerlink" title="配置默认编辑器"></a>配置默认编辑器</h3><p>You can choose between editors such as nano, vi, vim, etc.<br>In this case we will use vim as the default editor for consistency.</p>
+<pre><code>ln -s /usr/bin/vim /usr/bin/editor
+</code></pre><p>To remove this alias in the future:<br>以后删除别名的时候用这条命令</p>
+<pre><code>rm -i /usr/bin/editor
+</code></pre><h3 id="从源代码安装-Git"><a href="#从源代码安装-Git" class="headerlink" title="从源代码安装 Git"></a>从源代码安装 Git</h3><p>因为 Git 版本要求 2.7.4+，通过 yum install 的版本是 1.8.3，需要从源代码安装。</p>
+<p>先删除旧版本的 git</p>
+<pre><code>yum -y remove git
+</code></pre><p>Install the pre-requisite files for Git compilation:</p>
+<pre><code>yum install zlib-devel perl-CPAN gettext curl-devel expat-devel gettext-devel openssl-devel
+</code></pre><p>Download and extract it:</p>
+<pre><code>mkdir /tmp/git &amp;&amp; cd /tmp/git
+curl --progress https://www.kernel.org/pub/software/scm/git/git-2.8.4.tar.gz | tar xz
+cd git-2.8.4/
+./configure
+make
+make prefix=/usr/local install
+</code></pre><p>Make sure Git is in your <code>$PATH</code>:</p>
+<pre><code>which git
+</code></pre><p>You might have to logout and login again for the <code>$PATH</code> to take effect.<br><strong>Note:</strong> When editing <code>config/gitlab.yml</code> (step 6), change the git <code>bin_path</code> to <code>/usr/local/bin/git</code>.</p>
+<hr>
+<h2 id="2-Ruby"><a href="#2-Ruby" class="headerlink" title="2. Ruby"></a>2. Ruby</h2><p>GitLab 需要 2.1 以上版本的 Ruby，但是当前不兼容 2.2 和 2.3，先删除旧的</p>
+<pre><code>yum remove ruby
+</code></pre><p>Remove any other Ruby build if it is still present:</p>
+<pre><code>cd &lt;your-ruby-source-path&gt;
+make uninstall
+</code></pre><p>如果没有安装ruby，上述删除的步骤可以跳过</p>
+<p>Download Ruby and compile it:</p>
+<pre><code>mkdir /tmp/ruby &amp;&amp; cd /tmp/ruby
+</code></pre><p>从网上下载</p>
+<pre><code>curl --progress ftp://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.8.tar.gz | tar xz
+</code></pre><p>如果已经下载好，手动上传到服务器，可以先解压缩</p>
+<pre><code>tar -xzf ruby-2.1.8.tar.gz
+</code></pre><p>进入目录</p>
+<pre><code>cd ruby-2.1.8
+./configure --disable-install-rdoc
+</code></pre><p>如果出现错误</p>
+<pre><code>make: Warning: File &apos;common.mk&apos; has modification time 1386501635 s in the future
+</code></pre><p>是由于系统的时间错误导致，可以重新配置一下系统时间，以及NTP自动同步时间</p>
+<p>编译安装</p>
+<pre><code>make
+make prefix=/usr/local install
+</code></pre><h3 id="Install-the-Bundler-Gem"><a href="#Install-the-Bundler-Gem" class="headerlink" title="Install the Bundler Gem:"></a>Install the Bundler Gem:</h3><p>由于 AWS 被墙无法使用，修改 ruby 的源</p>
+<pre><code>gem sources --remove https://rubygems.org/
+gem sources -a https://ruby.taobao.org/
+gem sources -l
+
+gem install bundler --no-doc
+</code></pre><p>Logout and login again for the <code>$PATH</code> to take effect. Check that ruby is properly<br>installed with:</p>
+<pre><code>which ruby
+# /usr/local/bin/ruby
+ruby -v
+</code></pre><h2 id="安装-go-（gitlab-8-0-以后的版本需要go语言的支持）"><a href="#安装-go-（gitlab-8-0-以后的版本需要go语言的支持）" class="headerlink" title="安装 go （gitlab 8.0 以后的版本需要go语言的支持）"></a>安装 go （gitlab 8.0 以后的版本需要go语言的支持）</h2><pre><code>mkdir /tmp/go &amp;&amp; cd /tmp/go
+</code></pre><p>下载</p>
+<pre><code>URL=&apos;https://storage.googleapis.com/golang/&apos; &amp;&amp; wget -c `curl -s $URL|xmllint --format - |awk -PF&apos;[&gt;&lt;]&apos; &apos;{if ($3~/linux/ &amp;&amp; $3!~/(beta|rc)[0-9]+|armv6l|386/)a=$3}END{print &quot;&apos;$URL&apos;&quot;a}&apos;`
+</code></pre><p>解压缩</p>
+<pre><code>tar xf go*.linux-amd64.tar.gz -C /usr/local/ 
+echo &quot;PATH=/usr/local/go/bin:\$PATH&quot; &gt;/etc/profile.d/go.sh
+. /etc/profile.d/go.sh
+go version
+</code></pre><h2 id="3-System-Users"><a href="#3-System-Users" class="headerlink" title="3. System Users"></a>3. System Users</h2><p>Create a <code>git</code> user for Gitlab:</p>
+<pre><code>adduser --system --shell /bin/bash --comment &apos;GitLab&apos; --create-home --home-dir /home/git/ git
+</code></pre><p><strong>Important:</strong> In order to include <code>/usr/local/bin</code> to git user’s PATH, one way is to edit the sudoers file. As root run:</p>
+<pre><code>visudo
+</code></pre><p>Then search for this line:</p>
+<pre><code>Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+</code></pre><p>and append <code>/usr/local/bin</code> like so:</p>
+<pre><code>Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
+</code></pre><p>Save and exit.</p>
+<hr>
+<h2 id="4-Database"><a href="#4-Database" class="headerlink" title="4. Database"></a>4. Database</h2><h3 id="4-2-MySQL"><a href="#4-2-MySQL" class="headerlink" title="4.2 MySQL"></a>4.2 MySQL</h3><p>CentOS 7 版本将 MySQL 数据库软件从默认的程序列表中移除，用 Mariadb 代替了</p>
+<pre><code>yum install -y mariadb mariadb-server mariadb-devel
+
+systemctl enable mariadb  #设置开机启动
+systemctl start mariadb #启动MariaDB
+</code></pre><p>mariadb数据库的相关命令是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mariadb  #启动MariaDB</span><br><span class="line">systemctl stop mariadb  #停止MariaDB</span><br><span class="line">systemctl restart mariadb  #重启MariaDB</span><br><span class="line">systemctl enable mariadb  #设置开机启动</span><br></pre></td></tr></table></figure>
+<p>Ensure you have MySQL version 5.5.14 or later:</p>
+<pre><code>mysql --version
+</code></pre><p>设置数据库 root 用户密码，并设置相关的安全配置</p>
+<pre><code>mysql_secure_installation
+</code></pre><p>因为是刚安装完数据库，因此没有 root 账户的密码，按回车后，会开始让设置密码。设置完密码后，会问是否删除匿名用户（不需要密码就能登录），选择 y。</p>
+<p>登录 MySQL (输入数据库 root 用户的密码):</p>
+<pre><code>mysql -u root -p
+</code></pre><p>Create a user for GitLab (change $password in the command below to a real password you pick):</p>
+<p><strong>修改$password为自己的密码</strong></p>
+<pre><code>CREATE USER &apos;git&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;$password&apos;;
+</code></pre><p>Ensure you can use the InnoDB engine which is necessary to support long indexes.<br>If this fails, check your MySQL config files (e.g. <code>/etc/mysql/*.cnf</code>, <code>/etc/mysql/conf.d/*</code>) for the setting “innodb = off”.</p>
+<pre><code>SET storage_engine=INNODB;
+</code></pre><p>Create the GitLab production database:</p>
+<pre><code>CREATE DATABASE IF NOT EXISTS `gitlabhq_production` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_unicode_ci`;
+</code></pre><p>Grant the GitLab user necessary permissions on the table:</p>
+<pre><code>GRANT SELECT, LOCK TABLES, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON `gitlabhq_production`.* TO &apos;git&apos;@&apos;localhost&apos;;
+</code></pre><p>Quit the database session:</p>
+<pre><code>\q
+</code></pre><p>Try connecting to the new database with the new user:</p>
+<pre><code>sudo -u git -H mysql -u git -p -D gitlabhq_production
+</code></pre><p>使用上面在MySQL中创建的git用户的密码</p>
+<p>Type the password you replaced $password with earlier.<br>Quit the database session:</p>
+<pre><code>\q
+</code></pre><p>配置 MySQL max_allowed_packet 的大小，避免POST太大的内容导致出现 500 错误，例如 GitLab 发出 MergeRequest 的时候返回 500 错误。</p>
+<pre><code>vim /etc/my.cnf
+</code></pre><p>在 mysqld 中添加 max_allowed_packet，调整值，加大为一个合适的数字即可。</p>
+<pre><code>[mysqld]
+max_allowed_packet=512M
+</code></pre><p>然后 reload 下 mysql 的服务即可。</p>
+<pre><code>systemctl restart mariadb
+</code></pre><hr>
+<h2 id="5-Redis"><a href="#5-Redis" class="headerlink" title="5. Redis"></a>5. Redis</h2><p>Make sure redis is started on boot:</p>
+<pre><code>chkconfig redis on
+</code></pre><p>Configure redis to use sockets:</p>
+<pre><code>cp /etc/redis.conf /etc/redis.conf.orig
+</code></pre><p>Disable Redis listening on TCP by setting ‘port’ to 0:</p>
+<pre><code>sed &apos;s/^port .*/port 0/&apos; /etc/redis.conf.orig | sudo tee /etc/redis.conf
+</code></pre><p>Enable Redis socket for default CentOS path:</p>
+<pre><code>echo &apos;unixsocket /var/run/redis/redis.sock&apos; | sudo tee -a /etc/redis.conf
+echo -e &apos;unixsocketperm 0775&apos; | sudo tee -a /etc/redis.conf
+</code></pre><p>Activate the changes to redis.conf:</p>
+<pre><code>service redis restart
+</code></pre><p>Add git to the redis group:</p>
+<pre><code>usermod -aG redis git
+</code></pre><hr>
+<h2 id="6-GitLab"><a href="#6-GitLab" class="headerlink" title="6. GitLab"></a>6. GitLab</h2><pre><code># We&apos;ll install GitLab into home directory of the user &quot;git&quot;
+cd /home/git
+</code></pre><h3 id="Clone-the-Source"><a href="#Clone-the-Source" class="headerlink" title="Clone the Source"></a>Clone the Source</h3><pre><code># 先切换到git账户
+su - git
+# 再clone代码
+git clone https://github.com/gitlabhq/gitlabhq.git -b 8-8-stable gitlab
+</code></pre><p>或者中文翻译版</p>
+<pre><code>git clone https://gitlab.com/larryli/gitlab.git -b 8-8-zh gitlab
+
+# 退出git用户操作命令，使用root用户操作
+logout
+</code></pre><h3 id="Configure-it"><a href="#Configure-it" class="headerlink" title="Configure it"></a>Configure it</h3><pre><code># Go to GitLab installation folder
+cd /home/git/gitlab
+</code></pre><p>为了方便添加 git 用户拥有 root 权限，sudoers文件默认没有写权限需要强制保存:wq!</p>
+<pre><code>vi /etc/sudoers
+</code></pre><p>最后添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git     ALL=(ALL)       ALL</span><br></pre></td></tr></table></figure>
+<p>Copy the example GitLab config</p>
+<pre><code>sudo -u git -H cp config/gitlab.yml.example config/gitlab.yml
+</code></pre><p>Update GitLab config file, follow the directions at top of file</p>
+<pre><code>sudo -u git -H vim config/gitlab.yml
+</code></pre><p>配置如下信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">host: 192.168.137.142</span><br><span class="line">port: 8008</span><br><span class="line">email_from: gitlab@example.com</span><br><span class="line">default_theme: 1</span><br></pre></td></tr></table></figure>
+<p>确保 GitLab 可以写 log/ and tmp/ 目录</p>
+<pre><code>chown -R git log/
+chown -R git tmp/
+chmod -R u+rwX log/
+chmod -R u+rwX tmp/
+</code></pre><p>Create directory for satellites</p>
+<pre><code>sudo -u git -H mkdir /home/git/gitlab-satellites
+chmod u+rwx,g=rx,o-rwx /home/git/gitlab-satellites
+</code></pre><p>Make sure GitLab can write to the tmp/pids/ and tmp/sockets/ directories</p>
+<pre><code>chmod -R u+rwX tmp/pids/
+chmod -R u+rwX tmp/sockets/
+</code></pre><p>Make sure GitLab can write to the public/uploads/ directory</p>
+<pre><code>sudo -u git mkdir /home/git/gitlab/public/uploads
+chmod -R u+rwX  /home/git/gitlab/public/uploads
+</code></pre><p>Copy the example Unicorn config</p>
+<pre><code>sudo -u git -H cp config/unicorn.rb.example config/unicorn.rb
+</code></pre><p>Find number of cores</p>
+<pre><code>nproc
+
+# Enable cluster mode if you expect to have a high load instance
+# Ex. change amount of workers to 3 for 2GB RAM server
+# Set the number of workers to at least the number of cores
+sudo -u git -H vim config/unicorn.rb
+</code></pre><blockquote>
+<p>特别注意：比较差配置的机器，注意将unicorn.rb中的timeout设置大一点，因为第一次启动的时候Gitlab需要初始化，如果timeout太小，由于需要执行较长时间，导致无法正常启动，出现502错误**</p>
+</blockquote>
+<p>Copy the example Rack attack config</p>
+<pre><code>sudo -u git -H cp config/initializers/rack_attack.rb.example config/initializers/rack_attack.rb
+</code></pre><p>Configure Git global settings for git user, useful when editing via web.</p>
+<p>Edit user.email according to what is set in gitlab.yml</p>
+<pre><code>sudo -u git -H git config --global user.name &quot;GitLab&quot;
+sudo -u git -H git config --global user.email &quot;gitlab@example.com&quot;
+sudo -u git -H git config --global core.autocrlf input
+
+# Configure Redis connection settings
+sudo -u git -H cp config/resque.yml.example config/resque.yml
+</code></pre><p>如果不使用Redis的默认端口，则需要配置，Change the Redis socket path if you are not using the default CentOS configuration</p>
+<pre><code>sudo -u git -H vim config/resque.yml
+</code></pre><p><strong>Important Note:</strong> Make sure to edit both <code>gitlab.yml</code> and <code>unicorn.rb</code> to match your setup.</p>
+<p><strong>Note:</strong> If you want to use HTTPS, see <a href="https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/install/installation.md#using-https" target="_blank" rel="noopener">Using HTTPS</a> for the additional steps.</p>
+<p>配置一下权限</p>
+<pre><code>sudo chmod 700 /home/git/gitlab/public/uploads
+sudo chmod -R ug+rwX,o-rwx /home/git/repositories/
+sudo chmod -R ug-s /home/git/repositories/
+sudo find /home/git/repositories/ -type d -print0 | sudo xargs -0 chmod g+s
+</code></pre><h3 id="Configure-GitLab-DB-settings"><a href="#Configure-GitLab-DB-settings" class="headerlink" title="Configure GitLab DB settings"></a>Configure GitLab DB settings</h3><pre><code>sudo -u git cp config/database.yml.mysql config/database.yml
+</code></pre><p>配置数据库的密码，修改为正确的用户名和密码，分别修改git用户和root用户</p>
+<pre><code>sudo -u git -H vim config/database.yml
+</code></pre><p>Make config/database.yml readable to git only</p>
+<pre><code>sudo -u git -H chmod o-rwx config/database.yml
+</code></pre><h3 id="Install-Gems"><a href="#Install-Gems" class="headerlink" title="Install Gems"></a>Install Gems</h3><p><strong>Note:</strong> As of bundler 1.5.2, you can invoke <code>bundle install -jN</code><br>(where <code>N</code> the number of your processor cores) and enjoy the parallel gems installation with measurable<br>difference in completion time (~60% faster). Check the number of your cores with <code>nproc</code>.<br>For more information check this <a href="http://robots.thoughtbot.com/parallel-gem-installing-using-bundler" target="_blank" rel="noopener">post</a>.<br>First make sure you have bundler &gt;= 1.5.2 (run <code>bundle -v</code>) as it addresses some <a href="https://devcenter.heroku.com/changelog-items/411" target="_blank" rel="noopener">issues</a><br>that were <a href="https://github.com/bundler/bundler/pull/2817" target="_blank" rel="noopener">fixed</a> in 1.5.2.</p>
+<pre><code>cd /home/git/gitlab
+</code></pre><p>修改为淘宝的ruby源</p>
+<pre><code>vi Gemfile
+</code></pre><p>修改为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source &quot;https://ruby.taobao.org/&quot;</span><br></pre></td></tr></table></figure>
+<pre><code>sudo -u git -H bundle install --deployment --without development test postgres aws
+</code></pre><p>这一步的时间会等很久</p>
+<h3 id="Install-GitLab-shell"><a href="#Install-GitLab-shell" class="headerlink" title="Install GitLab shell"></a>Install GitLab shell</h3><p>GitLab Shell is an SSH access and repository management software developed specially for GitLab.</p>
+<p>Run the installation task for gitlab-shell (replace <code>REDIS_URL</code> if needed):</p>
+<pre><code>su - git
+cd /home/git/gitlab
+bundle exec rake gitlab:shell:install[v$(cat GITLAB_SHELL_VERSION)] REDIS_URL=unix:/var/run/redis/redis.sock RAILS_ENV=production
+
+logout
+</code></pre><p>如果出现错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Errno::ENOENT: No such file or directory - /usr/bin/git</span><br></pre></td></tr></table></figure>
+<p>找一下 git 所在的位置</p>
+<pre><code>which git
+</code></pre><p>例如我是在/usr/local/bin/git，因此建立软连接</p>
+<pre><code>ln -s /usr/local/bin/git /usr/bin/git
+</code></pre><p>By default, the gitlab-shell config is generated from your main GitLab config. You can review (and modify) the gitlab-shell config as follows:</p>
+<pre><code>sudo -u git -H editor /home/git/gitlab-shell/config.yml
+
+# Ensure the correct SELinux contexts are set
+# Read http://wiki.centos.org/HowTos/Network/SecuringSSH
+restorecon -Rv /home/git/.ssh
+</code></pre><h3 id="安装-gitlab-workhorse"><a href="#安装-gitlab-workhorse" class="headerlink" title="安装 gitlab-workhorse"></a>安装 gitlab-workhorse</h3><pre><code>su - git
+cd /home/git/
+git clone https://gitlab.com/gitlab-org/gitlab-workhorse.git  
+logout
+
+cd /home/git/gitlab-workhorse  
+</code></pre><p>编译安装</p>
+<pre><code>sudo -u git -H make
+</code></pre><p>如果出现错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/sh: go: 未找到命令</span><br></pre></td></tr></table></figure>
+<p>找一下 go 所在的位置</p>
+<pre><code>which go
+</code></pre><p>例如我是在 /usr/local/go/bin/go，因此建立软连接</p>
+<pre><code>ln -s /usr/local/go/bin/go /usr/bin/go
+</code></pre><p>然后重新编译安装一下</p>
+<p><strong>Note:</strong> If you want to use HTTPS, see <a href="#using-https">Using HTTPS</a> for the additional steps.</p>
+<h3 id="初始化数据并且激活高级特性"><a href="#初始化数据并且激活高级特性" class="headerlink" title="初始化数据并且激活高级特性"></a>初始化数据并且激活高级特性</h3><pre><code>cd /home/git/gitlab/
+sudo -u git -H bundle exec rake gitlab:setup RAILS_ENV=production
+</code></pre><p>Type <strong>yes</strong> to create the database.<br>When done you see <strong>Administrator account created:</strong>.</p>
+<p><strong>Note:</strong> You can set the Administrator password by supplying it in environmental variable <code>GITLAB_ROOT_PASSWORD</code>, eg.:</p>
+<h3 id="Install-Init-Script"><a href="#Install-Init-Script" class="headerlink" title="Install Init Script"></a>Install Init Script</h3><p>Download the init script (will be /etc/init.d/gitlab):</p>
+<pre><code>sudo cp /home/git/gitlab/lib/support/init.d/gitlab /etc/init.d/gitlab
+chmod +x /etc/init.d/gitlab
+chkconfig --add gitlab
+</code></pre><p>Make GitLab start on boot:</p>
+<pre><code>chkconfig gitlab on
+</code></pre><h3 id="Set-up-logrotate"><a href="#Set-up-logrotate" class="headerlink" title="Set up logrotate"></a>Set up logrotate</h3><pre><code>cp lib/support/logrotate/gitlab /etc/logrotate.d/gitlab
+</code></pre><h3 id="Check-Application-Status"><a href="#Check-Application-Status" class="headerlink" title="Check Application Status"></a>Check Application Status</h3><p>Check if GitLab and its environment are configured correctly:</p>
+<pre><code>sudo -u git -H bundle exec rake gitlab:env:info RAILS_ENV=production
+</code></pre><h3 id="Compile-assets"><a href="#Compile-assets" class="headerlink" title="Compile assets"></a>Compile assets</h3><pre><code>sudo -u git -H bundle exec rake assets:precompile RAILS_ENV=production
+</code></pre><h3 id="Start-your-GitLab-instance"><a href="#Start-your-GitLab-instance" class="headerlink" title="Start your GitLab instance"></a>Start your GitLab instance</h3><pre><code>service gitlab start
+</code></pre><h2 id="7-Configure-the-web-server"><a href="#7-Configure-the-web-server" class="headerlink" title="7. Configure the web server"></a>7. Configure the web server</h2><p>Use either Nginx or Apache, not both. Official installation guide recommends nginx.</p>
+<h3 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h3><p>You will need a new version of nginx otherwise you might encounter an issue like <a href="https://github.com/gitlabhq/gitlabhq/issues/5774" target="_blank" rel="noopener">this</a>.<br>To do so, follow the instructions provided by the <a href="http://wiki.nginx.org/Install#Official_Red_Hat.2FCentOS_packages" target="_blank" rel="noopener">nginx wiki</a> and then install nginx with:</p>
+<pre><code>yum update
+yum -y install nginx
+chkconfig nginx on
+</code></pre><p>使用SSl</p>
+<pre><code>cp lib/support/nginx/gitlab-ssl /etc/nginx/conf.d/gitlab.conf
+</code></pre><p>不使用SSL</p>
+<pre><code>cp lib/support/nginx/gitlab /etc/nginx/conf.d/gitlab.conf
+</code></pre><p>Edit <code>/etc/nginx/conf.d/gitlab.conf</code> and replace <code>git.example.com</code> with your FQDN. Make sure to read the comments in order to properly set up SSL.</p>
+<pre><code>vi /etc/nginx/conf.d/gitlab.conf
+</code></pre><p>去掉listen后面的default_server，修改为正确的端口号<br>去掉 listen [::]:<br>修改server_name 为本机的IP地址</p>
+<p>修改<code>client_max_body_size 256m;</code> 否则当推送较多数据到 gitlab 上时，会由于数据过大，而出现错误<br>    fatal: The remote end hung up unexpectedly fatal: The remote end hung up unexpectedly error: RPC failed; result=22, HTTP code = 413</p>
+<p>Add <code>nginx</code> user to <code>git</code> group:</p>
+<pre><code>usermod -a -G git nginx
+chmod g+rx /home/git/
+
+//chmod -R g+rx /home/git/gitlab/
+
+# 修改权限
+//chmod o+x /home/git
+</code></pre><p>将selinux关闭，否则会出现 nginx 访问错误 (13: Permission denied)，HTTP显示502</p>
+<pre><code>setenforce 0 # 只是临时关闭，重启后问题仍然出现
+</code></pre><p>Finally start nginx with:</p>
+<pre><code>service nginx start
+</code></pre><p>出现错误<br>nginx: [emerg] bind() to 0.0.0.0:8080 failed (13: Permission denied)</p>
+<p> <a href="http://www.tlanyan.me/nginx-open-failed-permission-denied/" target="_blank" rel="noopener">将selinux关闭就可以</a></p>
+<p><strong>注意：开启selinux情况下正常使用nginx，需要修改selinux的策略</strong></p>
+<p>将selinux关闭就可以</p>
+<p>查看SELinux状态：<br>1、/usr/sbin/sestatus -v      ##如果SELinux status参数为enabled即为开启状态</p>
+<pre><code>SELinux status:                 enabled
+</code></pre><p>2、getenforce                 ##也可以用这个命令检查</p>
+<p>关闭SELinux：<br>1、临时关闭（不用重启机器）：</p>
+<pre><code>setenforce 0    ##设置SELinux 成为permissive模式
+##setenforce 1 设置SELinux 成为enforcing模式
+</code></pre><p>2、修改配置文件需要重启机器：<br>修改/etc/selinux/config 文件</p>
+<pre><code>vi /etc/selinux/config
+</code></pre><p>将<code>SELINUX=enforcing</code> 改为 <code>SELINUX=disabled</code>,重启机器即可</p>
+<pre><code>shutdown -r now
+service gitlab restart
+</code></pre><h4 id="Test-Configuration"><a href="#Test-Configuration" class="headerlink" title="Test Configuration"></a>Test Configuration</h4><p>Validate your <code>gitlab</code> or <code>gitlab-ssl</code> Nginx config file with the following command:</p>
+<pre><code>nginx -t
+</code></pre><p>You should receive <code>syntax is okay</code> and <code>test is successful</code> messages. If you receive errors check your <code>gitlab</code> or <code>gitlab-ssl</code> Nginx config file for typos, etc. as indiciated in the error message given.</p>
+<pre><code>//vi /home/git/gitlab-shell/config.yml
+//修改gitlab_url为nginx中配置的相应端口
+//gitlab_url: http://192.168.137.142:8083/
+</code></pre><h2 id="8-Configure-the-firewall"><a href="#8-Configure-the-firewall" class="headerlink" title="8. Configure the firewall"></a>8. Configure the firewall</h2><pre><code>systemctl stop firewalld
+systemctl mask firewalld
+</code></pre><p>设置开放端口到服务器外访问，这里以8081为例子，需要替换为真实的端口</p>
+<pre><code>/sbin/iptables -I INPUT -p tcp --dport 8081 -j ACCEPT 
+</code></pre><p>Restart the service for the changes to take effect:</p>
+<pre><code>service iptables restart
+</code></pre><h2 id="Done"><a href="#Done" class="headerlink" title="Done!"></a>Done!</h2><h3 id="Double-check-Application-Status"><a href="#Double-check-Application-Status" class="headerlink" title="Double-check Application Status"></a>Double-check Application Status</h3><p>To make sure you didn’t miss anything run a more thorough check with:</p>
+<pre><code>cd /home/git/gitlab
+sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
+</code></pre><p>如果都是绿色的，表示安装成功。</p>
+<h2 id="Initial-Login"><a href="#Initial-Login" class="headerlink" title="Initial Login"></a>Initial Login</h2><p>默认的用户名是 root，一开始会要求重新设置密码</p>
+<pre><code>root
+5iveL!fe
+</code></pre><h2 id="代码更新"><a href="#代码更新" class="headerlink" title="代码更新"></a>代码更新</h2><p><strong>修改Github上的代码，然后更新到服务器上</strong></p>
+<pre><code>cd /home/git/gitlab/
+
+git fetch origin
+git merge origin/7-5-zh
+
+# 重启 gitlab
+service gitlab restart
+</code></pre><h2 id="Gitlab-备份"><a href="#Gitlab-备份" class="headerlink" title="Gitlab 备份"></a>Gitlab 备份</h2><p>官网的备份说明</p>
+<p><a href="https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md" target="_blank" rel="noopener">https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/raketasks/backup_restore.md</a></p>
+<h3 id="查看备份设置"><a href="#查看备份设置" class="headerlink" title="查看备份设置"></a>查看备份设置</h3><pre><code>vim /home/git/gitlab/config/gitlab.yml
+</code></pre><p>检查Backup Settings设置项<br>默认情况下，备份文件是存放在/home/git/gitlab/tmp/backups/</p>
+<h3 id="执行备份"><a href="#执行备份" class="headerlink" title="执行备份"></a>执行备份</h3><pre><code>sudo service gitlab stop # 先停止Gitlab，可以不暂停
+cd /home/git/gitlab/
+sudo -u git -H bundle exec rake gitlab:backup:create RAILS_ENV=production
+</code></pre><p>执行完成后，会在/home/git/gitlab/tmp/backups/目录下创建一个备份俄文件，以时间戳_gitlab_backup命名如 1417040627_gitlab_backup.tar</p>
+<h3 id="重新启动"><a href="#重新启动" class="headerlink" title="重新启动"></a>重新启动</h3><pre><code>sudo service gitlab start
+sudo service nginx restart
+</code></pre><h3 id="还原"><a href="#还原" class="headerlink" title="还原"></a>还原</h3><p>需要给其他用户配置读写执行的权限</p>
+<pre><code>chmod o+wrx /home/git/.ssh/authorized_keys.lock
+</code></pre><p>否则会出现如下错误，是由于没有权限<br>/home/git/gitlab-shell/lib/gitlab_keys.rb:101:in `initialize’: Permission denied @ rb_sysopen - /home/git/.ssh/authorized_keys.lock (Errno::EACCES)</p>
+<p>需要使用 git 用户来执行，否则会没有权限操作 git 目录下的文件，<code>timestamp_of_backup</code>为时间戳如 1417040627</p>
+<pre><code>sudo service gitlab stop
+cd /home/git/gitlab/ 
+sudo -u git -H bundle exec rake gitlab:backup:restore BACKUP=timestamp_of_backup RAILS_ENV=production
+</code></pre><p>如果是从全新部署的 gitlab 还原，需要执行这一步</p>
+<pre><code>sudo -u git -H bundle exec rake gitlab:satellites:create RAILS_ENV=production
+</code></pre><p>重启 gitlab</p>
+<pre><code>sudo service gitlab start
+sudo service nginx restart
+
+sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
+</code></pre><h3 id="设置自动备份"><a href="#设置自动备份" class="headerlink" title="设置自动备份"></a>设置自动备份</h3><pre><code>sudo service gitlab stop;
+cd /home/git/gitlab;
+sudo -u git -H editor config/gitlab.yml; 
+# Enable keep_time in the backup section to automatically delete old backups
+</code></pre><p>keep_time参数默认是604800（单位是秒），因此会保留最近7天内的备份</p>
+<pre><code>sudo -u git crontab -e # Edit the crontab for the git user
+</code></pre><p>将如下内容添加到文件末尾</p>
+<pre><code># Create a full backup of the GitLab repositories and SQL database every day at 2am
+0 2 * * * cd /home/git/gitlab &amp;&amp; PATH=/usr/local/bin:/usr/bin:/bin bundle exec rake gitlab:backup:create RAILS_ENV=production CRON=1
+</code></pre><p>每天凌晨2点自动备份</p>
+<p>The CRON=1 environment setting tells the backup script to suppress all progress output if there are no errors. This is recommended to reduce cron spam.</p>
+<p><strong>重新启动</strong></p>
+<pre><code>sudo service gitlab start;
+sudo service nginx restart;
+sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production;
+</code></pre><h2 id="忘记管理员密码"><a href="#忘记管理员密码" class="headerlink" title="忘记管理员密码"></a>忘记管理员密码</h2><p>可以参考<a href="https://www.nitrohsu.com/gitlab-reset-administrator-password.html" target="_blank" rel="noopener">这篇文章</a></p>
+<p>Gitlab 服务器上使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Gitlab 安装路径</span><br><span class="line">cd /home/git/gitlab</span><br><span class="line"># 进入Rails控制台</span><br><span class="line">sudo -u git -H bundle exec rails console production</span><br></pre></td></tr></table></figure>
+<p>ominbus上使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo gitlab-rails console</span><br><span class="line"># 或者</span><br><span class="line">sudo gitlab-rake rails console</span><br></pre></td></tr></table></figure>
+<p>进入控制台，如果知道需要修改用户的邮箱，使用如下，直接修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">user = User.find_by(email: &apos;admin@example.com&apos;)</span><br><span class="line">user.password = &apos;secret_password&apos;</span><br><span class="line">user.password_confirmation = &apos;secret_password&apos;</span><br><span class="line">user.save</span><br></pre></td></tr></table></figure>
+<p>如果不知道具体邮箱，可以通过find来查找邮箱</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user = User.find(1)</span><br></pre></td></tr></table></figure>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li><a href="https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/install/centos" target="_blank" rel="noopener">https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/install/centos</a></li>
+<li><a href="https://www.dwhd.org/20160406_094416.html" target="_blank" rel="noopener">https://www.dwhd.org/20160406_094416.html</a></li>
+</ul>
+</span>
+      
+    </div>
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gitlab/" rel="tag">#Gitlab</a>
+          
+            <a href="/tags/Git/" rel="tag">#Git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/25/auto-deployment-with-frabic/" rel="prev">使用 Fabric 自动化部署 Python 项目</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/09/vuejs-notes/" rel="next">Vue.js 1.0 学习笔记</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+  
+
+
+    <div class="post-spread">
+      
+    </div>
+    
+  </div>
+
+ 
+        </div>
+
+        
+          
+            <div class="comments" id="comments">
+              
+                <div id="disqus_thread">
+                  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                </div>
+              
+            </div>
+          
+        
+      </div>
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/uploads/avatar.jpg" alt="restran" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">restran</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">在位流的海洋里徜徉～</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="menu-item-icon icon-next-feed"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/restran" target="_blank">Github</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/restran" target="_blank">Weibo</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://douban.com/people/restran" target="_blank">Douban</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/restran" target="_blank">Zhihu</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+          <div class="cc-license motion-element" itemprop="license">
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+              <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.itpub.net/22664653/" target="_blank">北在南方</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://qzcool.com/" target="_blank">fredliu</a>
+              </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://linyuhao.cc/" target="_blank">依依呀呀</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Software-stack"><span class="nav-number">1.</span> <span class="nav-text">Software stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Installing-the-operating-system-CentOS-7-Minimal"><span class="nav-number">2.</span> <span class="nav-text">1. Installing the operating system (CentOS 7 Minimal)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Updating-and-adding-basic-software-and-services"><span class="nav-number">3.</span> <span class="nav-text">Updating and adding basic software and services</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装EPEL源"><span class="nav-number">3.1.</span> <span class="nav-text">安装EPEL源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Add-Remi’s-RPM-repository"><span class="nav-number">3.2.</span> <span class="nav-text">Add Remi’s RPM repository</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-the-required-tools-for-GitLab"><span class="nav-number">3.3.</span> <span class="nav-text">Install the required tools for GitLab</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装vim"><span class="nav-number">3.4.</span> <span class="nav-text">安装vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置NTP时间同步"><span class="nav-number">3.5.</span> <span class="nav-text">设置NTP时间同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-mail-server"><span class="nav-number">3.6.</span> <span class="nav-text">Install mail server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置默认编辑器"><span class="nav-number">3.7.</span> <span class="nav-text">配置默认编辑器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从源代码安装-Git"><span class="nav-number">3.8.</span> <span class="nav-text">从源代码安装 Git</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Ruby"><span class="nav-number">4.</span> <span class="nav-text">2. Ruby</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-the-Bundler-Gem"><span class="nav-number">4.1.</span> <span class="nav-text">Install the Bundler Gem:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-go-（gitlab-8-0-以后的版本需要go语言的支持）"><span class="nav-number">5.</span> <span class="nav-text">安装 go （gitlab 8.0 以后的版本需要go语言的支持）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-System-Users"><span class="nav-number">6.</span> <span class="nav-text">3. System Users</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Database"><span class="nav-number">7.</span> <span class="nav-text">4. Database</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-MySQL"><span class="nav-number">7.1.</span> <span class="nav-text">4.2 MySQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Redis"><span class="nav-number">8.</span> <span class="nav-text">5. Redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-GitLab"><span class="nav-number">9.</span> <span class="nav-text">6. GitLab</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Clone-the-Source"><span class="nav-number">9.1.</span> <span class="nav-text">Clone the Source</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Configure-it"><span class="nav-number">9.2.</span> <span class="nav-text">Configure it</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Configure-GitLab-DB-settings"><span class="nav-number">9.3.</span> <span class="nav-text">Configure GitLab DB settings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-Gems"><span class="nav-number">9.4.</span> <span class="nav-text">Install Gems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-GitLab-shell"><span class="nav-number">9.5.</span> <span class="nav-text">Install GitLab shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-gitlab-workhorse"><span class="nav-number">9.6.</span> <span class="nav-text">安装 gitlab-workhorse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化数据并且激活高级特性"><span class="nav-number">9.7.</span> <span class="nav-text">初始化数据并且激活高级特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Install-Init-Script"><span class="nav-number">9.8.</span> <span class="nav-text">Install Init Script</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set-up-logrotate"><span class="nav-number">9.9.</span> <span class="nav-text">Set up logrotate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Check-Application-Status"><span class="nav-number">9.10.</span> <span class="nav-text">Check Application Status</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Compile-assets"><span class="nav-number">9.11.</span> <span class="nav-text">Compile assets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Start-your-GitLab-instance"><span class="nav-number">9.12.</span> <span class="nav-text">Start your GitLab instance</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Configure-the-web-server"><span class="nav-number">10.</span> <span class="nav-text">7. Configure the web server</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx"><span class="nav-number">10.1.</span> <span class="nav-text">Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Test-Configuration"><span class="nav-number">10.1.1.</span> <span class="nav-text">Test Configuration</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Configure-the-firewall"><span class="nav-number">11.</span> <span class="nav-text">8. Configure the firewall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Done"><span class="nav-number">12.</span> <span class="nav-text">Done!</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Double-check-Application-Status"><span class="nav-number">12.1.</span> <span class="nav-text">Double-check Application Status</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initial-Login"><span class="nav-number">13.</span> <span class="nav-text">Initial Login</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码更新"><span class="nav-number">14.</span> <span class="nav-text">代码更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gitlab-备份"><span class="nav-number">15.</span> <span class="nav-text">Gitlab 备份</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看备份设置"><span class="nav-number">15.1.</span> <span class="nav-text">查看备份设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行备份"><span class="nav-number">15.2.</span> <span class="nav-text">执行备份</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重新启动"><span class="nav-number">15.3.</span> <span class="nav-text">重新启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#还原"><span class="nav-number">15.4.</span> <span class="nav-text">还原</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置自动备份"><span class="nav-number">15.5.</span> <span class="nav-text">设置自动备份</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#忘记管理员密码"><span class="nav-number">16.</span> <span class="nav-text">忘记管理员密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">17.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    
+    
+    
+        <footer id="footer" class="footer">
+          <div class="footer-inner"> <div class="copyright" >
+  
+  &copy;&nbsp; 2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  by
+  <span class="author" itemprop="copyrightHolder">restran, </span>
+</div>
+
+  <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT Mist. 
+  </a>
+  </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+
+
+ </div>
+        </footer>
+    
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/js/lazyload.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $("#posts").find('img').lazyload({
+        placeholder: "/images/loading.gif",
+        effect: "fadeIn",
+        load: function (element_left) {
+          // 图片加载后，修改 img 的父节点 a 的 href
+          // 确保 fancybox 上面的图片显示正确
+          var node = $(this);
+          node.parent().attr('href', node.attr('data-original'));
+        }
+      });
+    });
+  </script>
+  
+
+  
+
+  
+  
+<script type="text/javascript">
+    (function() {
+        var items = $('figure.highlight');
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var node = $(item);
+            var className = node.attr('class');
+            var classList = className.split(' ');
+            var langName = '';
+            if (classList.length > 1) {
+                langName = classList[1];
+            }
+            node.attr('data-lang', langName);
+        };
+    })();
+</script>
+
+
+
+  
+  
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.1"></script>
+
+
+
+  
+    <script type="text/javascript">
+  $(".reward-wrapper .reward-btn").fancybox({
+      maxWidth: 650,
+      maxHeight: 350,
+      fitToView: true,
+      autoSize: true,
+      closeClick: false,
+      openEffect: 'none',
+      closeEffect: 'none',
+      helpers: {
+        title: {
+            type: 'inside'
+        },
+        overlay: {
+            locked: false
+        }
+      }
+  });
+
+  $("[data-track]").on("click", function() {
+      var label = $(this).data("track");
+      window._hmt && window._hmt.push(['_trackEvent', label, 'click']);
+  });
+</script>
+  
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.1"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.5.1" id="motion.global"></script>
+
+
+
+
+
+  <script type="text/javascript" src="/js/nav-toggle.js?v=0.4.5.1"></script>
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.1" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" src="/js/post-detail.js"></script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+      if (isMobile()) {
+        FastClick.attach(document.body);
+      }
+    });
+  </script>
+
+
+
+  
+    <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("QnkkLfx3yvVKY4LTTTJBjDqW-gzGzoHsz", "FVfLCd14uEKbS1GXLxKWJS7O");</script>
+<script type="text/javascript" src="/js/lean-analytics.js"></script>
+  
+  
+  
+    
+  
+    <script type="text/javascript">
+      // 本地测试屏蔽评论
+      var host = window.location.host;
+      var disqus_shortname = host.includes('127.0.0.1') || host.includes('0.0.0.0') || host.includes('localhost') ? 'restranDev' : 'restran';
+      // var disqus_shortname = 'restran';
+      var disqus_identifier = '2016/07/06/gilab-source-install-in-centos7/';
+      var disqus_title = 'CentOS 7 Minimal 安装 Gitlab 8.9';
+      var disqus_url = 'http://www.restran.net/2016/07/06/gilab-source-install-in-centos7/';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+</body>
+</html>
