@@ -57,10 +57,10 @@ tags : [旅行, 湖南]
 
 
   [1]: http://tower.im
-  [2]: http://oxygen.qiniudn.com/img201407209.jpg
-  [3]: http://oxygen.qiniudn.com/img2014072010.jpg
-  [4]: http://oxygen.qiniudn.com/img201407206.jpg
-  [5]: http://oxygen.qiniudn.com/img2014072011.jpg
-  [6]: http://oxygen.qiniudn.com/img201407205.jpg
-  [7]: http://oxygen.qiniudn.com/img201407208.jpg
-  [8]: http://oxygen.qiniudn.com/img201407207.jpg
+  [2]: /uploads/post_img/2014/07/img201407209.jpg
+  [3]: /uploads/post_img/2014/07/img2014072010.jpg
+  [4]: /uploads/post_img/2014/07/img201407206.jpg
+  [5]: /uploads/post_img/2014/07/img2014072011.jpg
+  [6]: /uploads/post_img/2014/07/img201407205.jpg
+  [7]: /uploads/post_img/2014/07/img201407208.jpg
+  [8]: /uploads/post_img/2014/07/img201407207.jpg

@@ -55,7 +55,7 @@ Supervisor 有两个主要的组成部分：
 	mkdir /home/supervisor
 	mkdir /var/log/supervisor
 	mkdir /etc/supervisor.d
-	
+
 然后对一些配置进行修改
 
 ```ini
@@ -245,7 +245,7 @@ priority=999                  ; the relative start priority (default 999)
 ```
 
 当添加了上述配置后，`progname1` 和 `progname2` 的进程名就会变成 `thegroupname:progname1` 和 `thegroupname:progname2` 以后就要用这个名字来管理进程了，而不是之前的 `progname1`。
- 
+
 以后执行 `supervisorctl stop thegroupname:` 就能同时结束 `progname1` 和 `progname2`，执行 `supervisorctl stop thegroupname:progname1` 就能结束 `progname1`。supervisorctl 的命令我们稍后介绍。
 
 ## 启动 supervisord
@@ -314,6 +314,11 @@ supervisorctl update
 启用 rc.local 服务
 
     sudo systemctl enable rc-local.service
+
+Centos 系统需要手动设置 /etc/rc.local 为可执行
+
+    chmod +x /etc/rc.local
+
 
 ### 方法2
 

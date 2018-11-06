@@ -341,7 +341,7 @@ CSS设计指南（第3版）（文字版）
 
 1. 移动网络的环境比较复杂，在调试的时候可以用 Chrome 模拟不同的网络环境，关注页面加载的数据量，和加载时间。
 
-![http://oxygen.qiniudn.com/img2015051433.png][1]
+![/uploads/post_img/2015/05/img2015051433.png][1]
 
 
 2. 使用 CDN，常用的库一般会有 CDN 地址，也可以将自己的一些静态文件放在七牛上，七牛有免费的额度。
@@ -386,4 +386,4 @@ http://www.cnblogs.com/pifoo/archive/2011/05/28/webkit-webapp.html
 
 
 
-  [1]: http://oxygen.qiniudn.com/img2015051433.png
+  [1]: /uploads/post_img/2015/05/img2015051433.png

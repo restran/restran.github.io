@@ -8,8 +8,10 @@
 
   <span>thanks to <a class="theme-link" href="http://hexo.io">Hexo</a> and   
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT{% if theme.scheme %}.{{ theme.scheme }}{% endif %}
+    NexT{% if theme.scheme %} {{ theme.scheme }}{% endif %}. 
   </a>
   </span>
+
+  <span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
 
 {% block footer %}{% endblock %}

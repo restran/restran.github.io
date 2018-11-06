@@ -200,6 +200,6 @@ if __name__ == '__main__':
 
 
   [1]: http://www.postfix.org/
-  [2]: http://oxygen.qiniudn.com/img2014103024.png
-  [3]: http://oxygen.qiniudn.com/img2014103025.png
+  [2]: /uploads/post_img/2014/10/img2014103024.png
+  [3]: /uploads/post_img/2014/10/img2014103025.png
   [4]: http://www.masnun.com/2010/01/01/sending-mail-via-postfix-a-perfect-python-example.html

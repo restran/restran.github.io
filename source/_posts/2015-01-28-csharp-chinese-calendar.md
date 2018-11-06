@@ -42,4 +42,4 @@ MyDateTimePicker    | 对应 C# 本身的 DateTimePicker
 
 
   [1]: https://github.com/restran/chinese_calendar
-  [2]: http://oxygen.qiniudn.com/img2015012829.png
+  [2]: /uploads/post_img/2015/01/img2015012829.png

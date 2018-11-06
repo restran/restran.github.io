@@ -32,5 +32,5 @@ tags : [财务]
 就这么些吧，以后有更多有意思的数据再来分析吧。
 
 
-  [1]: http://oxygen.qiniudn.com/img2014102720.png "支出分类占比"
-  [2]: http://oxygen.qiniudn.com/img2014102723.png "行车交通月份数据"
+  [1]: /uploads/post_img/2014/10/img2014102720.png "支出分类占比"
+  [2]: /uploads/post_img/2014/10/img2014102723.png "行车交通月份数据"
